@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^contact$', kingWeb.adm.views.contact, name='contact'),
     url(r'^about$', kingWeb.adm.views.about, name='about'),
     url(r'^login/$',
-        django.contrib.auth.views.login,
+        django.contrib.auth.views.login, 
         {
             'template_name': 'adm/login.html',
             'authentication_form': kingWeb.adm.forms.BootstrapAuthenticationForm,
