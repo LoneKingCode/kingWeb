@@ -54,8 +54,14 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\" />
     <Folder Include="kingWeb\" />
+    <Folder Include="kingWeb\adm\" />
+    <Folder Include="kingWeb\adm\migrations\" />
     <Folder Include="kingWeb\contrib\" />
+    <Folder Include="kingWeb\static\" />
+    <Folder Include="kingWeb\static\css\" />
+    <Folder Include="kingWeb\static\fonts\" />
     <Folder Include="kingWeb\static\images\" />
+    <Folder Include="kingWeb\static\js\" />
     <Folder Include="kingWeb\static\lib\" />
     <Folder Include="kingWeb\static\lib\bootstrap-suggest-plugin\" />
     <Folder Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\" />
@@ -150,6 +156,8 @@
     <Folder Include="kingWeb\static\lib\zTree\demo\en\exhide\" />
     <Folder Include="kingWeb\static\lib\zTree\demo\en\super\" />
     <Folder Include="kingWeb\static\lib\zTree\js\" />
+    <Folder Include="kingWeb\templates\" />
+    <Folder Include="kingWeb\templates\adm\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="kingWeb\static\js\contabs.js" />
