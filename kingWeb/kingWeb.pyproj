@@ -33,7 +33,13 @@
     <Compile Include="kingWeb\adm\forms.py" />
     <Compile Include="kingWeb\adm\models.py" />
     <Compile Include="kingWeb\adm\tests.py" />
-    <Compile Include="kingWeb\adm\views.py" />
+    <Compile Include="kingWeb\adm\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="kingWeb\adm\views\home.py" />
+    <Compile Include="kingWeb\adm\views\user.py" />
+    <Compile Include="kingWeb\adm\views\control.py" />
+    <Compile Include="kingWeb\adm\views\__init__.py" />
     <Compile Include="kingWeb\adm\__init__.py" />
     <Compile Include="kingWeb\contrib\__init__.py">
       <SubType>Code</SubType>
@@ -56,6 +62,7 @@
     <Folder Include="kingWeb\" />
     <Folder Include="kingWeb\adm\" />
     <Folder Include="kingWeb\adm\migrations\" />
+    <Folder Include="kingWeb\adm\views\" />
     <Folder Include="kingWeb\contrib\" />
     <Folder Include="kingWeb\static\" />
     <Folder Include="kingWeb\static\css\" />
@@ -158,6 +165,32 @@
     <Folder Include="kingWeb\static\lib\zTree\js\" />
     <Folder Include="kingWeb\templates\" />
     <Folder Include="kingWeb\templates\adm\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\control\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\department\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\home\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\log\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\menu\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\module\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\role\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\shared\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\system_option\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_column\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_list\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\vewList\" />
+    <Folder Include="kingWeb\templates\adm\control\" />
+    <Folder Include="kingWeb\templates\adm\department\" />
+    <Folder Include="kingWeb\templates\adm\home\" />
+    <Folder Include="kingWeb\templates\adm\log\" />
+    <Folder Include="kingWeb\templates\adm\menu\" />
+    <Folder Include="kingWeb\templates\adm\module\" />
+    <Folder Include="kingWeb\templates\adm\role\" />
+    <Folder Include="kingWeb\templates\adm\shared\" />
+    <Folder Include="kingWeb\templates\adm\system_option\" />
+    <Folder Include="kingWeb\templates\adm\table_column\" />
+    <Folder Include="kingWeb\templates\adm\table_list\" />
+    <Folder Include="kingWeb\templates\adm\user\" />
+    <Folder Include="kingWeb\templates\adm\vewList\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="kingWeb\static\js\contabs.js" />
@@ -1005,7 +1038,51 @@
     <Content Include="kingWeb\static\lib\zTree\package.json" />
     <Content Include="kingWeb\static\lib\zTree\README.md" />
     <Content Include="kingWeb\static\lib\zTree\zTree.v3.jquery.json" />
-    <Content Include="kingWeb\templates\adm\about.html" />
+    <Content Include="kingWeb\templates\adm\shared\access_denied.cshtml" />
+    <Content Include="kingWeb\templates\adm\control\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\control\welcome.html" />
+    <Content Include="kingWeb\templates\adm\department\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\department\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\department\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\home\index.html" />
+    <Content Include="kingWeb\templates\adm\log\chart.cshtml" />
+    <Content Include="kingWeb\templates\adm\log\login.cshtml" />
+    <Content Include="kingWeb\templates\adm\log\operation.cshtml" />
+    <Content Include="kingWeb\templates\adm\menu\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\menu\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\menu\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\module\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\module\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\module\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\role\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\role\authen.cshtml" />
+    <Content Include="kingWeb\templates\adm\role\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\role\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\shared\error.cshtml" />
+    <Content Include="kingWeb\templates\adm\shared\layout.html" />
+    <Content Include="kingWeb\templates\adm\shared\layout_content.cshtml" />
+    <Content Include="kingWeb\templates\adm\system_option\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\system_option\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\system_option\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_column\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_column\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_column\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_list\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_list\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\table_list\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\authen.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\department.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\forget_pwd.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\index.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\login.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\register.cshtml" />
+    <Content Include="kingWeb\templates\adm\user\select_user.cshtml" />
+    <Content Include="kingWeb\templates\adm\vewList\add.cshtml" />
+    <Content Include="kingWeb\templates\adm\vewList\detail.cshtml" />
+    <Content Include="kingWeb\templates\adm\vewList\edit.cshtml" />
+    <Content Include="kingWeb\templates\adm\vewList\index.cshtml" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="kingWeb\static\css\site.css" />
@@ -1015,11 +1092,6 @@
     <Content Include="kingWeb\static\js\modernizr-2.6.2.js" />
     <Content Include="kingWeb\static\js\respond.js" />
     <Content Include="kingWeb\static\js\respond.min.js" />
-    <Content Include="kingWeb\templates\adm\contact.html" />
-    <Content Include="kingWeb\templates\adm\index.html" />
-    <Content Include="kingWeb\templates\adm\layout.html" />
-    <Content Include="kingWeb\templates\adm\login.html" />
-    <Content Include="kingWeb\templates\adm\loginpartial.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">
