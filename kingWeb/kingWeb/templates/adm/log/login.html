@@ -1,8 +1,7 @@
-﻿@{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout_Content.cshtml";
-    ViewBag.Title= "登录日志";
-}
-@section Scripts{
+﻿{% extends "adm/shared/layout_content.html" %}
+{%block title%}{{title}}{% endblock%}
+
+{% block scripts %}
 <script>
         $(function () {
             InitDataTable();
@@ -43,8 +42,10 @@
 
 
 </script>
-}
+{% endblock %}
 
+
+{% block content %}
 <div class="form-group">
     <div class="input-group">
         <input id="txtSearchKey" type="text" class="form-control" placeholder="搜索关键字">
@@ -70,3 +71,4 @@
     </thead>
     <tbody></tbody>
 </table>
+{% endblock %}

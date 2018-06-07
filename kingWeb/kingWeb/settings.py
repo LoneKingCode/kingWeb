@@ -32,9 +32,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-INSTALLED_APPS = ['kingWeb',
-        'kingWeb.adm',
-     # Add your apps here to enable them
+INSTALLED_APPS = [
+    'kingWeb',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,10 +70,22 @@ WSGI_APPLICATION = 'kingWeb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #},
+     'default': {
+    'ENGINE': 'django.db.backends.mysql',
+      'NAME': 'kingWeb',   #数据库名
+    'USER': 'root',    #用户名
+    'PASSWORD': 'hacker5402',
+    'HOST': '123.206.57.126',
+    'PORT': '3306',
+    'CHARSET':'utf8',##设置字符集，不然会出现中文乱码
+    'OPTIONS': {
+         'init_command': "SET sql_mode ='STRICT_TRANS_TABLES' "
     }
+}
 }
 
 

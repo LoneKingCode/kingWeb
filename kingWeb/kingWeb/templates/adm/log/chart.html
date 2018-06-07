@@ -1,10 +1,8 @@
-﻿@{
-    ViewBag.Title = "统计图表";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout_Content.cshtml";
-}
+﻿{% extends "adm/shared/layout_content.html" %}
+{%block title%}{{title}}{% endblock%}
 
-@section Scripts{
-    <script src="~/lib/echart/echarts-all.js"></script>
+{% block scripts %}
+    <script src="{% static 'lib/echart/echarts-all.js'%}"></script>
     <script>
         $(function () {
             LoadChartByDay();
@@ -149,13 +147,16 @@
             })
         }
     </script>
-}
+{% endblock %}
 
-@Html.AntiForgeryToken()
+
+{% block content %}
+
 
 <div id="chartByDay" style="width: 90%; height: 400px;"></div>
 <div id="chartByWeek" style="width: 90%; height: 400px;"></div>
 <div id="chartByMonth" style="width: 90%; height: 400px;"></div>
-
 <div id="chartByYear" style="width: 90%; height: 400px;"></div>
+
+{% endblock %}
 

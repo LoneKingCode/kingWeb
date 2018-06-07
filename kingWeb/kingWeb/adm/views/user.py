@@ -7,40 +7,23 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 
-def home(request):
-    """Renders the home page."""
+def index(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'adm/index.html',
+        'adm/user/index.html',
         {
-            'title':'Home Page',
+            'title':'用户列表',
             'year':datetime.now().year,
         }
     )
 
-def contact(request):
-    """Renders the contact page."""
+def edit(request,id):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'adm/contact.html',
+        'adm/user/edit.html',
         {
-            'title':'Contact',
-            'message':'Your contact page.',
-            'year':datetime.now().year,
-        }
-    )
-
-def about(request):
-    """Renders the about page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'adm/about.html',
-        {
-            'title':'About',
-            'message':'Your application description page.',
-            'year':datetime.now().year,
+            'title':'编辑用户',
         }
     )
