@@ -31,6 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="kingWeb\adm\forms.py" />
+    <Compile Include="kingWeb\DynamicRouter\activator.py" />
+    <Compile Include="kingWeb\DynamicRouter\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\models.py" />
     <Compile Include="kingWeb\adm\models\__init__.py">
       <SubType>Code</SubType>
@@ -52,7 +56,7 @@
     <Compile Include="manage.py" />
     <Compile Include="kingWeb\__init__.py" />
     <Compile Include="kingWeb\settings.py" />
-    <Compile Include="kingWeb\urls.py" />
+    <Compile Include="kingWeb\DynamicRouter\urls.py" />
     <Compile Include="kingWeb\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
@@ -66,10 +70,12 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\" />
     <Folder Include="kingWeb\" />
     <Folder Include="kingWeb\adm\" />
+    <Folder Include="kingWeb\adm\migrations\" />
     <Folder Include="kingWeb\adm\models\" />
     <Folder Include="kingWeb\adm\views\" />
     <Folder Include="kingWeb\contrib\" />
     <Folder Include="kingWeb\migrations\" />
+    <Folder Include="kingWeb\DynamicRouter\" />
     <Folder Include="kingWeb\static\" />
     <Folder Include="kingWeb\static\css\" />
     <Folder Include="kingWeb\static\css\login\" />
@@ -195,11 +201,21 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\module\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\role\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\shared\" />
+    <Folder Include="kingWeb\templates\adm\control\" />
+    <Folder Include="kingWeb\templates\adm\department\" />
+    <Folder Include="kingWeb\templates\adm\home\" />
+    <Folder Include="kingWeb\templates\adm\log\" />
+    <Folder Include="kingWeb\templates\adm\menu\" />
+    <Folder Include="kingWeb\templates\adm\module\" />
+    <Folder Include="kingWeb\templates\adm\role\" />
+    <Folder Include="kingWeb\templates\adm\shared\" />
     <Folder Include="kingWeb\templates\adm\system_option\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_column\" />
+    <Folder Include="kingWeb\templates\adm\table_column\" />
     <Folder Include="kingWeb\templates\adm\table_list\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
+    <Folder Include="kingWeb\templates\adm\user\" />
     <Folder Include="kingWeb\templates\adm\vewList\" />
   </ItemGroup>
   <ItemGroup>

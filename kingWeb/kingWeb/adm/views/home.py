@@ -6,8 +6,9 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
-from kingWeb.adm import urls
-def index(request):
+
+from kingWeb.DynamicRouter import urls
+def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -16,7 +17,7 @@ def index(request):
             'title':'Home Page',
         }
     )
-def home(request):
+def home(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(
         request,
