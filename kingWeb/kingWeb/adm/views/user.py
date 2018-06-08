@@ -6,9 +6,9 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
-from kingWeb import urls
+from kingWeb.DynamicRouter import urls
 
-def index(request):
+def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -19,12 +19,13 @@ def index(request):
         }
     )
 
-def edit(request,id):
+def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(
         request,
         'adm/user/edit.html',
         {
             'title':'编辑用户',
+            'id':kwargs.get('id',None),
         }
     )

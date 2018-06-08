@@ -1,5 +1,4 @@
 from django.conf.urls import url,include
-from kingWeb  import adm
 import django.contrib.auth.views
 from kingWeb.DynamicRouter.activator import process
 
