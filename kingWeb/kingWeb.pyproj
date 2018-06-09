@@ -30,6 +30,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="kingWeb\admin.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\adm\forms.py" />
     <Compile Include="kingWeb\DynamicRouter\activator.py" />
     <Compile Include="kingWeb\DynamicRouter\urls.py">
@@ -1121,6 +1124,7 @@
     <Content Include="kingWeb\templates\adm\vewList\detail.html" />
     <Content Include="kingWeb\templates\adm\vewList\edit.html" />
     <Content Include="kingWeb\templates\adm\vewList\index.html" />
+    <Content Include="record.txt" />
     <Content Include="requirements.txt" />
     <Content Include="kingWeb\static\css\site.css" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.svg" />

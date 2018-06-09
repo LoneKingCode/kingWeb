@@ -27,9 +27,19 @@ SECRET_KEY = '0d74a624-6359-4aec-a565-13ca0c68d19c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = []
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# In a Windows environment this must be set to your system time zone.
+TIME_ZONE = 'Asia/Shanghai'
 
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'zh-CN'
 
 # Application definition
 INSTALLED_APPS = [
@@ -39,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-     'django.contrib.staticfiles',]
+    'django.contrib.staticfiles',]
 
 MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

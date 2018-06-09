@@ -3,6 +3,26 @@ from datetime import  timezone
 from django.db import models
 from django.utils import timezone
 
+class ResultModel:
+    flag=False
+    data=None
+    msg=''
+    #def _init_(self):
+    #   self.flag = False
+    #   self.data = None
+    #   self.msg = ''
+    def tojson(self):
+        return {
+            'flag':self.flag,
+            'data':self.data,
+            'msg':self.msg,
+            }
+    def __str__(self):
+       return self.msg
+
+
+
+
 class BaseModel(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     createdatetime = models.DateTimeField(db_column='CreateDateTime',default=timezone.now)  # Field name made lowercase.
@@ -18,7 +38,8 @@ class SysDepartment(BaseModel):
     leader = models.CharField(db_column='Leader', max_length=20)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=20)  # Field name made lowercase.
     parentid = models.IntegerField(db_column='ParentId')  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name
     class Meta:
         db_table = 'Sys_Department'
 
@@ -27,7 +48,8 @@ class SysLoginlog(BaseModel):
     clientmac = models.CharField(db_column='ClientMac', max_length=40, blank=True, null=True)  # Field name made lowercase.
     username = models.CharField(db_column='UserName', max_length=20)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=40, blank=True, null=True)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.username + ' ' + self.description
     class Meta:
          db_table = 'Sys_LoginLog'
 
@@ -40,7 +62,8 @@ class SysMenu(BaseModel):
     url = models.CharField(db_column='Url', max_length=300)  # Field name made lowercase.
     moduleid = models.IntegerField(db_column='ModuleId')  # Field name made lowercase.
     icon = models.CharField(db_column='Icon', max_length=50)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name
     class Meta:
         db_table = 'Sys_Menu'
 
@@ -48,7 +71,8 @@ class SysMenu(BaseModel):
 class SysModule(BaseModel):
     description = models.CharField(db_column='Description', max_length=30)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=18)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name + ' ' + self.description
     class Meta:
         db_table = 'Sys_Module'
 
@@ -59,17 +83,17 @@ class SysOperationlog(BaseModel):
     operationdescription = models.CharField(db_column='OperationDescription', max_length=100)  # Field name made lowercase.
     operationurl = models.CharField(db_column='OperationUrl', max_length=300, blank=True, null=True)  # Field name made lowercase.
     username = models.TextField(db_column='UserName', blank=True, null=True)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.username + ' ' + self.operationdescription
     class Meta:
         db_table = 'Sys_OperationLog'
 
 
 class SysRole(BaseModel):
-    concurrencystamp = models.TextField(db_column='ConcurrencyStamp', blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=30)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=256, blank=True, null=True)  # Field name made lowercase.
-    normalizedname = models.CharField(db_column='NormalizedName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name
     class Meta:
         db_table = 'Sys_Role'
 
@@ -87,7 +111,8 @@ class SysRolemenu(BaseModel):
 class SysSystemoption(BaseModel):
     code = models.CharField(db_column='Code', max_length=100, blank=True, null=True)  # Field name made lowercase.
     value = models.CharField(db_column='Value', max_length=1000)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.code + ':' + value
     class Meta:
         db_table = 'Sys_SystemOption'
 
@@ -112,7 +137,8 @@ class SysTablecolumn(BaseModel):
     tableid = models.IntegerField(db_column='TableId')  # Field name made lowercase.
     vieworder = models.IntegerField(db_column='ViewOrder')  # Field name made lowercase.
     viewvisible = models.IntegerField(db_column='ViewVisible')  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name + ' ' + self.description
     class Meta:
         db_table = 'Sys_TableColumn'
 
@@ -135,7 +161,8 @@ class SysTablelist(BaseModel):
     allowimport = models.IntegerField(db_column='AllowImport')  # Field name made lowercase.
     allowview = models.IntegerField(db_column='AllowView')  # Field name made lowercase.
     allowadd = models.IntegerField(db_column='AllowAdd')  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name + ' ' + self.description
     class Meta:
         db_table = 'Sys_TableList'
 
@@ -180,6 +207,7 @@ class TestLeader(BaseModel):
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
     parentid = models.IntegerField(db_column='ParentId')  # Field name made lowercase.
     type = models.CharField(db_column='Type', max_length=30)  # Field name made lowercase.
-
+    def __str__(self):
+        return self.name
     class Meta:
         db_table = 'Test_Leader'
