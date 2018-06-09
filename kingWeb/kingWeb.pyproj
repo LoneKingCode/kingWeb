@@ -1122,7 +1122,6 @@
     <Content Include="kingWeb\templates\adm\vewList\edit.html" />
     <Content Include="kingWeb\templates\adm\vewList\index.html" />
     <Content Include="requirements.txt" />
-    <Content Include="db.sqlite3" />
     <Content Include="kingWeb\static\css\site.css" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.ttf" />
