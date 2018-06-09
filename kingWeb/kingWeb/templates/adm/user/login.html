@@ -23,23 +23,18 @@
     <link rel="stylesheet" href="{% static 'css/site.css' %}" asp-append-version="true" />
 
     <script type="text/javascript">
-        $(function () {
-            lkWeb.FormValidation($("#loginForm"), function () {
-                lkWeb.GoAction("adm", "control", "index")
-            }, "登陆成功")
+    $(function () {
+        lkWeb.FormValidation($("#loginForm"), function () {
+            lkWeb.GoAction("adm", "control", "index")
+        }, "登陆成功")
 
-        })
-
-
+    })
     </script>
 
-
-    <style>
-    </style>
-</head>
+    </head>
 <body>
     <div class="login">
-        <form action="../post_login/" method="post" role="form" id="loginForm">
+        <form action="/adm/user/post_login/" method="post" role="form" id="loginForm">
               {%csrf_token%}
             <div class="logo"></div>
             <div class="login_form">
@@ -61,10 +56,6 @@
             </div>
         </form>
     </div>
-
-
-
-    <script src="{% static 'js/site.js' %}" asp-append-version="true"></script>
 
 </body>
 </html>

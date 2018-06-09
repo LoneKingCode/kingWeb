@@ -7,10 +7,6 @@ class ResultModel:
     flag = False
     data = None
     msg = ''
-    #def _init_(self):
-    #   self.flag = False
-    #   self.data = None
-    #   self.msg = ''
     def tojson(self):
         return {
             'flag':self.flag,
