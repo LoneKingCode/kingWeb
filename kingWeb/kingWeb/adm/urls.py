@@ -33,5 +33,6 @@ urlpatterns = [
         {
             'next_page': '/',
         },
-        name='logout'),]
+        name='logout'),
+]
 

@@ -8,9 +8,11 @@ from django.http import HttpRequest
 from django.http import HttpResponse
 from django.template import RequestContext
 from datetime import datetime
-from kingWeb.DynamicRouter import urls
 from django.contrib import auth
 from kingWeb.models import ResultModel
+
+from kingWeb.DynamicRouter import urls
+
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)

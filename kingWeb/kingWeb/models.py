@@ -4,9 +4,9 @@ from django.db import models
 from django.utils import timezone
 
 class ResultModel:
-    flag=False
-    data=None
-    msg=''
+    flag = False
+    data = None
+    msg = ''
     #def _init_(self):
     #   self.flag = False
     #   self.data = None
@@ -20,6 +20,10 @@ class ResultModel:
     def __str__(self):
        return self.msg
 
+class SysDepartmentManager(models.Manager):
+    def get_by_id(self,id):
+        a = super().get_queryset().filter(id=id)
+        return a
 
 
 
@@ -42,6 +46,7 @@ class SysDepartment(BaseModel):
         return self.name
     class Meta:
         db_table = 'Sys_Department'
+    objects = SysDepartmentManager()
 
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)  # Field name made lowercase.
