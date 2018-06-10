@@ -11,7 +11,7 @@ from kingWeb.models import *
 from django.contrib.auth.models import User
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
-     return render(request,
+    return render(request,
         'adm/home/index.html',
         {
             'title':'Home Page',
