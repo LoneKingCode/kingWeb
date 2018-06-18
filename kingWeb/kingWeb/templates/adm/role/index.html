@@ -18,14 +18,14 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("admin","role", "add", 0);
+            lkWeb.GoAction("adm","role", "add", 0);
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("admin","role", "edit", id);
+                lkWeb.GoAction("adm","role", "edit", id);
         }
 
         function DelModel() {

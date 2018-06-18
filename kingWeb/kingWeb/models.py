@@ -3,6 +3,31 @@ from datetime import  timezone
 from django.db import models
 from django.utils import timezone
 
+class DataTableModel:
+    draw=0
+    recordsTotal=0
+    recordsFiltered=0
+    data=None
+    def __init__(self,draw,recordsTotal,recordsFiltered,data):
+        self.draw = draw
+        self.recordsTotal = recordsTotal
+        self.recordsFiltered = recordsFiltered
+        self.data = data
+    def tojson(self):
+        return {
+            'draw':self.draw,
+            'recordsTotal':self.recordsTotal,
+            'recordsFiltered':self.recordsFiltered,
+            'data':self.data,
+            }
+    def to_dict(self):
+        data = {}
+        for f in self._meta.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
+
+
+
 class ResultModel:
     flag = False
     data = None
@@ -15,6 +40,11 @@ class ResultModel:
             }
     def __str__(self):
        return self.msg
+    def to_dict(self):
+        data = {}
+        for f in self._meta.concrete_fields:
+            data[f.name] = f.value_from_object(self)
+        return data
 
 class SysDepartmentManager(models.Manager):
     def get_by_id(self,id):

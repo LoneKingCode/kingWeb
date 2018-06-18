@@ -16,7 +16,7 @@
                 type: "post",
                 url: "@Url.Action("GetRoleList", "Role")",
                 data: {
-                    __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                 },
                 dataType:"json",
                 async: false,
@@ -32,7 +32,7 @@
                 type: "post",
                 url: "@Url.Action("GetMenuList", "Role")",
                 data: {
-                    __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                 },
                 dataType:"json",
                 async: false,
@@ -83,7 +83,7 @@
                 url: "@Url.Action("GetRoleMenus", "Role")",
                 type: "post",
                 dataType: "json",
-                data: { roleId: roleId, __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val() },
+                data: { roleId: roleId, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() },
                 async: false,
                 success: function (data) {
                     var treeObj = $.fn.zTree.getZTreeObj("menuTree");
@@ -134,7 +134,7 @@
                           url: "@Url.Action("AuthMenus", "Role")",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()},
+                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)

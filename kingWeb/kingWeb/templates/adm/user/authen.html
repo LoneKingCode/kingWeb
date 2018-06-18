@@ -35,7 +35,7 @@
                           url: "@Url.Action("DeleteRole", "User")",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()},
+                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
@@ -67,7 +67,7 @@
                           url: "@Url.Action("AuthRole", "User")",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()},
+                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)

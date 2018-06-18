@@ -234,6 +234,7 @@
     <Content Include="kingWeb\static\css\login\images\复件 login_logo.jpg" />
     <Content Include="kingWeb\static\css\login\ui\config.js" />
     <Content Include="kingWeb\static\css\login\ui\do.js" />
+    <Content Include="kingWeb\static\images\head.jpg" />
     <Content Include="kingWeb\static\js\contabs.js" />
     <Content Include="kingWeb\static\js\lkWeb.js" />
     <Content Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\data.json" />

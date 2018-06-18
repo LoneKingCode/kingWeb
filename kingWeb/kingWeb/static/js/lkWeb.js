@@ -67,7 +67,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                 data: {
                     ids: ids,
                     value: _value,
-                    __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                 },
                 success: function (result) {
                     if (result.flag == true) {
@@ -112,7 +112,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
                     data: {
                         id: id,
                         value: _value,
-                        __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                        csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                     },
                     success: function (result) {
                         if (result.flag == true) {
@@ -141,7 +141,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
 }
 
 lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack, table) {
-    data.__RequestVerificationToken = $("input[name='__RequestVerificationToken']").val();
+    data.csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
     $.ajax(
         {
             type: 'post',
@@ -261,7 +261,7 @@ lkWeb.LoadTable = function (tableID, colums, dataUrl, value) {
                 }
                 param.searchKey = _searchKey;
                 param.value = _value;
-                param.__RequestVerificationToken = $("input[name='__RequestVerificationToken']").val();
+                param.csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
                 return param;
             }
 

@@ -8,18 +8,18 @@ from django.template import RequestContext
 from datetime import datetime
 from kingWeb.DynamicRouter import urls
 
-def index(request):
-    """Renders the home page."""
+def index(request,kwargs):
     assert isinstance(request, HttpRequest)
+
     return render(request,
         'adm/control/index.html',
         {
-            'title':'index',
+            'username':request.user.username
 
         })
 
 
-def welcome(request):
+def welcome(request,kwargs):
     """Renders the about page."""
     assert isinstance(request, HttpRequest)
     return render(request,

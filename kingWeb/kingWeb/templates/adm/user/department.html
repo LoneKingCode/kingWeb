@@ -54,7 +54,7 @@
                 type: "post",
                 url:"@Url.Action("GetList", "Department")",
                 dataType: "json",
-                data: { __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()},
+                data: { csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                 async: false,
                 success: function (data) {
                     zNodes_department = data;
@@ -95,7 +95,7 @@
             parent.layer.confirm("确认删除" + ids.length + "条数据？", {
                 btn: ["确认", "取消"]
             }, function () {
-                var data = { UserIDs: [], DepartmentID: departmentID, __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val() };
+                var data = { UserIDs: [], DepartmentID: departmentID, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() };
                 data.UserIDs = ids;
                 $.ajax(
                     {
@@ -123,7 +123,7 @@
         }
 
         function AddUser() {
-            lkWeb.GoAction("admin","user", "selectUser", departmentID, true, "选择用户", "80%", "80%");
+            lkWeb.GoAction("adm","user", "selectUser", departmentID, true, "选择用户", "80%", "80%");
         }
         //这个函数给 SelectUser子页面回调用
         function SelectUser() {

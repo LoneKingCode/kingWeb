@@ -41,7 +41,7 @@
               var dto = {};
               dto.DepartmentID = departmentID;
               dto.UserIDs = ids;
-              dto.__RequestVerificationToken=$("input[name='__RequestVerificationToken']").val();
+              dto.csrfmiddlewaretoken=$("input[name='csrfmiddlewaretoken']").val();
               $.ajax({
                   type: "post",
                   url: "@Url.Action("SetDepartment","User")",

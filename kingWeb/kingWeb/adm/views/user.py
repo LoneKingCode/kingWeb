@@ -8,9 +8,11 @@ from django.http import HttpRequest
 from django.http import HttpResponse
 from django.template import RequestContext
 from datetime import datetime
+from django.contrib.auth.models import User
 from django.contrib import auth
-from kingWeb.models import ResultModel
-
+from django.core import serializers
+from django.core.paginator import Paginator
+from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 
 
@@ -45,7 +47,7 @@ def post_login(request,kwargs):
     result = ResultModel()
     if request.method == 'GET':
         result.msg = 'Method not allowed'
-        return HttpResponse(json.dumps(result), content_type="application/json")
+        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     user = auth.authenticate(username=request.POST.get('UserName'), password=request.POST.get('Password'))
     if user is not None:
           auth.login(request, user)
@@ -57,7 +59,18 @@ def post_login(request,kwargs):
 
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
-
+@csrf_exempt
+def get_page_data(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    start = request.POST.get('start')
+    length = request.POST.get('length')
+    searchkey = request.POST.get('searchkey')
+    draw = request.POST.get('draw')
+    value = request.POST.get('value')
+    alldata = User.objects.all()
+    pagedata = serializers.serialize("json", alldata[int(start):int(length)])
+    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
+    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
 
 

@@ -19,14 +19,14 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("admin","tablelist", "add", 0);
+            lkWeb.GoAction("adm","tablelist", "add", 0);
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("admin","tablelist", "edit", id);
+                lkWeb.GoAction("adm","tablelist", "edit", id);
         }
 
         function DelModel() {

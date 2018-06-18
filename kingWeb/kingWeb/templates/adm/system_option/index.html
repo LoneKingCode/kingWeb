@@ -19,14 +19,14 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("admin","systemoption", "add", 0);
+            lkWeb.GoAction("adm","systemoption", "add", 0);
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("admin","systemoption", "edit", id);
+                lkWeb.GoAction("adm","systemoption", "edit", id);
         }
 
         function DelModel() {
