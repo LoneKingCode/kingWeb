@@ -182,11 +182,12 @@ lkWeb.FormValidation = function (validationForm, successCallBack, successMsg) {
             if (data.flag == true) {
                 if (IsNotEmpty(successMsg)) {
                     layer.alert(successMsg);
-                    setTimeout(function () {
-                        if (IsFunction(successCallBack))
+                     setTimeout(function () {
+                         if (IsFunction(successCallBack))
                             successCallBack();
+
                     }, 1200)
-                }
+                 }
                 else {
                     if (IsFunction(successCallBack))
                         successCallBack();

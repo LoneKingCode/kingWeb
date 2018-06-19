@@ -61,6 +61,7 @@ def post_add(request,kwargs):
     description = request.POST.get('Description','')
     object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
+    result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
@@ -74,6 +75,7 @@ def post_edit(request,kwargs):
     description = request.POST.get('Description','')
     object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
+    result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
@@ -82,11 +84,23 @@ def post_delete(request,kwargs):
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
     if ids == '':
-        result.msg='操作失败'
+        result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-
+    hassub = False
+    for id in ids:
+        objs = SysDepartment.objects.filter(parentid=id)
+        departmentname = SysDepartment.objects.get(id=id).name
+        if(objs.count() > 0):
+            result.msg += departmentname + "下有子部门:"
+            hassub = True
+            for o in objs:
+                 result.msg +=o.name + ' '
+            result.msg+='</br>'
+    if(hassub):
+         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     object = SysDepartment.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
+    result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 

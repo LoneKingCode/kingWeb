@@ -63,11 +63,6 @@ class ResultModel:
             data[f.name] = f.value_from_object(self)
         return data
 
-class SysDepartmentManager(models.Manager):
-    def get_by_id(self,id):
-        a = super().get_queryset().filter(id=id)
-        return a
-
 
 class BaseModel(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -88,7 +83,6 @@ class SysDepartment(BaseModel):
         return self.name
     class Meta:
         db_table = 'Sys_Department'
-    objects = SysDepartmentManager()
 
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)  # Field name made lowercase.
