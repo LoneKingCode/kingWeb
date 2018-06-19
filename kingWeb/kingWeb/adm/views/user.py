@@ -11,7 +11,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core import serializers
-from django.core.paginator import Paginator
+
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 

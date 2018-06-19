@@ -26,6 +26,23 @@ class DataTableModel:
             data[f.name] = f.value_from_object(self)
         return data
 
+    def toJSON(self):
+        fields = []
+        for field in self._meta.fields:
+            fields.append(field.name)
+
+        d = {}
+        for attr in fields:
+            if isinstance(getattr(self, attr),datetime.datetime):
+                d[attr] = getattr(self, attr).strftime('%Y-%m-%d %H:%M:%S')
+            elif isinstance(getattr(self, attr),datetime.date):
+                d[attr] = getattr(self, attr).strftime('%Y-%m-%d')
+            else:
+                d[attr] = getattr(self, attr)
+
+        import json
+        return json.dumps(d)
+
 
 
 class ResultModel:
@@ -50,7 +67,6 @@ class SysDepartmentManager(models.Manager):
     def get_by_id(self,id):
         a = super().get_queryset().filter(id=id)
         return a
-
 
 
 class BaseModel(models.Model):
