@@ -19,8 +19,7 @@
         });
 
         function AddModel() {
-            departmentId = lkWeb.GetCheckValue($(".checkChild"));
-            lkWeb.GoAction("adm","department", "add", departmentId);;
+            lkWeb.GoAction("adm","department", "add");;
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
@@ -32,7 +31,7 @@
 
         function DelModel() {
             var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("admin",ids, "department", lkTable);
+            lkWeb.DeleteMulti("adm",ids, "department", lkTable);
         }
 
         var lkTable;

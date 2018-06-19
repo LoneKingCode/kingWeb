@@ -18,7 +18,7 @@ lkWeb.GoAction = function (area, ctrl, action, values, isOpen, title, width, hei
         url = localhostPath + "/" + area + "/" + ctrl + "/" + action + "/" + values;
     else
         url = localhostPath + "/" + area + "/" + ctrl + "/" + action;
-    if (isOpen == true) {
+     if (isOpen == true) {
         lkWeb.LayerIndex = layer.open({
             type: 2,
             title: title,
@@ -56,7 +56,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
     parent.layer.confirm("确认删除" + ids.length + "条数据？", {
         btn: ["确认", "取消"]
     }, function () {
-        var postUrl = '/' + area + '/' + ctrl + '/Delete';
+        var postUrl = '/' + area + '/' + ctrl + '/post_delete/';
         var _value = "";
         if (IsNotEmpty(value))
             _value = value;
@@ -74,8 +74,9 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                         parent.layer.alert("删除成功")
                         if (table != null && table != undefined)
                             table.draw(false);//刷新datatable
-                        else
-                            window.location.reload();
+                        else {
+                             window.location.reload();
+                          }
                     }
                     else {
                         if (IsNotEmpty(result.msg))
