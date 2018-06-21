@@ -14,14 +14,15 @@
                     multiWord: !0,
                     showHeader: !0,
                     effectiveFieldsAlias: {
+                        parentname:"上级菜单",
                         id: "Id",
                         name: "名称",
                         typename: "类型",
                         url: "URL地址"
                     },
-                    effectiveFields: ["id", "name", "typename", "url"],
+                    effectiveFields: ["parentname","id", "name", "typename", "url"],
                     getDataMethod: "url",
-                    url: "/adm/menu/get_list?searchkey=", //最后一个参数为关键字请求参数
+                    url: "/adm/menu/get_list/", //最后一个参数为关键字请求参数
                     idField: "id",
                     keyField: "name"
                 }).on('onDataRequestSuccess', function (e, result) {

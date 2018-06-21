@@ -21,11 +21,13 @@ def add(request,kwargs):
     parentid = kwargs.get('id','')
     moduleid = ''
     parentname = ''
+    modules = SysModule.objects.values('id','name')
     if parentid != '':
         menu = SysMenu.objects.get(id=pid)
         parentname = menu.name
         moduleid = menu.moduleid
-    modules = SysModule.objects.values('id','name')
+    else:
+        moduleid = modules[0]['id']
     return render(request,
         'adm/menu/add.html',
         {
@@ -50,8 +52,9 @@ def edit(request,kwargs):
             'title':'编辑菜单',
             'id':object.id,
             'name':object.name,
-            'leader':object.leader,
-            'description':object.description,
+            'url':object.url,
+            'icon':object.icon,
+            'listorder':object.listorder,
             'parentid':object.parentid,
             'moduleid':object.moduleid,
             'parentname': SysMenu.objects.get(id=object.parentid).name,
@@ -165,40 +168,42 @@ def get_page_data(request,kwargs):
 @csrf_exempt
 def get_list(request,kwargs):
     assert isinstance(request, HttpRequest)
-    searchkey = request.POST.get('searchkey','')
+    searchkey = request.POST.get('id','')
 
     alldata = None
     if searchkey != '':
         alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey) | Q(name__icontains=searchkey))\
-            .order_by(_orderby).values('name','parentid','listorder','type','id','url')
+            .order_by('id').values('name','parentid','listorder','type','id','url')
     else:
-        alldata = SysMenu.objects.order_by(_orderby).\
+        alldata = SysMenu.objects.order_by('id').\
         values('name','parentid','listorder','type','id','url')
-    pagedata = list(alldata[int(start):int(length)])
+    pagedata = list(alldata)
 
-    rownum = int(start)
     for row in pagedata:
-        rownum = rownum + 1
-        row['rownum'] = rownum
         type = row['type']
+        pid = row['parentid']
+        if pid != 0 and pid != None:
+            row['parentname'] = SysMenu.objects.get(id=pid).name
+        else:
+            row['parentname'] = '无'
         if type != 0 and type != None:
-            row['typename'] = MenuType(int(type))
+            row['typename'] = MenuType(int(type)).name
         else:
             row['typename'] = '无'
-
-
-    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
-
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    data = {'value':pagedata} #suggest 插件需要的数据格式
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 def get_menu_type(parentid):
+    if parentid == '':
+        return MenuType.模块.value
+
     parentmenu = SysMenu.objects.get(id=parentid)
     parenttype = int(parentmenu.type)
-    if type == MenuType.模块:
-        return MenuType.菜单
-    elif type == MenuType.菜单:
-        return MenuType.按钮
-    elif type == MenuType.按钮:
-        return MenuType.按钮
+    if type == MenuType.模块.value:
+        return MenuType.菜单.value
+    elif type == MenuType.菜单.value:
+        return MenuType.按钮.value
+    elif type == MenuType.按钮.value:
+        return MenuType.按钮.value
     else:
-        return MenuType.模块
+        return MenuType.模块.value
