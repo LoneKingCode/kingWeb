@@ -11,19 +11,17 @@ from kingWeb.models import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
-        'adm/department/index.html',
+        'adm/system_option/index.html',
         {
-            'title':'部门管理',
+            'title':'参数管理',
         })
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
-    departments = SysDepartment.objects.values('id','name')
     return render(request,
-        'adm/department/add.html',
+        'adm/system_option/add.html',
         {
-            'title':'添加部门',
-            'departments':departments
+            'title':'添加参数',
         })
 
 
@@ -31,30 +29,25 @@ def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     if id == '':
-        return render(request, 'adm/department/index')
-    object = SysDepartment.objects.get(id=id)
-    departments = SysDepartment.objects.values('id','name')
+        return render(request, 'adm/system_option/index')
+    object = SysSystemOption.objects.get(id=id)
     return render(request,
-        'adm/department/edit.html',
+        'adm/system_option/edit.html',
         {
-            'title':'编辑部门',
+            'title':'编辑参数',
             'id':object.id,
-            'name':object.name,
-            'leader':object.leader,
-            'description':object.description,
-            'parentid':object.parentid,
-            'departments':departments
+            'code':object.code,
+            'value':object.value,
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
-    name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
-    description = request.POST.get('Description','')
-    object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    value = request.POST.get('Value','')
+    code = request.POST.get('Code','')
+
+    object = SysSystemOption.objects.create(value=value,code=code)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -63,12 +56,10 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
-    description = request.POST.get('Description','')
-    object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    value = request.POST.get('Value','')
+    code = request.POST.get('Code','')
+
+    object = SysSystemOption.objects.filter(id=id).update(value=value,code=code)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -81,19 +72,8 @@ def post_delete(request,kwargs):
     if ids == '':
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    hassub = False
-    for id in ids:
-        objs = SysDepartment.objects.filter(parentid=id)
-        departmentname = SysDepartment.objects.get(id=id).name
-        if(objs.count() > 0):
-            result.msg += departmentname + "下有子部门:"
-            hassub = True
-            for o in objs:
-                 result.msg +=o.name + ' '
-            result.msg+='</br>'
-    if(hassub):
-         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    object = SysDepartment.objects.filter(id__in=ids).delete()
+
+    object = SysSystemOption.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -119,22 +99,17 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        alldata = SysSystemOption.objects.filter(description__icontains=searchkey).order_by(_orderby).\
+        values('code','value')
     else:
-        alldata = SysDepartment.objects.order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        alldata = SysSystemOption.objects.order_by(_orderby).\
+        values('code','value')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        pid = row['parentid']
-        if pid != 0 and pid != None:
-            row['parentname'] = SysDepartment.objects.get(id=pid).name
-        else:
-            row['parentname'] = '无'
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 

@@ -15,13 +15,13 @@
 
 
 {% block content %}
-<form class="form-horizontal" action="@Url.Action("Edit");" method="post" id="lkForm">
-    @Html.HiddenFor(item => item.Id, new { @class = "form-control" })
-    @Html.AntiForgeryToken()
+<form class="form-horizontal" action="/adm/module/post_edit/" method="post" id="lkForm">
+    <input type="hidden" name="Id" value="{{id}}"/>
+     {%csrf_token%}
     <div class="form-group">
         <label class="col-md-3 control-label">模块名称</label>
         <div class="col-md-7">
-            <input type="text" class="form-control" name="Name" asp-for="Name"
+            <input type="text" class="form-control" name="Name" value="{{name}}"
                    data-val="true" data-val-maxlength="模块名称长度不能超过12个字符" data-val-maxlength-max="12"
                    data-val-minlength="模块名称长度不能少于2个字符" data-val-minlength-min="2" data-val-required="模块名称不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
@@ -30,7 +30,7 @@
     <div class="form-group">
         <label class="col-md-3 control-label">模块描述</label>
         <div class="col-md-7">
-            <textarea type="text" class="form-control" name="Description"
+            <textarea type="text" class="form-control" name="Description" value="{{module}}"
                       data-val="true" data-val-maxlength="模块描述长度不能超过100个字符" data-val-maxlength-max="100"
                       data-val-required="模块描述不能为空" rows="3"></textarea>
             <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>

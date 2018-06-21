@@ -2,12 +2,22 @@ from __future__ import unicode_literals
 from datetime import  timezone
 from django.db import models
 from django.utils import timezone
+from enum import IntEnum
 
+############################################################################
+#枚举
+class MenuType(IntEnum):
+    模块=0,
+    菜单=1,
+    按钮=2
+
+############################################################################
+#视图model
 class DataTableModel:
-    draw=0
-    recordsTotal=0
-    recordsFiltered=0
-    data=None
+    draw = 0
+    recordsTotal = 0
+    recordsFiltered = 0
+    data = None
     def __init__(self,draw,recordsTotal,recordsFiltered,data):
         self.draw = draw
         self.recordsTotal = recordsTotal
@@ -63,7 +73,8 @@ class ResultModel:
             data[f.name] = f.value_from_object(self)
         return data
 
-
+############################################################################################################################
+#数据库model
 class BaseModel(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     createdatetime = models.DateTimeField(db_column='CreateDateTime',default=timezone.now)  # Field name made lowercase.
@@ -83,7 +94,6 @@ class SysDepartment(BaseModel):
         return self.name
     class Meta:
         db_table = 'Sys_Department'
-
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)  # Field name made lowercase.
     clientmac = models.CharField(db_column='ClientMac', max_length=40, blank=True, null=True)  # Field name made lowercase.
@@ -118,7 +128,7 @@ class SysModule(BaseModel):
         db_table = 'Sys_Module'
 
 
-class SysOperationlog(BaseModel):
+class SysOperationLog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15)  # Field name made lowercase.
     clientmac = models.CharField(db_column='ClientMac', max_length=40)  # Field name made lowercase.
     operationdescription = models.CharField(db_column='OperationDescription', max_length=100)  # Field name made lowercase.
@@ -139,7 +149,7 @@ class SysRole(BaseModel):
         db_table = 'Sys_Role'
 
 
-class SysRolemenu(BaseModel):
+class SysRoleMenu(BaseModel):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     createdatetime = models.DateTimeField(db_column='CreateDateTime', blank=True, null=True)  # Field name made lowercase.
     menuid = models.IntegerField(db_column='MenuId')  # Field name made lowercase.
@@ -149,7 +159,7 @@ class SysRolemenu(BaseModel):
         db_table = 'Sys_RoleMenu'
 
 
-class SysSystemoption(BaseModel):
+class SysSystemOption(BaseModel):
     code = models.CharField(db_column='Code', max_length=100, blank=True, null=True)  # Field name made lowercase.
     value = models.CharField(db_column='Value', max_length=1000)  # Field name made lowercase.
     def __str__(self):
@@ -158,7 +168,7 @@ class SysSystemoption(BaseModel):
         db_table = 'Sys_SystemOption'
 
 
-class SysTablecolumn(BaseModel):
+class SysTableColumn(BaseModel):
     addvisible = models.IntegerField(db_column='AddVisible')  # Field name made lowercase.
     datatype = models.IntegerField(db_column='DataType')  # Field name made lowercase.
     description = models.TextField(db_column='Description', blank=True, null=True)  # Field name made lowercase.
@@ -229,14 +239,14 @@ class SysUser(BaseModel):
         db_table = 'Sys_User'
 
 
-class SysUserdepartment(BaseModel):
+class SysUserDepartment(BaseModel):
     departmentid = models.IntegerField(db_column='DepartmentId')  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserId')  # Field name made lowercase.
 
     class Meta:
         db_table = 'Sys_UserDepartment'
 
-class SysUserrole(models.Model):
+class SysUserRole(models.Model):
     userid = models.IntegerField(db_column='UserId')  # Field name made lowercase.
     roleid = models.IntegerField(db_column='RoleId')  # Field name made lowercase.
 

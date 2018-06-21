@@ -34,6 +34,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\adm\forms.py" />
+    <Compile Include="kingWeb\adm\views\systemoption.py" />
+    <Compile Include="kingWeb\adm\views\log.py" />
+    <Compile Include="kingWeb\adm\views\tablecolumn.py" />
+    <Compile Include="kingWeb\adm\views\tablelist.py" />
+    <Compile Include="kingWeb\adm\views\viewlist.py" />
+    <Compile Include="kingWeb\adm\views\module.py" />
+    <Compile Include="kingWeb\adm\views\role.py" />
+    <Compile Include="kingWeb\adm\views\menu.py" />
     <Compile Include="kingWeb\adm\views\department.py" />
     <Compile Include="kingWeb\DynamicRouter\activator.py" />
     <Compile Include="kingWeb\DynamicRouter\urls.py">

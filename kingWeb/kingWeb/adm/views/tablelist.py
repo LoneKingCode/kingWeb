@@ -11,19 +11,19 @@ from kingWeb.models import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
-        'adm/department/index.html',
+        'adm/table_list/index.html',
         {
-            'title':'部门管理',
+            'title':'表管理',
         })
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
-    departments = SysDepartment.objects.values('id','name')
+    table_lists = SysTableList.objects.values('id','name')
     return render(request,
-        'adm/department/add.html',
+        'adm/table_list/add.html',
         {
-            'title':'添加部门',
-            'departments':departments
+            'title':'添加表',
+            'table_lists':table_lists
         })
 
 
@@ -31,19 +31,19 @@ def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     if id == '':
-        return render(request, 'adm/department/index')
-    object = SysDepartment.objects.get(id=id)
-    departments = SysDepartment.objects.values('id','name')
+        return render(request, 'adm/table_list/index')
+    object = SysTableList.objects.get(id=id)
+    table_lists = SysTableList.objects.values('id','name')
     return render(request,
-        'adm/department/edit.html',
+        'adm/table_list/edit.html',
         {
-            'title':'编辑部门',
+            'title':'编辑表',
             'id':object.id,
             'name':object.name,
             'leader':object.leader,
             'description':object.description,
             'parentid':object.parentid,
-            'departments':departments
+            'table_lists':table_lists
         })
 
 @csrf_exempt
@@ -54,7 +54,7 @@ def post_add(request,kwargs):
     name = request.POST.get('Name','')
     leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    object = SysTableList.objects.create(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -68,7 +68,7 @@ def post_edit(request,kwargs):
     name = request.POST.get('Name','')
     leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    object = SysTableList.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -83,17 +83,17 @@ def post_delete(request,kwargs):
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     hassub = False
     for id in ids:
-        objs = SysDepartment.objects.filter(parentid=id)
-        departmentname = SysDepartment.objects.get(id=id).name
+        objs = SysTableList.objects.filter(parentid=id)
+        table_listname = SysTableList.objects.get(id=id).name
         if(objs.count() > 0):
-            result.msg += departmentname + "下有子部门:"
+            result.msg += table_listname + "下有子表:"
             hassub = True
             for o in objs:
                  result.msg +=o.name + ' '
             result.msg+='</br>'
     if(hassub):
          return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    object = SysDepartment.objects.filter(id__in=ids).delete()
+    object = SysTableList.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -119,10 +119,10 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
+        alldata = SysTableList.objects.filter(description__icontains=searchkey).order_by(_orderby).\
         values('name','parentid','leader','description','id')
     else:
-        alldata = SysDepartment.objects.order_by(_orderby).\
+        alldata = SysTableList.objects.order_by(_orderby).\
         values('name','parentid','leader','description','id')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
@@ -130,11 +130,7 @@ def get_page_data(request,kwargs):
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        pid = row['parentid']
-        if pid != 0 and pid != None:
-            row['parentname'] = SysDepartment.objects.get(id=pid).name
-        else:
-            row['parentname'] = '无'
+
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 

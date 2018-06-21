@@ -13,7 +13,7 @@ def index(request,kwargs):
     return render(request,
         'adm/department/index.html',
         {
-            'title':'部门管理',
+            'title':'XX管理',
         })
 
 def add(request,kwargs):
@@ -22,7 +22,7 @@ def add(request,kwargs):
     return render(request,
         'adm/department/add.html',
         {
-            'title':'添加部门',
+            'title':'添加XX',
             'departments':departments
         })
 
@@ -37,7 +37,7 @@ def edit(request,kwargs):
     return render(request,
         'adm/department/edit.html',
         {
-            'title':'编辑部门',
+            'title':'编辑XX',
             'id':object.id,
             'name':object.name,
             'leader':object.leader,
@@ -86,7 +86,7 @@ def post_delete(request,kwargs):
         objs = SysDepartment.objects.filter(parentid=id)
         departmentname = SysDepartment.objects.get(id=id).name
         if(objs.count() > 0):
-            result.msg += departmentname + "下有子部门:"
+            result.msg += departmentname + "下有子XX:"
             hassub = True
             for o in objs:
                  result.msg +=o.name + ' '
@@ -119,7 +119,7 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
+        alldata = SysDepartment.objects.filter(description__icontains=searchkey).order_by(_orderby).\
         values('name','parentid','leader','description','id')
     else:
         alldata = SysDepartment.objects.order_by(_orderby).\

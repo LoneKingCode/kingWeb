@@ -14,8 +14,8 @@
 
 
 {% block content %}
-<form class="form-horizontal" action="@Url.Action("Add", new { id = 0 })" method="post" id="lkForm">
-    @Html.AntiForgeryToken()
+<form class="form-horizontal" action="/adm/module/post_add/" method="post" id="lkForm">
+{%csrf_token%}
     <div class="form-group">
         <label class="col-md-3 control-label">模块名称</label>
         <div class="col-md-7">

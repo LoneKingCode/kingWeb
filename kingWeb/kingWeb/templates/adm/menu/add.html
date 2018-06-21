@@ -1,8 +1,7 @@
-﻿{% extends "adm/shared/layout_content.html" %}
+﻿ {% extends "adm/shared/layout_content.html" %}
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
-    <script src="{% statkc 'lib/bootstrap-suggest-plugin/dist/bootstrap-suggest.min.js'%}'"></script>
     <script type="text/javascript">
         $(function () {
             lkWeb.FormValidation($("#lkForm"), function () {
@@ -17,12 +16,12 @@
                     effectiveFieldsAlias: {
                         id: "Id",
                         name: "名称",
-                        typeName: "类型",
+                        typename: "类型",
                         url: "URL地址"
                     },
-                    effectiveFields: ["id", "name", "typeName", "url"],
+                    effectiveFields: ["id", "name", "typename", "url"],
                     getDataMethod: "url",
-                    url: "@Url.Action("GetList", "Menu")?searchKey=", //最后一个参数为关键字请求参数
+                    url: "/adm/menu/get_list?searchkey=", //最后一个参数为关键字请求参数
                     idField: "id",
                     keyField: "name"
                 }).on('onDataRequestSuccess', function (e, result) {
@@ -45,21 +44,25 @@
 
 
 {% block content %}
-<form class="form-horizontal" action="@Url.Action("Add", new { id = 0 })" method="post" id="lkForm">
-    @Html.AntiForgeryToken()
+<form class="form-horizontal" action="/adm/menu/post_add/" method="post" id="lkForm">
+  {%csrf_token%}
     <div class="form-group">
         <label class="col-md-3 control-label">所属模块</label>
         <div class="col-md-7">
-            <input name="ModuleId" type="hidden" id="txtModuleId" value="@ViewBag.ModuleId" />
-            @Html.DropDownList("ModuleId", (SelectList)ViewBag.Modules, new { @class = "form-control", @onchange = "SelectModule(this.value)" })
+            <input name="ModuleId" type="hidden" id="txtModuleId" value="{{moduleid}}" />
+              <select name="ParentId" class="form-control" onchange="SelectModule(this.value)">
+             {% for item in modules%}
+                <option value="{{item.id}}">{{item.name}}</option>
+             {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-3 control-label">上级菜单</label>
         <div class="col-md-7">
             <div class="input-group">
-                <input name="ParentId" type="hidden" id="txtParentId" value="@ViewBag.ParentId" />
-                <input class="form-control" type="text" autocomplete="off" id="menuList" value="@ViewBag.ParentName" />
+                <input name="ParentId" type="hidden" id="txtParentId" value="{{parentid}}" />
+                <input class="form-control" type="text" autocomplete="off" id="menuList" value="{{parentname}}" />
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle>
                         <span class="caret"></span>
