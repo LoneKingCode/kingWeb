@@ -155,7 +155,7 @@ def get_page_data(request,kwargs):
             row['modulename'] = '无'
 
         type = row['type']
-        if type != 0 and type != None:
+        if  type != None and type != '':
             row['typename'] = MenuType(int(type)).name
         else:
             row['typename'] = '无'
@@ -199,11 +199,11 @@ def get_menu_type(parentid):
 
     parentmenu = SysMenu.objects.get(id=parentid)
     parenttype = int(parentmenu.type)
-    if type == MenuType.模块.value:
+    if parenttype == MenuType.模块.value:
         return MenuType.菜单.value
-    elif type == MenuType.菜单.value:
+    elif parenttype == MenuType.菜单.value:
         return MenuType.按钮.value
-    elif type == MenuType.按钮.value:
+    elif parenttype == MenuType.按钮.value:
         return MenuType.按钮.value
     else:
         return MenuType.模块.value

@@ -35,7 +35,7 @@
 
         var lkTable;
         function InitDataTable() {
-            var dataUrl = '@Url.Action("GetPageData")';
+            var dataUrl = '/adm/role/get_page_data/';
             var columns = [
                 {
                     "sClass": "text-center",
@@ -45,7 +45,7 @@
                     },
                     "bSortable": false
                 },
-                { "mData": "rowNum", "sClass": "text-center" },
+                { "mData": "rownum", "sClass": "text-center" },
                 { "mData": "name", "sClass": "text-center" },
                 { "mData": "description", "sClass": "text-center" }
             ];
@@ -70,7 +70,7 @@
         </span>
     </div>
 </div>
-@Html.AntiForgeryToken()
+{%csrf_token%}
 <table class="table table-striped table-hover" id="lkTable">
     <thead>
         <tr>

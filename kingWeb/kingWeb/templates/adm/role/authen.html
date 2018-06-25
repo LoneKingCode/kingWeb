@@ -14,7 +14,7 @@
         function LoadData() {
             $.ajax({
                 type: "post",
-                url: "@Url.Action("GetRoleList", "Role")",
+                url: "/adm/role/get_list/",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                 },
@@ -30,7 +30,7 @@
             })
             $.ajax({
                 type: "post",
-                url: "@Url.Action("GetMenuList", "Role")",
+                url: "/adm/role/get_menu_list/",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                 },
@@ -80,7 +80,7 @@
         function onRoleCheck(e, treeId, treeNode) {
             roleId = treeNode.id;
             $.ajax({
-                url: "@Url.Action("GetRoleMenus", "Role")",
+                url: "/adm/role/get_role_menus",
                 type: "post",
                 dataType: "json",
                 data: { roleId: roleId, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() },
@@ -131,7 +131,7 @@
                     function () {
                         var data = GetData();
                       $.ajax({
-                          url: "@Url.Action("AuthMenus", "Role")",
+                          url: "/adm/role/auth_menus",
                           type: "post",
                           dataType: "json",
                           data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
@@ -171,7 +171,7 @@
     </div>
 </div>
 <hr />
-@Html.AntiForgeryToken()
+{%csrf_token%}
 <div class="row">
     <div class="col-sm-4">
         <div class="panel panel-info">
