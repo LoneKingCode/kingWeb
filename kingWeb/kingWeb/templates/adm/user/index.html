@@ -49,6 +49,7 @@
         var lkTable;
         function InitDataTable() {
             var dataUrl = '/adm/user/get_page_data/'
+
             var columns = [
                 {
                     "sClass": "text-center",
@@ -58,13 +59,15 @@
                     },
                     "bSortable": false
                 },
-                { "mData": "rowNum",  "sClass": "text-center" },
-                { "mData": "userName",  "sClass": "text-center" },
-                { "mData": "realName",   "sClass": "text-center" },
-                { "mData": "email" ,"sClass": "text-center", "bSortable": false },
-                { "mData": "statusName",   "sClass": "text-center" }
+                { "mData": "rownum",  "sClass": "text-center" },
+                { "mData": "username",  "sClass": "text-center" },
+                { "mData": "realname",   "sClass": "text-center" },
+                { "mData": "email", "sClass": "text-center", "bSortable": false },
+                                { "mData": "status",   "sClass": "text-center" },
+                { "mData": "last_login",   "sClass": "text-center" },
             ];
             lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
+            console.log('1')
         }
     </script>
 {% endblock %}
@@ -99,6 +102,7 @@
             <th>姓名</th>
             <th>电子邮箱</th>
             <th>状态</th>
+            <th>最后登陆时间</th>
         </tr>
     </thead>
     <tbody></tbody>

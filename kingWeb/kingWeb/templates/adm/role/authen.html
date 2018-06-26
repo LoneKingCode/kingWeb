@@ -2,9 +2,7 @@
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
-    <link href="{% static 'lib/zTree/css/metroStyle/metroStyle.css' %}" rel="stylesheet" />
-    <script src="{% static 'lib/zTree/js/jquery.ztree.core.js' %}"></script>
-    <script src="{% static 'lib/zTree/js/jquery.ztree.excheck.js' %}"></script>
+
 
     <script>
         var zNodes_role = [];
@@ -80,7 +78,7 @@
         function onRoleCheck(e, treeId, treeNode) {
             roleId = treeNode.id;
             $.ajax({
-                url: "/adm/role/get_role_menus",
+                url: "/adm/role/get_role_menus/",
                 type: "post",
                 dataType: "json",
                 data: { roleId: roleId, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() },
@@ -131,10 +129,14 @@
                     function () {
                         var data = GetData();
                       $.ajax({
-                          url: "/adm/role/auth_menus",
+                          url: "/adm/role/auth_menus/",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                          data: {
+                              RoleIds: data.RoleIds,
+                              MenuIds: data.MenuIds,
+                              csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                          },
                           async: false,
                           success: function (data) {
                               if (data.flag == true)

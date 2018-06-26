@@ -14,13 +14,13 @@
 
 
 {% block content %}
-<form class="form-horizontal" action="@Url.Action("Edit");" method="post" id="lkForm">
-    @Html.HiddenFor(item => item.Id, new { @class = "form-control" })
-    @Html.AntiForgeryToken()
+<form class="form-horizontal" action="/adm/systemoption/post_edit/" method="post" id="lkForm">
+   <input type="hidden" name="Id" value="{{id}}"/>
+     {%csrf_token%}
     <div class="form-group">
         <label class="col-md-3 control-label">代码</label>
         <div class="col-md-7">
-            <input type="text" class="form-control" asp-for="Code"
+            <input type="text" class="form-control" name="Code" value="{{code}}"
                    data-val-minlength="代码长度不能少于1个字符" data-val-minlength-min="1" data-val-required="代码不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Code" data-valmsg-replace="true"></span>
         </div>
@@ -28,8 +28,8 @@
     <div class="form-group">
         <label class="col-md-3 control-label">值</label>
         <div class="col-md-7">
-            <textarea type="text" class="form-control" asp-for="Value"
-                      data-val="true" data-val-required="值不能为空" rows="3"></textarea>
+            <textarea type="text" class="form-control" name="Value"
+                      data-val="true" data-val-required="值不能为空" rows="3">{{value}}</textarea>
             <span class="field-validation-valid" data-valmsg-for="Value" data-valmsg-replace="true"></span>
         </div>
     </div>

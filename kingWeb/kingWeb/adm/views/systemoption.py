@@ -58,7 +58,7 @@ def post_edit(request,kwargs):
     result = ResultModel()
     value = request.POST.get('Value','')
     code = request.POST.get('Code','')
-
+    id = request.POST.get('Id','')
     object = SysSystemOption.objects.filter(id=id).update(value=value,code=code)
     result.msg = '操作成功'
     result.flag = True
@@ -100,10 +100,10 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysSystemOption.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('code','value')
+        values('code','value','id')
     else:
         alldata = SysSystemOption.objects.order_by(_orderby).\
-        values('code','value')
+        values('code','value','id')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)

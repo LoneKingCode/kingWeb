@@ -16,6 +16,14 @@ def index(request,kwargs):
             'title':'角色管理',
         })
 
+def authen(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/role/authen.html',
+        {
+            'title':'角色授权',
+        })
+
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -121,7 +129,7 @@ def get_list(request,kwargs):
     alldata = SysRole.objects.values('id','name')
     result = []
     for row in alldata:
-        result.append({'pid':0,'name':row['name'],'id':row['id']})
+        result.append({'pId':0,'name':row['name'],'id':row['id']})
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt
@@ -132,17 +140,17 @@ def get_menu_list(request,kwargs):
     result = []
     for row in allmenu:
         type = int(row['type'])
-        pid = (row['moduleid'] + '_m') if type == MenuType.模块.value else row['parentid']
-        result.append({'pid': pid,'name':row['name'],'id':row['id'],'open':type == MenuType.模块.value})
+        pId = (str(row['moduleid']) + '_m') if type == MenuType.模块.value else row['parentid']
+        result.append({'pId': str(pId),'name':row['name'],'id':str(row['id']),'open':type == MenuType.模块.value})
     for row in allmodule:
-            result.append({'pid':0,'name':'--------' + row['name'] + '--------' ,'id':row['id'] + '_m','open':False})
+            result.append({'pId':'0','name':'--------' + row['name'] + '--------' ,'id':str(row['id']) + '_m','open':True,'type':'module'})
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt
 def get_role_menus(request,kwargs):
     assert isinstance(request,HttpRequest)
-    roleid = kwargs.get('roleId','')
-    alldata = SysRoleMenu.objects.filter(roleid=roleid).values('id','menuId')
+    roleid = request.POST.get('roleId','')
+    alldata = SysRoleMenu.objects.filter(roleid=roleid).values('id','menuid')
     result = []
     for row in alldata:
         result.append({'id':row['id'],'menuId':row['menuid']})
@@ -155,14 +163,15 @@ def auth_menus(request,kwargs):
     roleids = request.POST.getlist('RoleIds[]')
     menuids = request.POST.getlist('MenuIds[]')
     newmodels = []
-    if menuids.count() > 0 and roleids.count() > 0:
+    if len(menuids) > 0 and len(roleids) > 0:
+        SysRoleMenu.objects.filter(roleid__in=roleids).delete()
         for roleid in roleids:
             SysRoleMenu.objects.filter(roleid=roleid).delete()
-        for menuid in menuids:
-            newmodels.append(SysRoleMenu(roleid=roleid,menuid=menuid))
+            for menuid in menuids:
+                newmodels.append(SysRoleMenu(roleid=roleid,menuid=menuid))
         SysRoleMenu.objects.bulk_create(newmodels)
         result.msg = '操作成功'
         result.flag = True
     else:
         result.msg='操作失败'
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

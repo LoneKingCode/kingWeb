@@ -2,10 +2,10 @@
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
-     {#ViewBag.RealName = Model.RealName;
-     iewBag.UserId = Model.Id;#}
+
 
     <script>
+        var userId = {{userid}}
         $(function () {
             InitDataTable_role();
             InitDataTable_auth();
@@ -19,7 +19,7 @@
             });
         })
         function DeleteRole(roleId) {
-            var data = { UserId:@ViewBag.UserId,RoleIds: [] }
+            var data = { UserId:userId,RoleIds: [] }
             if (roleId == undefined) {  //如果没有传roleId 说明是批量删除 获取选中的行
                 $(".check_role").each(function (i, n) {
                     if ($(n).prop("checked"))
@@ -32,7 +32,7 @@
             else
                 data.RoleIds.push(roleId);
                     $.ajax({
-                          url: "@Url.Action("DeleteRole", "User")",
+                          url: "/adm/user/delete_role/",
                           type: "post",
                           dataType: "json",
                           data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
@@ -53,7 +53,7 @@
                      })
         }
         function AuthRole(roleId) {
-            var data = { UserId:@ViewBag.UserId,RoleIds: [] }
+            var data = { UserId: userId,RoleIds: [] }
             if (roleId == undefined) {  //如果没有传roleId 说明是批量授权 获取选中的行
                 data.RoleIds = lkWeb.GetCheckValueList($(".check_auth"));
                 if (data.RoleIds.length < 1) {
@@ -64,10 +64,12 @@
             else
                 data.RoleIds.push(roleId);
              $.ajax({
-                          url: "@Url.Action("AuthRole", "User")",
+                          url: "/adm/user/auth_role/",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                          data: { UserId:data.UserId,
+                             RoleIds:data.RoleIds,
+                             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
@@ -91,7 +93,7 @@
         //已拥有的角色
         var table_role;
         function InitDataTable_role() {
-            var dataUrl = '@Url.Action("GetMyRoles")/' + @ViewBag.UserId;
+            var dataUrl = '/adm/user/get_user_role/' + userId;
             var columns = [
                 {
                     "sClass": "text-center",
@@ -117,7 +119,7 @@
             //未拥有的角色
         var table_auth;
          function InitDataTable_auth() {
-       var dataUrl = '@Url.Action("GetNotMyRoles")/' + @ViewBag.UserId;
+       var dataUrl = '/adm/user/get_not_user_role/' + userId;
             $.fn.dataTableExt.sErrMode = 'throw';
             var columns = [
                 {
@@ -147,7 +149,7 @@
 
 {% block content %}
 <div>
-    <h3>@ViewBag.RealName 已拥有的角色</h3>
+    <h3>{{realname}} 已拥有的角色</h3>
     <button type="button" class="btn btn-danger" onclick="DeleteRole()">批量取消</button>
     <table class="table table-striped table-hover" id="table_role">
         <thead>
