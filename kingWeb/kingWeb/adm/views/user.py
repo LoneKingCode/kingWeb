@@ -12,7 +12,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
-from django.db import connection
 from django.core import serializers
 
 from kingWeb.models import *
@@ -355,7 +354,6 @@ def remove_department_user(request,kwargs):
     departmentid = request.POST.get('DepartmentId','')
     userids = request.POST.getlist('UserIDs[]','')
     objects = SysUserDepartment.objects.filter(Q(departmentid = departmentid) & Q(userid__in=userids)).delete()
-    print(connection.queries)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
