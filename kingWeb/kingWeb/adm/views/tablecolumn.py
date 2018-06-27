@@ -10,21 +10,27 @@ from kingWeb.models import *
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
+    tablelist = SysTableList.objects.values('id','name')
     return render(request,
         'adm/table_column/index.html',
         {
             'title':'表结构管理',
+            'tablelist':tablelist,
         })
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
-    table_columns = SysTableColumn.objects.values('id','name')
+    tablelist = SysTableList.objects.values('id','name')
+    datatype = []
+    for s in TableColumnDataType:
+        datatype.append(s)
     return render(request,
         'adm/table_column/add.html',
         {
             'title':'添加表结构',
-            'table_columns':table_columns
-        })
+            'tablelist':tablelist,
+            'datatype':datatype
+         })
 
 
 def edit(request,kwargs):
@@ -33,28 +39,68 @@ def edit(request,kwargs):
     if id == '':
         return render(request, 'adm/table_column/index')
     object = SysTableColumn.objects.get(id=id)
-    table_columns = SysTableColumn.objects.values('id','name')
+    tablelist = SysTableList.objects.values('id','name')
+    datatype = []
+    for s in TableColumnDataType:
+        datatype.append(s)
     return render(request,
         'adm/table_column/edit.html',
         {
             'title':'编辑表结构',
             'id':object.id,
             'name':object.name,
-            'leader':object.leader,
             'description':object.description,
-            'parentid':object.parentid,
-            'table_columns':table_columns
+            'tableid':object.tableid,
+            'name':object.name,
+            'datatype':object.datatype,
+            'required':object.required,
+            'maxlength':object.maxlength,
+            'vieworder':object.vieworder,
+            'listorder':object.listorder,
+            'editorder':object.editorder,
+            'importvisible':object.importvisible,
+            'exportvisible':object.exportvisible,
+            'viewvisible':object.viewvisible,
+            'addvisible':object.addvisible,
+            'searchvisible':object.searchvisible,
+            'editvisible':object.editvisible,
+            'listvisible':object.listvisible,
+            'outsql':object.outsql,
+            'enumrange':object.enumrange,
+            'primarkey':object.primarkey,
+            'tablelist':tablelist,
+            'datatype':datatype
+
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysTableColumn.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    tableid = request.POST.get('TableId','')
+    datatype = request.POST.get('DataType','')
+    required = request.POST.get('Required','')
+    maxlength = request.POST.get('MaxLength','')
+    vieworder = request.POST.get('ViewOrder','')
+    listorder = request.POST.get('ListOrder','')
+    editorder = request.POST.get('EditOrder','')
+    importvisible = request.POST.get('ImportVisible','')
+    exportvisible = request.POST.get('ExportVisible','')
+    viewvisible = request.POST.get('ViewVisible','')
+    addvisible = request.POST.get('AddVisible','')
+    searchvisible = request.POST.get('SearchVisible','')
+    editvisible = request.POST.get('EditVisible','')
+    listvisible = request.POST.get('ListVisible','')
+    outsql = request.POST.get('OutSql','')
+    enumrange = request.POST.get('EnumRange','')
+    primarkey = request.POST.get('PrimarKey','')
+
+    object = SysTableColumn.objects.create(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
+        maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
+        viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -63,12 +109,31 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     id = request.POST.get('Id','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysTableColumn.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    tableid = request.POST.get('TableId','')
+    datatype = request.POST.get('DataType','')
+    required = request.POST.get('Required','')
+    maxlength = request.POST.get('MaxLength','')
+    vieworder = request.POST.get('ViewOrder','')
+    listorder = request.POST.get('ListOrder','')
+    editorder = request.POST.get('EditOrder','')
+    importvisible = request.POST.get('ImportVisible','')
+    exportvisible = request.POST.get('ExportVisible','')
+    viewvisible = request.POST.get('ViewVisible','')
+    addvisible = request.POST.get('AddVisible','')
+    searchvisible = request.POST.get('SearchVisible','')
+    editvisible = request.POST.get('EditVisible','')
+    listvisible = request.POST.get('ListVisible','')
+    outsql = request.POST.get('OutSql','')
+    enumrange = request.POST.get('EnumRange','')
+    primarkey = request.POST.get('PrimarKey','')
+
+    object = SysTableColumn.objects.filter(id=id).update(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
+        maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
+        viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -81,18 +146,6 @@ def post_delete(request,kwargs):
     if ids == '':
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    hassub = False
-    for id in ids:
-        objs = SysTableColumn.objects.filter(parentid=id)
-        table_columnname = SysTableColumn.objects.get(id=id).name
-        if(objs.count() > 0):
-            result.msg += table_columnname + "下有子表结构:"
-            hassub = True
-            for o in objs:
-                 result.msg +=o.name + ' '
-            result.msg+='</br>'
-    if(hassub):
-         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     object = SysTableColumn.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
@@ -120,23 +173,48 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysTableColumn.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
     else:
         alldata = SysTableColumn.objects.order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        pid = row['parentid']
-        if pid != 0 and pid != None:
-            row['parentname'] = SysTableColumn.objects.get(id=pid).name
-        else:
-            row['parentname'] = '无'
-
+        row['tablename'] = SysTableList.objects.get(id=row['tableid']).name
+        row['addvisible'] = '是' if row['addvisible'] == 1 else '否'
+        row['editvisible'] = '是' if row['editvisible'] == 1 else '否'
+        row['listvisible'] = '是' if row['listvisible'] == 1 else '否'
+        row['searchvisible'] = '是' if row['searchvisible'] == 1 else '否'
+        row['datatypename'] = TableColumnDataType(int(row['datatype'])).name
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+@csrf_exempt
+def post_copy(request,kwargs):
+    result = ResultModel()
+    assert isinstance(request, HttpRequest)
+    id = request.POST.get('id','')
+    object = SysTableColumn.objects.get(id=id)
+    object.pk=None
+    object.save()
+    result.msg = '操作成功'
+    result.flag = True
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
+
+@csrf_exempt
+def setvalue(request,kwargs):
+    result = ResultModel()
+    assert isinstance(request, HttpRequest)
+    id = request.POST.getlist('ids[]','')
+    value = request.POST.get('value','')
+    filedname = request.POST.get('filedname','')
+
+    result.msg = '操作成功'
+    result.flag = True
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 

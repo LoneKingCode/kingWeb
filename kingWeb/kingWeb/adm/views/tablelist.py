@@ -18,13 +18,15 @@ def index(request,kwargs):
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
-    table_lists = SysTableList.objects.values('id','name')
+    import_type_list = []
+    for s in TableImportType:
+        import_type_list.append(s)
     return render(request,
         'adm/table_list/add.html',
         {
             'title':'添加表',
-            'table_lists':table_lists
-        })
+            'import_type_list':import_type_list,
+         })
 
 
 def edit(request,kwargs):
@@ -33,28 +35,60 @@ def edit(request,kwargs):
     if id == '':
         return render(request, 'adm/table_list/index')
     object = SysTableList.objects.get(id=id)
-    table_lists = SysTableList.objects.values('id','name')
+    import_type_list = []
+    for s in TableImportType:
+        import_type_list.append(s)
     return render(request,
         'adm/table_list/edit.html',
         {
             'title':'编辑表',
             'id':object.id,
             'name':object.name,
-            'leader':object.leader,
             'description':object.description,
-            'parentid':object.parentid,
-            'table_lists':table_lists
+            'deletetablename':object.deletetablename,
+            'allowview':object.allowview,
+            'allowadd':object.allowadd,
+            'allowedit':object.allowedit,
+            'allowdelete':object.allowdelete,
+            'allowimport':object.allowimport,
+            'allowexport':object.allowexport,
+            'importtype':object.importtype,
+            'isview':object.isview,
+            'defaultsort':object.defaultsort,
+            'forbiddendeletefilter':object.forbiddendeletefilter,
+            'forbiddenupdatefilter':object.forbiddenupdatefilter,
+            'forbiddenaddfilter':object.forbiddenaddfilter,
+            'defaultfilter':object.defaultfilter,
+            'extendfunction':object.extendfunction,
+            'import_type_list':import_type_list,
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysTableList.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    deletetablename = request.POST.get('DeleteTableName','')
+    allowview = request.POST.get('AllowView','')
+    allowadd = request.POST.get('AllowAdd','')
+    allowedit = request.POST.get('AllowEdit','')
+    allowdelete = request.POST.get('AllowDelete','')
+    allowimport = request.POST.get('AllowImport','')
+    allowexport = request.POST.get('AllowExport','')
+    importtype = request.POST.get('ImportType','')
+    isview = request.POST.get('IsView','')
+    defaultsort = request.POST.get('DefaultSort','')
+    forbiddendeletefilter = request.POST.get('ForbiddenDeleteFilter','')
+    forbiddenupdatefilter = request.POST.get('ForbiddenUpdateFilter','')
+    forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
+    defaultfilter = request.POST.get('DefaultFilter','')
+    extendfunction = request.POST.get('ExtendFunction','')
+
+    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
+      allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+   isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -63,12 +97,29 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     id = request.POST.get('Id','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysTableList.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    deletetablename = request.POST.get('DeleteTableName','')
+    allowview = request.POST.get('AllowView','')
+    allowadd = request.POST.get('AllowAdd','')
+    allowedit = request.POST.get('AllowEdit','')
+    allowdelete = request.POST.get('AllowDelete','')
+    allowimport = request.POST.get('AllowImport','')
+    allowexport = request.POST.get('AllowExport','')
+    importtype = request.POST.get('ImportType','')
+    isview = request.POST.get('IsView','')
+    defaultsort = request.POST.get('DefaultSort','')
+    forbiddendeletefilter = request.POST.get('ForbiddenDeleteFilter','')
+    forbiddenupdatefilter = request.POST.get('ForbiddenUpdateFilter','')
+    forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
+    defaultfilter = request.POST.get('DefaultFilter','')
+    extendfunction = request.POST.get('ExtendFunction','')
+
+    object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
+      allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+   isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -81,18 +132,6 @@ def post_delete(request,kwargs):
     if ids == '':
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    hassub = False
-    for id in ids:
-        objs = SysTableList.objects.filter(parentid=id)
-        table_listname = SysTableList.objects.get(id=id).name
-        if(objs.count() > 0):
-            result.msg += table_listname + "下有子表:"
-            hassub = True
-            for o in objs:
-                 result.msg +=o.name + ' '
-            result.msg+='</br>'
-    if(hassub):
-         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     object = SysTableList.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
@@ -120,19 +159,46 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysTableList.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        values('id','name','description','allowview','allowadd','allowedit','allowdelete','isview')
     else:
         alldata = SysTableList.objects.order_by(_orderby).\
-        values('name','parentid','leader','description','id')
+        values('id','name','description','allowview','allowadd','allowedit','allowdelete','isview')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
+        row['allowview'] = '是' if row['allowview'] == 1 else '否'
+        row['allowadd'] = '是' if row['allowadd'] == 1 else '否'
+        row['allowedit'] = '是' if row['allowedit'] == 1 else '否'
+        row['allowdelete'] = '是' if row['allowdelete'] == 1 else '否'
+        row['isview'] = '是' if row['isview'] == 1 else '否'
 
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+@csrf_exempt
+def post_copy(request,kwargs):
+    result = ResultModel()
+    assert isinstance(request, HttpRequest)
+    id = request.POST.get('id','')
+    object = SysTableList.objects.get(id=id)
+    object.pk=None
+    object.save()
+    result.msg = '操作成功'
+    result.flag = True
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
+
+@csrf_exempt
+def post_build_column(request,kwargs):
+    result = ResultModel()
+    assert isinstance(request, HttpRequest)
+    id = request.POST.get('id','')
+    result.msg = '操作成功'
+    result.flag = True
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 

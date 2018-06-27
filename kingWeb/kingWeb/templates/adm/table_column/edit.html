@@ -16,17 +16,21 @@
 
 {% block content %}
 
-<form class="form-horizontal" action="@Url.Action("Edit");" method="post" id="lkForm">
-    @Html.HiddenFor(item => item.Id, new { @class = "form-control" })
+<form class="form-horizontal" action="/adm/tablecolumn/post_edit/" method="post" id="lkForm">
+    <input type="hidden" name="Id" value="{{id}}" />
     {%csrf_token%}
     <div class="form-group">
         <label class="col-md-2 control-label">所属表</label>
         <div class="col-md-4">
-            @Html.DropDownList("TableId", (SelectList)ViewBag.TableList, new { @class = "form-control" })
+               <select name="TableId" class="form-control" >
+             {% for item in tablelist%}
+                <option value="{{item.id}}" {%ifequal item.id tableid %} selected {%endifequal%}>{{item.name}}</option>
+             {% endfor %}
+            </select>
         </div>
         <label class="col-md-2 control-label">列名称</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="Name"
+            <input type="text" class="form-control" name="Name" value="name"
                    data-val="true" data-val-maxlength="列名称长度不能超过12个字符" data-val-maxlength-max="50"
                    data-val-minlength="列名称长度不能少于2个字符" data-val-minlength-min="2" data-val-required="列名称不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
@@ -35,93 +39,99 @@
     <div class="form-group">
         <label class="col-md-2 control-label">列说明</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="Description"
+            <input type="text" class="form-control" name="Description" value="description"
                    data-val="true" data-val-maxlength="列说明长度不能超过50个字符" data-val-maxlength-max="50"
                    data-val-required="列说明不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>
         </div>
         <label class="col-md-2 control-label">数据类型</label>
         <div class="col-md-4">
-            @Html.DropDownListFor(item => item.DataType, (SelectList)ViewBag.DataTypeList, new { @class = "form-control" })
+              <select name="DataType" class="form-control">
+             {% for item in datatype%}
+                <option value="{{item.value}}" {%ifequal item.value datatype %} selected {%endifequal%}>{{item.name}}</option>
+             {% endfor %}
+           </select>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">是否必填</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="Required" />
+            <input type="text" class="form-control" name="Required" value="{{required}}"/>
         </div>
         <label class="col-md-2 control-label">输入控制</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="MaxLength" data-toggle="tooltip" title="最大长度"/>
+            <input type="text" class="form-control" name="MaxLength" data-toggle="tooltip" title="最大长度" value="{{maxlength}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ViewOrder" />
+            <input type="text" class="form-control" name="ViewOrder"  value="{{vieworder}}"/>
         </div>
         <label class="col-md-2 control-label">列表显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ListOrder" />
+            <input type="text" class="form-control" name="ListOrder" value="{{listorder}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">添加编辑显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="EditOrder" />
+            <input type="text" class="form-control" name="EditOrder"  value="{{editorder}}"/>
         </div>
 
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">导入是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ImportVisible" />
+            <input type="text" class="form-control" name="ImportVisible" value="{{importvisible}}"/>
         </div>
         <label class="col-md-2 control-label">导出是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ExportVisible" />
+            <input type="text" class="form-control" name="ExportVisible" value="{{exportvisible}}" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ViewVisible" />
+            <input type="text" class="form-control" name="ViewVisible" value="{{viewvisible}}" />
         </div>
         <label class="col-md-2 control-label">添加是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="AddVisible" />
+            <input type="text" class="form-control" name="AddVisible" value="{{addvisible}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">查询是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="SearchVisible" />
+            <input type="text" class="form-control" name="SearchVisible" value="{{searchvisible}}" />
         </div>
         <label class="col-md-2 control-label">编辑是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="EditVisible" />
+            <input type="text" class="form-control" name="EditVisible" value="{{editvisible}}" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">列表是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="ListVisible" />
+            <input type="text" class="form-control" name="ListVisible" value="{{listvisible}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">外部SQL</label>
         <div class="col-md-7">
-            <textarea class="form-control" asp-for="OutSql" rows="3" data-toggle="tooltip" title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件)">></textarea>
+            <textarea class="form-control" name="OutSql" rows="3" data-toggle="tooltip" title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件)">
+{{outsql}}
+</textarea>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">枚举值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="EnumRange" data-toggle="tooltip" title="例如 模块,菜单,按钮" />
+            <input type="text" class="form-control" name="EnumRange"  value="{{enumrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮" />
         </div>
         <label class="col-md-2 control-label">是否主键</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" asp-for="PrimarKey" />
+            <input type="text" class="form-control" name="PrimarKey"  value="{{primarkey}}"/>
         </div>
     </div>
     <div class="form-group">

@@ -16,7 +16,7 @@
 
 
 {% block content %}
-<form class="form-horizontal" action="@Url.Action("Add", new { id = 0 })" method="post" id="lkForm">
+<form class="form-horizontal" action="/adm/tablelist/post_add/" method="post" id="lkForm">
     {%csrf_token%}
     <div class="form-group">
         <label class="col-md-2 control-label">表名</label>
@@ -75,7 +75,11 @@
     <div class="form-group">
         <label class="col-md-2 control-label">导入类型</label>
         <div class="col-md-4">
-            @Html.DropDownList("ImportType", (SelectList)ViewBag.ImportTypeList, new { @class = "form-control" })
+             <select name="ImportType" class="form-control">
+            {% for item in import_type_list%}
+                <option value="{{item.value}}">{{item.name}}</option>
+             {% endfor %}
+           </select>
         </div>
         <label class="col-md-2 control-label">是否视图</label>
         <div class="col-md-4">

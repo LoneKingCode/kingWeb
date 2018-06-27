@@ -17,6 +17,13 @@ class UserStatus(IntEnum):
     未激活=0,
     已激活=1,
     禁用=2,
+
+class TableImportType(IntEnum):
+    插入 = 0,
+    更新 = 1,
+
+class TableColumnDataType(IntEnum):
+    int = 0,
 ############################################################################
 #视图model
 class DataTableModel:
@@ -200,7 +207,7 @@ class SysTableColumn(BaseModel):
         db_table = 'Sys_TableColumn'
 
 
-class SysTablelist(BaseModel):
+class SysTableList(BaseModel):
     defaultfilter = models.TextField(db_column='DefaultFilter', blank=True, null=True)  # Field name made lowercase.
     defaultsort = models.TextField(db_column='DefaultSort', blank=True, null=True)  # Field name made lowercase.
     deletetablename = models.TextField(db_column='DeleteTableName', blank=True, null=True)  # Field name made lowercase.

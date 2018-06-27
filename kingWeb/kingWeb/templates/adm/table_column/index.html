@@ -39,7 +39,7 @@
                 return;
             }
             lkWeb.Confirm("确认复制", function () {
-                lkWeb.AjaxPost("@Url.Action("Copy")", { id: id }, function () {
+                lkWeb.AjaxPost("/adm/tablecolumn/post_copy/", { id: id }, function () {
                     parent.layer.alert("复制成功");
                 lkTable.draw(false);
             })
@@ -47,7 +47,7 @@
         }
         var lkTable;
         function InitDataTable() {
-            var dataUrl = '@Url.Action("GetPageData")';
+            var dataUrl = '/adm/tablecolumn/get_page_data/';
             var columns = [
                 {
                     "sClass": "text-center",
@@ -57,15 +57,15 @@
                     },
                     "bSortable": false
                 },
-                { "mData": "rowNum", "sClass": "text-center" },
-                { "mData": "tableName", "sClass": "text-center" },
+                { "mData": "rownum", "sClass": "text-center" },
+                { "mData": "tablename", "sClass": "text-center" },
                 { "mData": "name", "sClass": "text-center" },
                 { "mData": "description", "sClass": "text-center" },
-                { "mData": "dataType", "sClass": "text-center" },
-                { "mData": "addVisible", "sClass": "text-center" },
-                { "mData": "editVisible", "sClass": "text-center" },
-                { "mData": "listVisible", "sClass": "text-center" },
-                { "mData": "searchVisible", "sClass": "text-center" },
+                { "mData": "datatypename", "sClass": "text-center" },
+                { "mData": "addvisible", "sClass": "text-center" },
+                { "mData": "editvisible", "sClass": "text-center" },
+                { "mData": "listvisible", "sClass": "text-center" },
+                { "mData": "searchvisible", "sClass": "text-center" },
              ];
             lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
         }
@@ -91,7 +91,7 @@
             var ids = lkWeb.GetCheckValueList($(".checkChild"));
             var value = $("#txtValue").val();
             lkWeb.Confirm("确认修改", function () {
-                lkWeb.AjaxPost("@Url.Action("SetValue")", { ids: ids, Value: value, FiledName: filedName }, function () {
+                lkWeb.AjaxPost("/adm/tablecolumn/setvalue/", { ids: ids, value: value, filedname: filedName }, function () {
                     parent.layer.alert("修改成功");
                     lkTable.draw(false);
                 })
@@ -143,7 +143,11 @@
 </div>
 <div class="form-group">
     <div class="input-group">
-        @Html.DropDownList("TableList", (SelectList)ViewBag.TableList, new { @class = "form-control" })
+        <select id="TableList" class="form-control" >
+             {% for item in tablelist%}
+                <option value="{{item.id}}">{{item.name}}</option>
+             {% endfor %}
+        </select>
         <span class="input-group-btn">
             <button class="btn btn-primary" type="button" onclick="SelectByTable()"> <i class="fa fa-search"></i> 查看</button>
         </span>
