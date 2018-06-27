@@ -26,7 +26,7 @@
                 parent.layer.alert("请选择用户");
                 return;
             }
-              lkWeb.GoAction("adm","user", "authen", userId, true, "设置权限",'100%','100%');
+              lkWeb.GoAction("adm","user", "authen", userId, true, "角色授权",'100%','100%');
         }
 
         function AddModel() {
@@ -53,18 +53,18 @@
             var columns = [
                 {
                     "sClass": "text-center",
-                    "mData": "id",
+                    "mData": "user__id",
                     "mRender": function (data, type, row) {
                         return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                     },
                     "bSortable": false
                 },
                 { "mData": "rownum",  "sClass": "text-center" },
-                { "mData": "username",  "sClass": "text-center" },
+                { "mData": "user__username",  "sClass": "text-center" },
                 { "mData": "realname",   "sClass": "text-center" },
-                { "mData": "email", "sClass": "text-center", "bSortable": false },
-                                { "mData": "status",   "sClass": "text-center" },
-                { "mData": "last_login",   "sClass": "text-center" },
+                { "mData": "user__email", "sClass": "text-center", "bSortable": false },
+                { "mData": "status",   "sClass": "text-center" },
+                { "mData": "user__last_login",   "sClass": "text-center" },
             ];
             lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
             console.log('1')

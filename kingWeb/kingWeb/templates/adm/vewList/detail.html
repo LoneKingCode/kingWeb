@@ -15,7 +15,7 @@
     </script>
 }
 <form class="form-horizontal" method="post" id="lkForm">
-    @Html.AntiForgeryToken()
+    {%csrf_token%}
     @{
         string tpl = "<div class=\"form-group\"><div class=\"\">" +
 "<label class=\"col-md-2 control-label\">{0}:</label>" +

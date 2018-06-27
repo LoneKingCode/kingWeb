@@ -12,7 +12,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
-
+from django.db import connection
 from django.core import serializers
 
 from kingWeb.models import *
@@ -29,37 +29,71 @@ def index(request,kwargs):
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
+    statuslist = []
+    for s in UserStatus:
+        statuslist.append(s)
     return render(request,
         'adm/user/add.html',
         {
             'title':'添加用户',
+            'statuslist':statuslist
         })
 
 def authen(request,kwargs):
     assert isinstance(request, HttpRequest)
+    userid = kwargs.get('id','')
+    user = User.objects.get(id=userid)
     return render(request,
         'adm/user/authen.html',
         {
             'title':'角色授权',
+            'userid':userid,
+            'realname':user.last_name + user.first_name,
         })
+def department(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/user/department.html',
+        {
+            'title':'用户部门',
+        })
+
+def select_user(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/user/select_user.html',
+        {
+            'title':'选择用户',
+            'departmentid':kwargs.get('id','')
+        })
+
 
 
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
+    allow_modify_status = 1
     if id == '':
-        return render(request, 'adm/user/index')
-    object = User.objects.get(id=id)
+       id = request.user.id
+       allow_modify_status = 0 #如果是从后台 访问的修改信息，是修改自身信息，不允许修改账户状态
+    object = SysUserProfile.objects.filter(user__id=id)\
+        .values('status','user__email','user__first_name','user__last_name',\
+        'user__id','user__last_login','user__username').first()
+    statuslist = []
+    for s in UserStatus:
+        statuslist.append(s)
     return render(request,
         'adm/user/edit.html',
         {
             'title':'编辑用户',
-            'username':object.username,
-            'lastname':object.last_name,
-            'firstname':object.first_name,
-            'email':object.email,
-            'status':object.is_active,
-
+            'id':object['user__id'],
+            'username':object['user__username'],
+            'lastname':object['user__last_name'],
+            'firstname':object['user__first_name'],
+            'email':object['user__email'],
+            'status':object['status'],
+            'statuslist':statuslist,
+            'allow_modify_status':allow_modify_status,
         })
 
 
@@ -99,10 +133,13 @@ def post_add(request,kwargs):
     firstname = request.POST.get('FirstName','')
     email = request.POST.get('Email','')
     password = request.POST.get('Password','')
-    #is_active = request.POST.get('Status','')
+    status = request.POST.get('Status','')
 
-    object = User.objects.create_user(username=username,email=email,first_name=firstname,\
+    user = User.objects.create_user(username=username,email=email,first_name=firstname,\
         last_name=lastname,password=password) #is_active=is_active)
+    user_profile = SysUserProfile.objects.get(user=user)
+    user_profile.status = status
+    user_profile.save()
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -117,19 +154,20 @@ def post_edit(request,kwargs):
     email = request.POST.get('Email','')
     password = request.POST.get('Password','')
     oldpassword = request.POST.get('OldPassword','')
-    #is_active = request.POST.get('Status','')
+    status = request.POST.get('Status','')
     user = auth.authenticate(username=username, password=oldpassword)
     if user is not None:
             user.last_name = lastname
             user.first_name = firstname
-            user.email = email
-          #  user.is_active = is_active
             user.set_password(password)
             user.save()
+            user_profile = SysUserProfile.objects.get(user=user)
+            user_profile.status = status
+            user_profile.save()
             result.msg = '操作成功'
             result.flag = True
     else:
-        result.msg='旧密码错误'
+        result.msg = '旧密码错误'
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
@@ -165,39 +203,31 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(name__icontains=searchkey).order_by(_orderby).\
-        values('email','first_name','last_name','id','last_login','is_active','username')
+        alldata = SysUserProfile.objects.filter(__name__icontains=searchkey).order_by(_orderby)\
+        .values('status','user__email','user__first_name','user__last_name','user__id','user__last_login','user__username')
     else:
-        alldata = User.objects.order_by(_orderby).\
-        values('email','first_name','last_name','id','last_login','is_active','username')
+        alldata = SysUserProfile.objects.order_by(_orderby)\
+        .values('status','user__email','user__first_name','user__last_name','user__id','user__last_login','user__username')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        row['realname'] = row['last_name'] + row['first_name']
-        row['status'] = '激活' if row['is_active'] == 1 else '未激活'
-        row['last_login'] = str(row['last_login'])
+        row['realname'] = row['user__last_name'] + row['user__first_name']
+        row['status'] = UserStatus(int(row['status'])).name
+        row['user__last_login'] = str(row['user__last_login'])
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
-
 @csrf_exempt
 def delete_role(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-
-    result.msg = '操作成功'
-    result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-
-@csrf_exempt
-def delete_role(request,kwargs):
-    result = ResultModel()
-    assert isinstance(request, HttpRequest)
-
+    userid = request.POST.get('UserId','')
+    roleids = request.POST.getlist('RoleIds[]','')
+    objects = SysUserRole.objects.filter(Q(roleid__in=roleids) & Q(userid=userid)).delete()
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -206,25 +236,141 @@ def delete_role(request,kwargs):
 def auth_role(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-
-    result.msg = '操作成功'
-    result.flag = True
+    userid = request.POST.get('UserId','')
+    roleids = request.POST.getlist('RoleIds[]','')
+    user_role = []
+    for roleid in roleids:
+        user_role.append(SysUserRole(userid=userid,roleid=roleid))
+    if len(user_role) > 0:
+        objects = SysUserRole.objects.bulk_create(user_role)
+        result.msg = '操作成功'
+        result.flag = True
+    else:
+        result.msg = '操作失败'
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
 def get_user_role(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    userid = kwargs.get('id','')
+    draw = request.POST.get('draw','')
+    if userid == '':
+        return HttpResponse('', content_type="application/json")
+    user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
+    role_data = SysRole.objects.filter(id__in = user_role_data).values('id','name')
+
+    datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
+
+    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+@csrf_exempt
+def get_not_user_role(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    userid = kwargs.get('id','')
+    draw = request.POST.get('draw','')
+    if userid == '':
+        return HttpResponse('', content_type="application/json")
+    user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
+    role_data = SysRole.objects.exclude(id__in = user_role_data).values('id','name')
+
+    datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
+
+    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+@csrf_exempt
+def get_not_department_user(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    start = request.POST.get('start','0')
+    length = request.POST.get('length','0')
+    orderby = request.POST.get('orderBy','')
+    orderdir = request.POST.get('orderDir','')
+    draw = request.POST.get('draw','')
+    departmentid = request.POST.get('value','')
+    _orderby = ''
+    if orderdir == 'desc':
+        _orderby = '-'
+    if orderby != '':
+        _orderby +=orderby
+    else:
+        _orderby +='id'
+
+    if departmentid == '':
+        return HttpResponse('', content_type="application/json")
+    user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
+    users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
+        .values('status','user__email','user__first_name','user__last_name','user__id','user__username')
+    pagedata = list(users[int(start):int(length) + int(start)])
+
+    rownum = int(start)
+    for row in pagedata:
+        rownum = rownum + 1
+        row['rownum'] = rownum
+        row['realname'] = row['user__last_name'] + row['user__first_name']
+        row['status'] = UserStatus(int(row['status'])).name
+
+    datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))
+
+    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+
+@csrf_exempt
+def get_department_user(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    start = request.POST.get('start','0')
+    length = request.POST.get('length','0')
+    orderby = request.POST.get('orderBy','')
+    orderdir = request.POST.get('orderDir','')
+    draw = request.POST.get('draw','')
+    departmentid = request.POST.get('value','')
+    _orderby = ''
+    if orderdir == 'desc':
+        _orderby = '-'
+    if orderby != '':
+        _orderby +=orderby
+    else:
+        _orderby +='id'
+
+    if departmentid == '':
+        return HttpResponse('', content_type="application/json")
+    user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
+    users = SysUserProfile.objects.filter(user__id__in=user_department).order_by(_orderby)\
+        .values('status','user__email','user__first_name','user__last_name','user__id','user__username','id')
+    pagedata = list(users[int(start):int(length) + int(start)])
+
+    rownum = int(start)
+    for row in pagedata:
+        rownum = rownum + 1
+        row['rownum'] = rownum
+        row['realname'] = row['user__last_name'] + row['user__first_name']
+        row['status'] = UserStatus(int(row['status'])).name
+
+    datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))
+
+    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+
+@csrf_exempt
+def remove_department_user(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-
+    departmentid = request.POST.get('DepartmentId','')
+    userids = request.POST.getlist('UserIDs[]','')
+    objects = SysUserDepartment.objects.filter(Q(departmentid = departmentid) & Q(userid__in=userids)).delete()
+    print(connection.queries)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
-def get_not_user_role(request,kwargs):
+def set_user_department(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-
-    result.msg = '操作成功'
-    result.flag = True
+    departmentid = request.POST.get('DepartmentId','')
+    userids = request.POST.getlist('UserIDs[]','')
+    newobjects = []
+    for userid in userids:
+        newobjects.append(SysUserDepartment(userid=userid,departmentid=departmentid))
+    if len(newobjects) > 0:
+        SysUserDepartment.objects.bulk_create(newobjects)
+        result.msg = '操作成功'
+        result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

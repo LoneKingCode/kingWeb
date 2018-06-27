@@ -17,7 +17,7 @@
 {% block content %}
 <form class="form-horizontal" action="@Url.Action("Edit");" method="post" id="lkForm">
     @Html.HiddenFor(item => item.Id, new { @class = "form-control" })
-    @Html.AntiForgeryToken()
+    {%csrf_token%}
     <div class="form-group">
         <label class="col-md-2 control-label">表名</label>
         <div class="col-md-4">

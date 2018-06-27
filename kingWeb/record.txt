@@ -1,16 +1,19 @@
-user 扩展
 表管理
 表结构管理
-
+activator.py 根据是post还是get请求 返回对应的类型的错误信息 json或跳转
+csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() 封装为lkWeb.js里方法
+所有方法 return httpresponse 简化下 用jsonresponse什么的
 已完成：
 
 	角色管理
 	部门管理
 	角色授权
+	用户管理
+	用户部门
 	模块管理
 	菜单管理
 	系统参数
-
+	修改信息
 
 数据库表外键关系 withmany....... && 用户权限
 

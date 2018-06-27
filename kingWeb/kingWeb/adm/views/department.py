@@ -140,3 +140,11 @@ def get_page_data(request,kwargs):
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
+@csrf_exempt
+def get_list(request,kwargs):
+    assert isinstance(request,HttpRequest)
+    departments = SysDepartment.objects.values('id','name')
+    result = []
+    for row in departments:
+            result.append({'pId':'0','name': row['name'] ,'id':str(row['id'])})
+    return HttpResponse(json.dumps(result), content_type="application/json")

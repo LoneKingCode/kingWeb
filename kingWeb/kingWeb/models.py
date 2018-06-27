@@ -3,14 +3,20 @@ from datetime import  timezone
 from django.db import models
 from django.utils import timezone
 from enum import IntEnum
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 ############################################################################
 #枚举
 class MenuType(IntEnum):
-    模块=0,
-    菜单=1,
-    按钮=2
+    模块 = 0,
+    菜单 = 1,
+    按钮 = 2,
 
+class UserStatus(IntEnum):
+    未激活=0,
+    已激活=1,
+    禁用=2,
 ############################################################################
 #视图model
 class DataTableModel:
@@ -253,6 +259,18 @@ class SysUserRole(models.Model):
     class Meta:
         db_table = 'Sys_UserRole'
 
+class SysUserProfile(BaseModel):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    status = models.SmallIntegerField(db_column='Status',default=0)
+    imagepath = models.CharField(db_column='ImagePath',max_length=256,blank=True,null=True)
+    class Meta:
+        db_table = 'Sys_UserProfile'
+    def create_user_profile(sender, instance,created,**kwargs):
+         if created:
+            profile = SysUserProfile()
+            profile.user = instance
+            profile.save()
+    post_save.connect(create_user_profile, sender=User)
 
 class TestLeader(BaseModel):
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.

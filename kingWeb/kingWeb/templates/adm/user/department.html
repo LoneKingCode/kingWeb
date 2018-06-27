@@ -2,10 +2,6 @@
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
-     <link href="{% static 'lib/zTree/css/metroStyle/metroStyle.css' %}" rel="stylesheet" />
-    <script src="{% static 'lib/zTree/js/jquery.ztree.core.js' %}"></script>
-    <script src="{% static 'lib/zTree/js/jquery.ztree.excheck.js' %}"></script>
-
     <script>
         $(function () {
             $(".checkAll").click(function () {
@@ -16,7 +12,7 @@
             InitDepartmentTree();
         })
 
-        var departmentID = "";
+        var departmentId = "";
         var table_user;
 
         var zNodes_department = [];
@@ -36,7 +32,7 @@
         };
 
         function onNodeClick( treeId, treeNode, clickFlag) {
-            departmentID = treeNode.id;
+            departmentId = treeNode.id;
             LoadDataTable();
             table_user.draw();
         }
@@ -46,13 +42,12 @@
 
             $.fn.zTree.init($("#departmentTree"), setting_department, zNodes_department);
 
-            $("#level").bind("change", setCheck_department);
-            $("#all").bind("change", setCheck_department);
+
         }
       function LoadData() {
             $.ajax({
                 type: "post",
-                url:"@Url.Action("GetList", "Department")",
+                url:"/adm/department/get_list/",
                 dataType: "json",
                 data: { csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                 async: false,
@@ -67,23 +62,23 @@
 
         }
         function LoadDataTable() {
-            var dataUrl = '@Url.Action("GetListByDepartment")';
+            var dataUrl = '/adm/user/get_department_user/';
             var columns = [
                 {
                     "sClass": "text-center",
-                    "mData": "id",
+                    "mData": "user__id",
                     "mRender": function (data, type, row) {
                         return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                     },
                     "bSortable": false
                 },
-                { "mData": "rowNum", "sClass": "text-center" },
-                { "mData": "userName","sClass": "text-center" },
-                { "mData": "realName",  "sClass": "text-center" },
-                { "mData": "email", "sClass": "text-center", "bSortable": false },
-                { "mData": "statusName",  "sClass": "text-center" }
+                { "mData": "rownum", "sClass": "text-center" },
+                { "mData": "user__username","sClass": "text-center" },
+                { "mData": "realname",  "sClass": "text-center" },
+                { "mData": "user__email", "sClass": "text-center", "bSortable": false },
+                { "mData": "status",  "sClass": "text-center" }
             ];
-            table_user = lkWeb.LoadTable("table_user", columns, dataUrl, departmentID)
+            table_user = lkWeb.LoadTable("table_user", columns, dataUrl, departmentId)
          }
 
         function DelUser() {
@@ -95,13 +90,15 @@
             parent.layer.confirm("确认删除" + ids.length + "条数据？", {
                 btn: ["确认", "取消"]
             }, function () {
-                var data = { UserIDs: [], DepartmentID: departmentID, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() };
-                data.UserIDs = ids;
-                $.ajax(
+                 $.ajax(
                     {
                         type: 'post',
-                        url: '@Url.Action("DelUserDepartment","User") ',
-                        data: data,
+                        url: '/adm/user/remove_department_user/',
+                        data: {
+                            UserIDs: ids,
+                           DepartmentId: departmentId,
+                            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                        },
                         success: function (result) {
                             if (result.flag == true) {
                                 parent.layer.alert("删除成功")
@@ -123,7 +120,7 @@
         }
 
         function AddUser() {
-            lkWeb.GoAction("adm","user", "selectUser", departmentID, true, "选择用户", "80%", "80%");
+            lkWeb.GoAction("adm","user", "select_user", departmentId, true, "选择用户", "80%", "80%");
         }
         //这个函数给 SelectUser子页面回调用
         function SelectUser() {
@@ -147,7 +144,7 @@
             </div>
         </div>
     </div>
-    @Html.AntiForgeryToken()
+ {%csrf_token%}
     <div class="col-sm-8">
         <div class="panel panel-info">
 

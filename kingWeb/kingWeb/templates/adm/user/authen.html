@@ -35,7 +35,9 @@
                           url: "/adm/user/delete_role/",
                           type: "post",
                           dataType: "json",
-                          data: { model: data, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                          data: { UserId:data.UserId,
+                              RoleIds:data.RoleIds,
+                             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
@@ -93,7 +95,7 @@
         //已拥有的角色
         var table_role;
         function InitDataTable_role() {
-            var dataUrl = '/adm/user/get_user_role/' + userId;
+            var dataUrl = '/adm/user/get_user_role/' + userId + '/';
             var columns = [
                 {
                     "sClass": "text-center",
@@ -103,7 +105,7 @@
                     },
                     "bSortable": false
                 },
-                { "mData": "rolename", "sClass": "text-center" },
+                { "mData": "name", "sClass": "text-center" },
                 {
                     "sClass": "text-center", //自定义列内容
                     "mData": "id",
@@ -119,7 +121,7 @@
             //未拥有的角色
         var table_auth;
          function InitDataTable_auth() {
-       var dataUrl = '/adm/user/get_not_user_role/' + userId;
+       var dataUrl = '/adm/user/get_not_user_role/' + userId + '/';
             $.fn.dataTableExt.sErrMode = 'throw';
             var columns = [
                 {
@@ -130,7 +132,7 @@
                     },
                     "bSortable": false
                 },
-                { "mData": "rolename", "sClass": "text-center" },
+                { "mData": "name", "sClass": "text-center" },
                 {
                     "sClass": "text-center", //自定义列内容
                     "mData": "id",
@@ -165,9 +167,9 @@
     </table>
 </div>
 <hr />
-@Html.AntiForgeryToken()
+{%csrf_token%}
 <div>
-    <h3>@ViewBag.RealName 未拥有的角色</h3>
+    <h3>{{realname}} 未拥有的角色</h3>
     <button type="button" class="btn btn-success" onclick="AuthRole()">批量授权</button>
     <table class="table table-striped table-hover" id="table_auth">
         <thead>

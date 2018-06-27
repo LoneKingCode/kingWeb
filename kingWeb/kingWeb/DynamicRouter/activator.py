@@ -19,6 +19,6 @@ def process(request,**kwargs):
         return HttpResponse('404 Not Found')
     except Exception as e:
         #代码执行异常时，自动跳转到指定页面
-        return redirect('/adm/home/index')
+         return redirect('/adm/home/index')
 
     return result
