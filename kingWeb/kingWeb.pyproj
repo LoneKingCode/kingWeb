@@ -43,6 +43,9 @@
     <Compile Include="kingWeb\adm\views\role.py" />
     <Compile Include="kingWeb\adm\views\menu.py" />
     <Compile Include="kingWeb\adm\views\department.py" />
+    <Compile Include="kingWeb\contrib\sqlhelper.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\DynamicRouter\activator.py" />
     <Compile Include="kingWeb\DynamicRouter\urls.py">
       <SubType>Code</SubType>

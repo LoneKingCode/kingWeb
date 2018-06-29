@@ -22,8 +22,7 @@ class TableImportType(IntEnum):
     插入 = 0,
     更新 = 1,
 
-class TableColumnDataType(IntEnum):
-    int = 0,
+ 
 ############################################################################
 #视图model
 class DataTableModel:
@@ -182,25 +181,25 @@ class SysSystemOption(BaseModel):
 
 
 class SysTableColumn(BaseModel):
-    addvisible = models.IntegerField(db_column='AddVisible')  # Field name made lowercase.
-    datatype = models.IntegerField(db_column='DataType')  # Field name made lowercase.
+    addvisible = models.IntegerField(db_column='AddVisible',default=0)  # Field name made lowercase.
+    datatype = models.TextField(db_column='DataType',blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(db_column='Description', blank=True, null=True)  # Field name made lowercase.
-    editorder = models.IntegerField(db_column='EditOrder')  # Field name made lowercase.
-    editvisible = models.IntegerField(db_column='EditVisible')  # Field name made lowercase.
+    editorder = models.IntegerField(db_column='EditOrder',default=0)  # Field name made lowercase.
+    editvisible = models.IntegerField(db_column='EditVisible',default=0)  # Field name made lowercase.
     enumrange = models.TextField(db_column='EnumRange', blank=True, null=True)  # Field name made lowercase.
-    exportvisible = models.IntegerField(db_column='ExportVisible')  # Field name made lowercase.
-    importvisible = models.IntegerField(db_column='ImportVisible')  # Field name made lowercase.
-    listorder = models.IntegerField(db_column='ListOrder')  # Field name made lowercase.
-    listvisible = models.IntegerField(db_column='ListVisible')  # Field name made lowercase.
-    maxlength = models.IntegerField(db_column='MaxLength')  # Field name made lowercase.
+    exportvisible = models.IntegerField(db_column='ExportVisible',default=0)  # Field name made lowercase.
+    importvisible = models.IntegerField(db_column='ImportVisible',default=0)  # Field name made lowercase.
+    listorder = models.IntegerField(db_column='ListOrder',default=0)  # Field name made lowercase.
+    listvisible = models.IntegerField(db_column='ListVisible',default=0)  # Field name made lowercase.
+    maxlength = models.IntegerField(db_column='MaxLength',default=0)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
     outsql = models.TextField(db_column='OutSql', blank=True, null=True)  # Field name made lowercase.
-    primarkey = models.IntegerField(db_column='PrimarKey')  # Field name made lowercase.
-    required = models.IntegerField(db_column='Required')  # Field name made lowercase.
-    searchvisible = models.IntegerField(db_column='SearchVisible')  # Field name made lowercase.
+    primarkey = models.IntegerField(db_column='PrimarKey',default=0)  # Field name made lowercase.
+    required = models.IntegerField(db_column='Required',default=0)  # Field name made lowercase.
+    searchvisible = models.IntegerField(db_column='SearchVisible',default=0)  # Field name made lowercase.
     tableid = models.IntegerField(db_column='TableId')  # Field name made lowercase.
-    vieworder = models.IntegerField(db_column='ViewOrder')  # Field name made lowercase.
-    viewvisible = models.IntegerField(db_column='ViewVisible')  # Field name made lowercase.
+    vieworder = models.IntegerField(db_column='ViewOrder',default=0)  # Field name made lowercase.
+    viewvisible = models.IntegerField(db_column='ViewVisible',default=0)  # Field name made lowercase.
     def __str__(self):
         return self.name + ' ' + self.description
     class Meta:

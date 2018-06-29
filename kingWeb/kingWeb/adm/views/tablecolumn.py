@@ -7,7 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-
+from kingWeb.contrib.sqlhelper import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     tablelist = SysTableList.objects.values('id','name')
@@ -21,15 +21,11 @@ def index(request,kwargs):
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     tablelist = SysTableList.objects.values('id','name')
-    datatype = []
-    for s in TableColumnDataType:
-        datatype.append(s)
     return render(request,
         'adm/table_column/add.html',
         {
             'title':'添加表结构',
             'tablelist':tablelist,
-            'datatype':datatype
          })
 
 
@@ -40,9 +36,6 @@ def edit(request,kwargs):
         return render(request, 'adm/table_column/index')
     object = SysTableColumn.objects.get(id=id)
     tablelist = SysTableList.objects.values('id','name')
-    datatype = []
-    for s in TableColumnDataType:
-        datatype.append(s)
     return render(request,
         'adm/table_column/edit.html',
         {
@@ -69,8 +62,6 @@ def edit(request,kwargs):
             'enumrange':object.enumrange,
             'primarkey':object.primarkey,
             'tablelist':tablelist,
-            'datatype':datatype
-
         })
 
 @csrf_exempt
@@ -188,7 +179,6 @@ def get_page_data(request,kwargs):
         row['editvisible'] = '是' if row['editvisible'] == 1 else '否'
         row['listvisible'] = '是' if row['listvisible'] == 1 else '否'
         row['searchvisible'] = '是' if row['searchvisible'] == 1 else '否'
-        row['datatypename'] = TableColumnDataType(int(row['datatype'])).name
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
@@ -210,10 +200,14 @@ def post_copy(request,kwargs):
 def setvalue(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-    id = request.POST.getlist('ids[]','')
+    ids = request.POST.getlist('ids[]','')
     value = request.POST.get('value','')
     filedname = request.POST.get('filedname','')
-
+    sqllist = []
+    for id in ids:
+        sqllist.append('update Sys_TableColumn set {0} = {1} where Id={2}'.format(filedname,value,id))
+        pass
+    sqlhelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

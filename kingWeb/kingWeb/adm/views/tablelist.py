@@ -7,6 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
+from kingWeb.contrib.sqlhelper import *
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -186,7 +187,7 @@ def post_copy(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = request.POST.get('id','')
     object = SysTableList.objects.get(id=id)
-    object.pk=None
+    object.pk = None
     object.save()
     result.msg = '操作成功'
     result.flag = True
@@ -197,7 +198,17 @@ def post_copy(request,kwargs):
 def post_build_column(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
-    id = request.POST.get('id','')
+    tableid = request.POST.get('id','')
+    tablename = SysTableList.objects.get(id=tableid).name
+
+    query_result = sqlhelper.query('desc ' + tablename)
+    newmodels = []
+    for row in query_result:
+        field = row['Field']
+        type = row['Type']
+        newmodels.append(SysTableColumn(tableid=tableid,name=field,datatype=type))
+    deleted_objects = SysTableColumn.objects.filter(tableid=tableid).delete()
+    objects = SysTableColumn.objects.bulk_create(newmodels)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
