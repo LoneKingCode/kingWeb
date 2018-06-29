@@ -18,7 +18,7 @@ lkWeb.GoAction = function (area, ctrl, action, values, isOpen, title, width, hei
         url = localhostPath + "/" + area + "/" + ctrl + "/" + action + "/" + values;
     else
         url = localhostPath + "/" + area + "/" + ctrl + "/" + action;
-     if (isOpen == true) {
+    if (isOpen == true) {
         lkWeb.LayerIndex = layer.open({
             type: 2,
             title: title,
@@ -67,7 +67,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                 data: {
                     ids: ids,
                     value: _value,
-                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                    csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                 },
                 success: function (result) {
                     if (result.flag == true) {
@@ -75,8 +75,8 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                         if (table != null && table != undefined)
                             table.draw(false);//刷新datatable
                         else {
-                             window.location.reload();
-                          }
+                            window.location.reload();
+                        }
                     }
                     else {
                         if (IsNotEmpty(result.msg))
@@ -113,7 +113,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
                     data: {
                         id: id,
                         value: _value,
-                        csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                        csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                     },
                     success: function (result) {
                         if (result.flag == true) {
@@ -142,7 +142,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
 }
 
 lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack, table) {
-    data.csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+    data.csrfmiddlewaretoken = lkWeb.GetCsrfToken();
     $.ajax(
         {
             type: 'post',
@@ -182,12 +182,12 @@ lkWeb.FormValidation = function (validationForm, successCallBack, successMsg) {
             if (data.flag == true) {
                 if (IsNotEmpty(successMsg)) {
                     layer.alert(successMsg);
-                     setTimeout(function () {
-                         if (IsFunction(successCallBack))
+                    setTimeout(function () {
+                        if (IsFunction(successCallBack))
                             successCallBack();
 
                     }, 1200)
-                 }
+                }
                 else {
                     if (IsFunction(successCallBack))
                         successCallBack();
@@ -235,6 +235,7 @@ lkWeb.Confirm = function (msg, successCallBack, cancelCallBack) {
 }
 
 //Datatable
+
 lkWeb.Search = function (searchKey, table) {
     _searchKey = searchKey;
     table.search(_searchKey).draw(); //！！！！！！！！！！！搜索暂时无效 很无奈！！！ 只能先这样代替了
@@ -244,7 +245,7 @@ var _value = "";
 //tableID:控件ID，columns:列集合，dataUrl:获取数据的URL，value:补充的值给后台(QueryBase)用
 lkWeb.LoadTable = function (tableID, colums, dataUrl, value) {
     _value = value;
-     var config = {
+    var config = {
         "processing": true, //载入数据的时候是否显示“载入中”
         "bInfo": true, //是否显示是否启用底边信息栏
         "ajax": {
@@ -263,9 +264,9 @@ lkWeb.LoadTable = function (tableID, colums, dataUrl, value) {
                 }
                 param.searchKey = _searchKey;
                 param.value = _value;
-                param.csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+                param.csrfmiddlewaretoken = lkWeb.GetCsrfToken()
                 return param;
-            }
+            },
 
         },
         "searching": false,
@@ -327,6 +328,10 @@ lkWeb.GetCheckValueList = function (chkList) {
 
 lkWeb.GetCurrentUrl = function () {
     return window.location.protocol + "://" + window.location.host;
+}
+
+lkWeb.GetCsrfToken = function () {
+    return lkWeb.GetCsrfToken();
 }
 
 //扩展

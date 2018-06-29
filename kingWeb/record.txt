@@ -1,13 +1,7 @@
-表管理
-	post_build_column 生成列为写
-表结构管理
-	setvalue 设置值未写
-	SelectByTable
+viewlist及相关功能未做
 
 数据库表外键关系 withmany....... && 用户权限
 
-activator.py 根据是post还是get请求 返回对应的类型的错误信息 json或跳转
-csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() 封装为lkWeb.js里方法
 所有方法 return httpresponse 简化下 用jsonresponse什么的
 
 已完成：

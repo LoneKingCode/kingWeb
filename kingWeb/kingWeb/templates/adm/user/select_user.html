@@ -44,7 +44,7 @@
                                        data: {
                             UserIDs: ids,
                            DepartmentId: departmentId,
-                            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                            csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                         },
                   dataType: "json",
                   async: false,

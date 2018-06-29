@@ -14,7 +14,7 @@
                 type: "post",
                 url: "/adm/role/get_list/",
                 data: {
-                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                    csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                 },
                 dataType:"json",
                 async: false,
@@ -30,7 +30,7 @@
                 type: "post",
                 url: "/adm/role/get_menu_list/",
                 data: {
-                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                    csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                 },
                 dataType:"json",
                 async: false,
@@ -81,7 +81,7 @@
                 url: "/adm/role/get_role_menus/",
                 type: "post",
                 dataType: "json",
-                data: { roleId: roleId, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val() },
+                data: { roleId: roleId, csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
                 async: false,
                 success: function (data) {
                     var treeObj = $.fn.zTree.getZTreeObj("menuTree");
@@ -135,7 +135,7 @@
                           data: {
                               RoleIds: data.RoleIds,
                               MenuIds: data.MenuIds,
-                              csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                              csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                           },
                           async: false,
                           success: function (data) {

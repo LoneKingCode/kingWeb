@@ -31,7 +31,7 @@
                 var formFile = new FormData();
                 formFile.append("excelFile", fileObj); //加入文件对象
                 formFile.append("id", @Model.Table.Id);
-                var token = $("input[name='csrfmiddlewaretoken']").val();
+                var token = lkWeb.GetCsrfToken();
                 formFile.append("csrfmiddlewaretoken", token);
                 var data = formFile;
                 $.ajax({
@@ -95,7 +95,7 @@
                           url: "@Url.Action("DownloadImportTemplate")",
                           type: "post",
                           dataType: "json",
-                          data: { param: {id:@Model.Table.Id}, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                          data: { param: {id:@Model.Table.Id}, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
@@ -119,7 +119,7 @@
                           url: "@Url.Action("Export")",
                           type: "post",
                           dataType: "json",
-                          data: { param: {id:@Model.Table.Id}, csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                          data: { param: {id:@Model.Table.Id}, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)

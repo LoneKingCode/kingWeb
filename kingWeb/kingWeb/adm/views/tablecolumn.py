@@ -162,7 +162,11 @@ def get_page_data(request,kwargs):
         _orderby +='id'
 
     alldata = None
-    if searchkey != '':
+    if 'TableId|' in searchkey:
+        tableid = searchkey.split('|')[1]
+        alldata = SysTableColumn.objects.filter(tableid=tableid).order_by(_orderby).\
+        values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
+    elif searchkey != '':
         alldata = SysTableColumn.objects.filter(description__icontains=searchkey).order_by(_orderby).\
         values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
     else:

@@ -11,23 +11,23 @@ def process(request,**kwargs):
         viewObj = __import__("%s.%s.views" % ('kingWeb',app),fromlist=(controller,))
         ctrlObj = getattr(viewObj, controller)
         actionObj = getattr(ctrlObj, action)
-
         #执行view.py中的函数，并获取其返回值
         result = actionObj(request,kwargs)
         return result
     except(ImportError,AttributeError) as e:
-        result = ResultModel()
-        result.flag=False
-        result.msg = '操作失败:' + str(e)
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-
-        #导入失败时，自定义404错误
-        #return HttpResponse('404 Not Found')
+        if request.method=='POST':
+            result = ResultModel()
+            result.flag=False
+            result.msg = '操作失败:' + str(e)
+            return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        else:
+           return redirect('/adm/home/notfound')
     except Exception as e:
-        result = ResultModel()
-        result.flag=False
-        result.msg = '操作失败:' + str(e)
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-        #代码执行异常时，自动跳转到指定页面
-        #return redirect('/adm/home/index')
+        if request.method=='POST':
+            result = ResultModel()
+            result.flag=False
+            result.msg = '操作失败:' + str(e)
+            return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        else:
+            return redirect('/adm/home/error')
 

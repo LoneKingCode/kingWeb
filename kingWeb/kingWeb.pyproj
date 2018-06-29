@@ -1097,6 +1097,7 @@
     <Content Include="kingWeb\templates\adm\department\add.html" />
     <Content Include="kingWeb\templates\adm\department\edit.html" />
     <Content Include="kingWeb\templates\adm\department\index.html" />
+    <Content Include="kingWeb\templates\adm\home\notfound.html" />
     <Content Include="kingWeb\templates\adm\home\index.html" />
     <Content Include="kingWeb\templates\adm\log\chart.html" />
     <Content Include="kingWeb\templates\adm\log\login.html" />
@@ -1111,8 +1112,8 @@
     <Content Include="kingWeb\templates\adm\role\authen.html" />
     <Content Include="kingWeb\templates\adm\role\edit.html" />
     <Content Include="kingWeb\templates\adm\role\index.html" />
-    <Content Include="kingWeb\templates\adm\shared\access_denied.html" />
-    <Content Include="kingWeb\templates\adm\shared\error.html" />
+    <Content Include="kingWeb\templates\adm\home\access_denied.html" />
+    <Content Include="kingWeb\templates\adm\home\error.html" />
     <Content Include="kingWeb\templates\adm\shared\layout.html" />
     <Content Include="kingWeb\templates\adm\shared\layout_content.html" />
     <Content Include="kingWeb\templates\adm\system_option\add.html" />

@@ -37,7 +37,7 @@
                           dataType: "json",
                           data: { UserId:data.UserId,
                               RoleIds:data.RoleIds,
-                             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                             csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
@@ -71,7 +71,7 @@
                           dataType: "json",
                           data: { UserId:data.UserId,
                              RoleIds:data.RoleIds,
-                             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()},
+                             csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)

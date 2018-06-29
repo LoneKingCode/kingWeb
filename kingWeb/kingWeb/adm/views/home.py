@@ -23,3 +23,24 @@ def home(request,kwargs):
         {
             'title':'Home Page',
         })
+def notfound(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/home/notfound.html',
+        {
+            'title':'页面不存在',
+        })
+def error(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/home/error.html',
+        {
+            'title':'出错了',
+        })
+def access_denied(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/home/access_denied.html',
+        {
+            'title':'无权限访问',
+        })
