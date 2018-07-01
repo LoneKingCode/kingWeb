@@ -30,7 +30,7 @@
         </div>
         <label class="col-md-2 control-label">列名称</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Name" value="name"
+            <input type="text" class="form-control" name="Name" value="{{name}}"
                    data-val="true" data-val-maxlength="列名称长度不能超过12个字符" data-val-maxlength-max="50"
                    data-val-minlength="列名称长度不能少于2个字符" data-val-minlength-min="2" data-val-required="列名称不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
@@ -39,7 +39,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">列说明</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Description" value="description"
+            <input type="text" class="form-control" name="Description" value="{{description}}"
                    data-val="true" data-val-maxlength="列说明长度不能超过50个字符" data-val-maxlength-max="50"
                    data-val-required="列说明不能为空" />
             <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>

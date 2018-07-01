@@ -102,6 +102,9 @@
     <Folder Include="kingWeb\contrib\" />
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
+    <Folder Include="kingWeb\templates\adm\table_column\" />
+    <Folder Include="kingWeb\templates\adm\vewList\" />
+    <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />
     <Folder Include="kingWeb\static\" />
     <Folder Include="kingWeb\static\css\" />

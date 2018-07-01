@@ -27,29 +27,25 @@ class sqlhelper(object):
     def query(sql):
         cursor = connection.cursor()
         cursor.execute(sql)
-        raw = cursor.fetchone() #返回结果行 或使用 #raw = cursor.fetchall()
-        return sqlhelper.dictfetchall(cursor)
+        col_names = [desc[0] for desc in cursor.description]
+        rawData = cursor.fetchall()
+        result = []
+        for row in rawData:
+            objDict = {}
+            # 把每一行的数据遍历出来放到Dict中
+            for index, value in enumerate(row):
+                objDict[col_names[index]] = value
+
+            result.append(objDict)
+
+        return result
         pass
 
     @staticmethod
     def single(sql):
         query_result = sqlhelper.query(sql)
-        firstrow =  query_result[0]
-        return firstrow[firstrow.keys()[0]]
-        pass
-
-    @staticmethod
-    def dictfetchall(cursor):
-        #"Return all rows from a cursor as a dict"
-        columns = [col[0] for col in cursor.description]
-        return [
-            dict(zip(columns, row))
-            for row in cursor.fetchall()
-        ]
-    @staticmethod
-    def namedtuplefetchall(cursor):
-        #"Return all rows from a cursor as a namedtuple"
-        desc = cursor.description
-        nt_result = namedtuple('Result', [col[0] for col in desc])
-        return [nt_result(*row) for row in cursor.fetchall()]
-
+        if len(query_result) > 0:
+            firstrow = query_result[0]
+            return firstrow[list(firstrow.keys())[0]]
+        else:
+            return ''

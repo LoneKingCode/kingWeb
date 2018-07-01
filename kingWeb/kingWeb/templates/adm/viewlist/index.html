@@ -149,14 +149,14 @@
                {% set str = "{{'mData': '{0}', 'sClass': 'text-center'}}," %}
                {% set hiddenstr = "{{'mData': '{0}','visible': false, 'sClass': 'text-center'}},"%}
                   {% for col in tablecolumns%}
-                        {% ifequal col.Name "Id" %}
+                        {% ifequal 'Id' col.name  %}
                           {'mData': '{{col.name}}','visible': false, 'sClass': 'text-center'},
                         {% else %}
-                           {'mData': '"{{col.name}}', 'sClass': 'text-center'},
+                           {'mData': '{{col.name}}', 'sClass': 'text-center'},
                         {% endifequal %}
                     {% endfor %}
                {% ifnotequal table.extendfunction '' %}
-                      {"mData":"extendFunction", "sClass": "text-center" },
+                      {"mData":"ExtendFunction", "sClass": "text-center" },
               {% endifnotequal %}
             ];
            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl, tableid)

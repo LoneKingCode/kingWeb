@@ -109,7 +109,7 @@ def get_page_data(request,kwargs):
     draw = request.POST.get('draw','')
     tableid = request.POST.get('value','')
 
-    table = SysTableList.objects.get(table)
+    table = SysTableList.objects.get(id=tableid)
     if table.allowview != 1:
         return HttpResponse('', content_type="application/json")
 
@@ -128,31 +128,32 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
        search_columns = syshelper.get_column_names(tableid, "SearchVisible=1", "ListOrder").split(',')
+       condition = ''
        for sc in search_columns:
            condition+=" {0} like '%{1}%' or".format(sc,searchkey)
        condition = '(' + condition.rstrip('or') + ')'
 
     if table.defaultfilter != '':
-        condition +=' and ' + table.defaultfilter
+        condition += ' and ' + table.defaultfilter
 
     sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'
-    list_columns = syshelper.get_column_names(tableid, "ListVisible=1", "ListOrder").split(',')
-    pagedata = sqlhelper.query(sql.format(list_columns,table.name,condition,orderby,start,length))
+    list_columns = syshelper.get_column_names(tableid, "ListVisible=1", "ListOrder")
+    pagedata = sqlhelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
     data_count = sqlhelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
     out_type_column_names = syshelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
 
     rownum = int(start)
     for dic in pagedata:
         rownum = rownum + 1
-        row['rownum'] = rownum
+        dic['rownum'] = rownum
         for key in dic:
             if key in out_type_column_names:
-                dic[key]  = syshelper.get_out_value(tableid,key,dic[key])
+                dic[key] = syshelper.get_out_value(tableid,key,dic[key])
             else:
-                if key == 'CreateDateTime':
+                if key == 'CreateDateTime' or key == 'ModifyDateTime':
                     dic[key] = str(dic[key])
-        if table.extendfunction !='':
-            dic['ExtendFunction'] = table.extendfunction.replace('{Id}',dic['Id']).replace('{UserId}',request.user.id)
+        if table.extendfunction != '':
+            dic['ExtendFunction'] = table.extendfunction.replace('{Id}',str(dic['Id'])).replace('{UserId}',str(request.user.id))
 
     datatable = DataTableModel(draw,data_count,data_count,pagedata)
 
