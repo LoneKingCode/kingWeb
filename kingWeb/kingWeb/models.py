@@ -22,7 +22,7 @@ class TableImportType(IntEnum):
     插入 = 0,
     更新 = 1,
 
- 
+
 ############################################################################
 #视图model
 class DataTableModel:
@@ -215,15 +215,15 @@ class SysTableList(BaseModel):
     forbiddenaddfilter = models.TextField(db_column='ForbiddenAddFilter', blank=True, null=True)  # Field name made lowercase.
     forbiddendeletefilter = models.TextField(db_column='ForbiddenDeleteFilter', blank=True, null=True)  # Field name made lowercase.
     forbiddenupdatefilter = models.TextField(db_column='ForbiddenUpdateFilter', blank=True, null=True)  # Field name made lowercase.
-    importtype = models.IntegerField(db_column='ImportType')  # Field name made lowercase.
-    isview = models.IntegerField(db_column='IsView')  # Field name made lowercase.
+    importtype = models.IntegerField(db_column='ImportType', blank=True)  # Field name made lowercase.
+    isview = models.IntegerField(db_column='IsView', default=0)  # Field name made lowercase.
     name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
-    allowdelete = models.IntegerField(db_column='AllowDelete')  # Field name made lowercase.
-    allowedit = models.IntegerField(db_column='AllowEdit')  # Field name made lowercase.
-    allowexport = models.IntegerField(db_column='AllowExport')  # Field name made lowercase.
-    allowimport = models.IntegerField(db_column='AllowImport')  # Field name made lowercase.
-    allowview = models.IntegerField(db_column='AllowView')  # Field name made lowercase.
-    allowadd = models.IntegerField(db_column='AllowAdd')  # Field name made lowercase.
+    allowdelete = models.IntegerField(db_column='AllowDelete', default=0)  # Field name made lowercase.
+    allowedit = models.IntegerField(db_column='AllowEdit', default=0)  # Field name made lowercase.
+    allowexport = models.IntegerField(db_column='AllowExport', default=0)  # Field name made lowercase.
+    allowimport = models.IntegerField(db_column='AllowImport', default=0)  # Field name made lowercase.
+    allowview = models.IntegerField(db_column='AllowView', default=0)  # Field name made lowercase.
+    allowadd = models.IntegerField(db_column='AllowAdd', default=0)  # Field name made lowercase.
     def __str__(self):
         return self.name + ' ' + self.description
     class Meta:

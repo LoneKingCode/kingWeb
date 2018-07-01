@@ -59,25 +59,25 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("adm","viewlist", "add","tableid");
+            lkWeb.GoAction("adm","viewlist", "add",tableid);
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","viewlist", "edit", id+"/" + "tableid");
+                lkWeb.GoAction("adm","viewlist", "edit", id+"/" + tableid);
         }
         function Detail() {
                   var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","viewlist", "detail", id+"/" + "tableid",true,"查看详情","80%","80%");
+                lkWeb.GoAction("adm","viewlist", "detail", id+"/" + tableid,true,"查看详情","80%","80%");
         }
         function DelModel() {
             var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "viewlist", lkTable,"tableid");
+            lkWeb.DeleteMulti("adm",ids, "viewlist", lkTable, tableid);
         }
 
         function Import() {
@@ -173,7 +173,7 @@
             <button type="button" class="btn btn-success" onclick="Detail()">查看详情</button>
         {% endif %}
 
-        {% if table..allowadd == 1 %}
+        {% if table.allowadd == 1 %}
             <button type="button" class="btn btn-success" onclick="AddModel()">添加</button>
         {% endif %}
 

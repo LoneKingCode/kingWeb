@@ -9,7 +9,7 @@ class sqlhelper(object):
         try:
             cursor.execute(sql)
             transaction.savepoint_commit(sid)
-        except IntegrityError:
+        except IntegrityError as e:
             transaction.savepoint_rollback(sid)
 
     @staticmethod

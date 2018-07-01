@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.http import HttpRequest
 from django.db.models import Q
 import json
+import time
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.contrib.sqlhelper import *
@@ -32,16 +33,52 @@ def index(request,kwargs):
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
+    tableid = kwargs.get('id','')
+    table_desc = ''
+    columns = None
+    table = None
+    enum_col_data = {}
+    out_col_data = {}
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowadd != 1:
+            return render(request,'/adm/home/error.html')
+        table_desc = table.description
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
+    for col in tablecolumns:
+        if col.datatype == 'out':
+            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2]
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            outdatalist = sqlhelper.query('select {0} from {1} where {2}'.\
+                format(outdata_arr[0],tablename,condition))
+            out_col_data[col.name] = outdatalist
+        elif col.datatype == 'enum':
+            enumdata = col.enumrange.split(',')
+            enumlist = []
+            for e in enumdata:
+               enumlist.append(e)
+            enum_col_data[col.name] = enumlist
+
+
     return render(request,
         'adm/viewlist/add.html',
         {
-            'title':'添加XX',
+            'title':'添加' + table_desc,
+            'tablecolumns':tablecolumns,
+            'tableid':tableid,
+            'table':table,
+            'enum_col_data':enum_col_data,
+            'out_col_data':out_col_data,
         })
 
 def detail(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
-        'adm/viewlist/add.html',
+        'adm/viewlist/detail.html',
         {
             'title':'添加XX',
         })
@@ -65,9 +102,28 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.create(name=name,description=description)
+    formdata = request.POST.dict()
+    tableid = kwargs.get('id','')
+    tablecolumns = None
+    table = None
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowadd != 1:
+              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
+    addmodel = {}
+    for col in tablecolumns:
+        if col.name in formdata.keys():
+            addmodel[col.name] = formdata.get(col.name,'')
+    addmodel['CreateDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+    addmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+    addmodel['Creator'] = str(request.user.id)
+    addmodel['Modifier'] = str(request.user.id)
+    sql = 'insert into {0}({1}) values({2})'
+    sql = sql.format(table.name,\
+        ','.join(addmodel.keys()),\
+        "'" + ','.join(addmodel.values()).replace(',' , "','") + "'")
+    sqlhelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -89,10 +145,20 @@ def post_delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    tableid = request.POST.get('value','')
+    if len(ids) <= 0:
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    object = SysModule.objects.filter(id__in=ids).delete()
+
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowdelete != 1:
+              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
+    sqllist = []
+    for id in ids:
+        sqllist.append('delete from {0} where {1}'.format(table.name,'Id=' + str(id)))
+    sqlhelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
