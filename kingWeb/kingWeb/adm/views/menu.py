@@ -131,7 +131,7 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysMenu.objects.filter(Q(description__icontains=searchkey) | Q(name__icontains=searchkey))\
+        alldata = SysMenu.objects.filter(name__icontains=searchkey)\
             .order_by(_orderby).values('name','parentid','listorder','type','id','url','moduleid','icon')
     else:
         alldata = SysMenu.objects.order_by(_orderby).\

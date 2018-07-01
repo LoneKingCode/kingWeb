@@ -32,7 +32,10 @@ class sqlhelper(object):
         pass
 
     @staticmethod
-    def single():
+    def single(sql):
+        query_result = sqlhelper.query(sql)
+        firstrow =  query_result[0]
+        return firstrow[firstrow.keys()[0]]
         pass
 
     @staticmethod

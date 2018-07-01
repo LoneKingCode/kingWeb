@@ -1,19 +1,18 @@
-﻿@using lkWeb.Areas.Admin.Models
-@using System.Text;
-@using System.Text.Encodings.Web;
-@{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout_Content.cshtml";
-    ViewBag.Title = "查看详情";
-}
-@model ViewListModel
-@section Scripts{
+﻿{% extends "adm/shared/layout_content.html" %}
+{%block title%}{{title}}{% endblock%}
+
+{% block scripts %}
     <script type="text/javascript">
         $(function () {
 
         })
 
     </script>
-}
+{% endblock %}
+
+
+{% block content %}
+
 <form class="form-horizontal" method="post" id="lkForm">
     {%csrf_token%}
     @{
@@ -47,3 +46,4 @@
         </div>
     </div>
 </form>
+{% endblock %}

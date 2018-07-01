@@ -1,4 +1,5 @@
 viewlist及相关功能未做
+列类型，给几个预选 out enum
 
 数据库表外键关系 withmany....... && 用户权限
 

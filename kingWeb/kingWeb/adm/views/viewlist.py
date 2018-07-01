@@ -7,54 +7,67 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-
+from kingWeb.contrib.sqlhelper import *
+from kingWeb.contrib.syshelper import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
+    tableid = kwargs.get('id','')
+    table_desc = ''
+    columns = None
+    table = None
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowview != 1:
+            return render(request,'/adm/home/error.html')
+        table_desc = table.description
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(listvisible=1)))
     return render(request,
-        'adm/department/index.html',
+        'adm/viewlist/index.html',
         {
-            'title':'XX管理',
+            'title':table_desc + '管理',
+            'tablecolumns':tablecolumns,
+            'tableid':tableid,
+            'table':table
         })
 
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
-    departments = SysDepartment.objects.values('id','name')
     return render(request,
-        'adm/department/add.html',
+        'adm/viewlist/add.html',
         {
             'title':'添加XX',
-            'departments':departments
         })
 
+def detail(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/viewlist/add.html',
+        {
+            'title':'添加XX',
+        })
 
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     if id == '':
-        return render(request, 'adm/department/index')
-    object = SysDepartment.objects.get(id=id)
-    departments = SysDepartment.objects.values('id','name')
+        return render(request, 'adm/viewlist/index')
+    object = SysModule.objects.get(id=id)
     return render(request,
-        'adm/department/edit.html',
+        'adm/viewlist/edit.html',
         {
             'title':'编辑XX',
             'id':object.id,
             'name':object.name,
-            'leader':object.leader,
             'description':object.description,
-            'parentid':object.parentid,
-            'departments':departments
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    object = SysModule.objects.create(name=name,description=description)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -63,12 +76,10 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
     id = request.POST.get('Id','')
     name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
     description = request.POST.get('Description','')
-    object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    object = SysModule.objects.filter(id=id).update(name=name,description=description)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -81,19 +92,7 @@ def post_delete(request,kwargs):
     if ids == '':
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    hassub = False
-    for id in ids:
-        objs = SysDepartment.objects.filter(parentid=id)
-        departmentname = SysDepartment.objects.get(id=id).name
-        if(objs.count() > 0):
-            result.msg += departmentname + "下有子XX:"
-            hassub = True
-            for o in objs:
-                 result.msg +=o.name + ' '
-            result.msg+='</br>'
-    if(hassub):
-         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    object = SysDepartment.objects.filter(id__in=ids).delete()
+    object = SysModule.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -108,35 +107,76 @@ def get_page_data(request,kwargs):
     orderby = request.POST.get('orderBy','')
     orderdir = request.POST.get('orderDir','')
     draw = request.POST.get('draw','')
-    value = request.POST.get('value','')
+    tableid = request.POST.get('value','')
+
+    table = SysTableList.objects.get(table)
+    if table.allowview != 1:
+        return HttpResponse('', content_type="application/json")
+
     _orderby = ''
     if orderdir == 'desc':
         _orderby = '-'
+
     if orderby != '':
         _orderby +=orderby
+    elif table.defaultsort != '':
+        _orderby +=table.defaultsort
     else:
         _orderby +='id'
 
+    condition = '1=1'
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('name','parentid','leader','description','id')
-    else:
-        alldata = SysDepartment.objects.order_by(_orderby).\
-        values('name','parentid','leader','description','id')
-    pagedata = list(alldata[int(start):int(length) + int(start)])
+       search_columns = syshelper.get_column_names(tableid, "SearchVisible=1", "ListOrder").split(',')
+       for sc in search_columns:
+           condition+=" {0} like '%{1}%' or".format(sc,searchkey)
+       condition = '(' + condition.rstrip('or') + ')'
+
+    if table.defaultfilter != '':
+        condition +=' and ' + table.defaultfilter
+
+    sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'
+    list_columns = syshelper.get_column_names(tableid, "ListVisible=1", "ListOrder").split(',')
+    pagedata = sqlhelper.query(sql.format(list_columns,table.name,condition,orderby,start,length))
+    data_count = sqlhelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
+    out_type_column_names = syshelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
 
     rownum = int(start)
-    for row in pagedata:
+    for dic in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        pid = row['parentid']
-        if pid != 0 and pid != None:
-            row['parentname'] = SysDepartment.objects.get(id=pid).name
-        else:
-            row['parentname'] = '无'
+        for key in dic:
+            if key in out_type_column_names:
+                dic[key]  = syshelper.get_out_value(tableid,key,dic[key])
+            else:
+                if key == 'CreateDateTime':
+                    dic[key] = str(dic[key])
+        if table.extendfunction !='':
+            dic['ExtendFunction'] = table.extendfunction.replace('{Id}',dic['Id']).replace('{UserId}',request.user.id)
 
-    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
+    datatable = DataTableModel(draw,data_count,data_count,pagedata)
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
+def post_import(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/viewlist/add.html',
+        {
+            'title':'添加XX',
+        })
+def post_export(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/viewlist/add.html',
+        {
+            'title':'添加XX',
+        })
+
+def download_import_template(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/viewlist/add.html',
+        {
+            'title':'添加XX',
+        })

@@ -331,7 +331,7 @@ lkWeb.GetCurrentUrl = function () {
 }
 
 lkWeb.GetCsrfToken = function () {
-    return lkWeb.GetCsrfToken();
+    return $("input[name='csrfmiddlewaretoken']").val()
 }
 
 //扩展
