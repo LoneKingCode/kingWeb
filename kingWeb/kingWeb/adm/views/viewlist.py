@@ -34,7 +34,6 @@ def index(request,kwargs):
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = kwargs.get('id','')
-    table_desc = ''
     columns = None
     table = None
     enum_col_data = {}
@@ -67,7 +66,7 @@ def add(request,kwargs):
     return render(request,
         'adm/viewlist/add.html',
         {
-            'title':'添加' + table_desc,
+            'title':'添加' + table.description,
             'tablecolumns':tablecolumns,
             'tableid':tableid,
             'table':table,
@@ -77,25 +76,92 @@ def add(request,kwargs):
 
 def detail(request,kwargs):
     assert isinstance(request, HttpRequest)
+    id = kwargs.get('id','')
+    tableid = kwargs.get('value','')
+    if tableid == '' or id == '':
+        return render(request, 'adm/viewlist/index')
+    tablecolumns = None
+    table = None
+    out_col_data = {}
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowview != 1:
+              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)))
+    columnnames = syshelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
+    data = sqlhelper.query('select {0} from {1} where {2}'\
+        .format(columnnames,table.name,'Id=' + str(id)))[0]
+    for col in tablecolumns:
+        if col.datatype == 'out':
+            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2]
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            outvalue = sqlhelper.query('select {0} from {1} where {2}'.\
+                format(outdata_arr[0],tablename,'Id=' + str(data[col.name])))
+            out_col_data[col.name] = outvalue
+
     return render(request,
         'adm/viewlist/detail.html',
         {
-            'title':'添加XX',
+            'id':id,
+            'title': table.description + '详情',
+            'tablecolumns':tablecolumns,
+            'tableid':tableid,
+            'table':table,
+            'out_col_data':out_col_data,
+            'data':data,
         })
 
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
-    if id == '':
+    tableid = kwargs.get('value','')
+    if tableid == '' or id == '':
         return render(request, 'adm/viewlist/index')
-    object = SysModule.objects.get(id=id)
+    tablecolumns = None
+    table = None
+    enum_col_data = {}
+    out_col_data = {}
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowedit != 1:
+              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
+    columnnames = syshelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
+    data = sqlhelper.query('select {0} from {1} where {2}'\
+        .format(columnnames,table.name,'Id=' + str(id)))[0]
+    for col in tablecolumns:
+        if col.datatype == 'out':
+            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2]
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            outdatalist = sqlhelper.query('select {0} from {1} where {2}'.\
+                format(outdata_arr[0],tablename,condition))
+            out_col_data[col.name] = outdatalist
+        elif col.datatype == 'enum':
+            enumdata = col.enumrange.split(',')
+            enumlist = []
+            for e in enumdata:
+               enumlist.append(e)
+            enum_col_data[col.name] = enumlist
+
     return render(request,
         'adm/viewlist/edit.html',
         {
-            'title':'编辑XX',
-            'id':object.id,
-            'name':object.name,
-            'description':object.description,
+            'id':id,
+            'title':'编辑' + table.description,
+            'tablecolumns':tablecolumns,
+            'tableid':tableid,
+            'table':table,
+            'enum_col_data':enum_col_data,
+            'out_col_data':out_col_data,
+            'data':data,
         })
 
 @csrf_exempt
@@ -132,10 +198,30 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.filter(id=id).update(name=name,description=description)
+    formdata = request.POST.dict()
+    id = kwargs.get('id','')
+    tableid = kwargs.get('value','')
+    tablecolumns = None
+    table = None
+    if tableid != '':
+        table = SysTableList.objects.get(id=int(tableid))
+        if table.allowedit != 1:
+              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
+    editmodel = {}
+    for col in tablecolumns:
+        if col.name in formdata.keys():
+            editmodel[col.name] = formdata.get(col.name,'')
+
+    editmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+    editmodel['Modifier'] = str(request.user.id)
+    sql = 'update {0} set {1} where {2}'
+    newvalues = ''
+    for key,value in editmodel.items():
+        newvalues += "{0}='{1}',".format(key,value)
+    newvalues= newvalues.rstrip(',')
+    sql = sql.format(table.name,newvalues,'Id=' + str(id))
+    sqlhelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

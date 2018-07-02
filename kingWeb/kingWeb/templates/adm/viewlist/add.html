@@ -54,7 +54,6 @@
                     </div>
            {% else %}
                 <div class="form-group">
-                    <div class="">
                         <label class="col-md-2 control-label">{{col.description}}</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control" name="{{col.name}}"  data-val="true"
@@ -64,7 +63,6 @@
                                    data-val-maxlength-max="{{col.maxlength}}"/>{% endifnotequal %}
                             <span class="field-validation-valid" data-valmsg-for="{1}" data-valmsg-replace="true"></span>
                         </div>
-                    </div>
                 </div>
             {% endif %}
        {% endfor %}

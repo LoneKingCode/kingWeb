@@ -34,18 +34,18 @@
     <script src="{%static 'js/lkWeb.js' %}" ></script>
     <link href="{%static 'css/site.css' %}" rel="stylesheet" />
 
-    {%block styles%}    {% endblock%}
+    {% block styles %}    {% endblock %}
 
 </head>
 <body>
     <div class="ibox">
         <div class="ibox-title">
-            <h5>{%block title%}   {% endblock%}</h5>
+            <h5>{% block title %}   {% endblock %}</h5>
         </div>
         <div class="ibox-content">
-            {%block content%}  {% endblock%}
+            {% block content %}  {% endblock %}
         </div>
     </div>
-    {%block scripts%}    {% endblock%}
+    {% block scripts %}    {% endblock %}
 </body>
 </html>

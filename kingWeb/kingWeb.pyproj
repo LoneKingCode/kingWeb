@@ -74,6 +74,9 @@
     </Compile>
     <Compile Include="kingWeb\migrations\0001_initial.py" />
     <Compile Include="kingWeb\migrations\__init__.py" />
+    <Compile Include="kingWeb\templatetags\filters.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\templatetags\set_val.py">
       <SubType>Code</SubType>
     </Compile>
@@ -103,7 +106,6 @@
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
-    <Folder Include="kingWeb\templates\adm\vewList\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />
     <Folder Include="kingWeb\static\" />

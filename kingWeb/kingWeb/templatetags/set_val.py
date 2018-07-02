@@ -1,7 +1,8 @@
-
 from django import template
+
 register = template.Library()
 
+#{% set a = 1 %}
 class SetVarNode(template.Node):
 
     def __init__(self, var_name, var_value):

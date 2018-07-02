@@ -13,32 +13,32 @@
 
 {% block content %}
 
-<form class="form-horizontal" method="post" id="lkForm">
+<form class="form-horizontal" id="lkForm">
     {%csrf_token%}
-    @{
-        string tpl = "<div class=\"form-group\"><div class=\"\">" +
-"<label class=\"col-md-2 control-label\">{0}:</label>" +
-"<div class=\"col-md-9\">" +
-"<label class=\"control-label\">{1}</label>" +
-"</div> " +
-"</div></div>";
-        StringBuilder sb = new StringBuilder();
-        foreach (var column in Model.TableColumn)
-        {
-            if (column.DataType == lkWeb.Service.Enum.ColumnDataType.Out)
-            {
-                sb.Append(string.Format(tpl, column.Description, ViewBag.OutColumn[column.Name]));
-            }
-            else
-            {
-                sb.Append(string.Format(tpl, column.Description, ViewBag.ColumnValue[column.Name]));
-            }
-        }
-        @Html.Raw(sb.ToString());
-    }
-
-
-
+    {% load filters %}
+       {% for col in tablecolumns%}
+            {% if col.datatype == 'out' %}
+                <div class="form-group">
+                        <label class="col-md-2 control-label">{{col.description}}</label>
+                        <div class="col-md-9">
+                                    {% for key,value in out_col_data.items %}
+                                        {% if key == col.name%}
+                                            {% for item in value%}
+                                                  <input type="text" class="form-control" name="{{col.name}}"   value="{{item.Name}}" readonly/>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                        </div>
+                </div>
+           {% else %}
+                <div class="form-group">
+                        <label class="col-md-2 control-label">{{col.description}}</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="{{col.name}}"   value="{{data|get_value:col.name}}" readonly/>
+                        </div>
+                    </div>
+            {% endif %}
+       {% endfor %}
 
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">

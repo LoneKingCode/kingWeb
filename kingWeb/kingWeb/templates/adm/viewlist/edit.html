@@ -5,7 +5,7 @@
     <script type="text/javascript">
         $(function () {
             lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm","viewlist", "index","@Model.Table.Id")
+                lkWeb.GoAction("adm", "viewlist", "index", "{{tableid}}")
             }, "操作成功")
         })
 
@@ -14,49 +14,73 @@
 
 
 {% block content %}
-
-<form class="form-horizontal" action="@Url.Action("Edit")" method="post" id="lkForm">
+<form class="form-horizontal" action="/adm/viewlist/post_edit/{{id}}/{{tableid}}/" method="post" id="lkForm">
     {%csrf_token%}
-    @{
-        string selectTpl = "<div class=\"form-group\"><div class=\"\">" +
-    "<label class=\"col-md-2 control-label\">{0}</label>" +
-    "<div class=\"col-md-9\"> {1} </div></div></div>";
-        string inputTemplate = "<div class=\"form-group\"><div class=\"\">" +
-"<label class=\"col-md-2 control-label\">{0}</label>" +
-"<div class=\"col-md-9\">" +
-"<input type=\"text\" class=\"form-control\" name=\"{1}\" value=\"{2}\" data-val-required=\"{0}不能为空\" {4} data-val-maxlength=\"{0}长度不能超过{3}个字符\" data-val-maxlength-max=\"{3}\" data-val=\"true\"/>" +
-"<span class=\"field-validation-valid\" data-valmsg-for=\"{1}\" data-valmsg-replace=\"true\"></span></div> " +
-"</div></div>";
-        StringBuilder sb = new StringBuilder();
-        foreach (var column in Model.TableColumn)
-        {
-            if (column.DataType == lkWeb.Service.Enum.ColumnDataType.Out)
-            {
-                var content = Html.DropDownList(column.Name, (SelectList)ViewBag.OutColumn[column.Name], new { @class = "form-control" });
-                var writer = new System.IO.StringWriter();
-                content.WriteTo(writer, HtmlEncoder.Default);
-                var sltHtml = writer.ToString();
-                sb.Append(string.Format(selectTpl, column.Description, sltHtml));
-            }
-            else if (column.DataType == lkWeb.Service.Enum.ColumnDataType.Enum)
-            {
-                var content = Html.DropDownList(column.Name, (SelectList)ViewBag.EnumColumn[column.Name], new { @class = "form-control" });
-                var writer = new System.IO.StringWriter();
-                content.WriteTo(writer, HtmlEncoder.Default);
-                var sltHtml = writer.ToString();
-                sb.Append(string.Format(selectTpl, column.Description, sltHtml));
-            }
-            else
-            {
-                sb.Append(string.Format(inputTemplate, column.Description, column.Name, ViewBag.ColumnValue[column.Name], column.MaxLength,
-                    column.Required == 1 ? "data-val-required=\"" + column.Description + "不能为空\"" : ""));
-            }
-        }
-        @Html.Raw(sb.ToString());
-    }
+    {% load set_val %}
+    {% load filters %}
+       {% for col in tablecolumns%}
+            {% if col.datatype == 'out' %}
+                <div class="form-group">
 
+                        <label class="col-md-2 control-label">{{col.description}}</label>
+                        <div class="col-md-9">
+                            <select name="{{col.name}}" class="form-control">
+                                    {% for key,value in out_col_data.items %}
+                                        {% if key == col.name%}
+                                            {% for item in value%}
+                                                  <option value="{{item.Id}}"
+                                                          {% for key,value in data.items %}
+                                                                {% if key == col.name %}
+                                                                     {% if value == item.Id%}
+                                                                          selected
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                          {% endfor %}
+                                                   >{{item.Name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                            </select>
+                        </div>
 
-
+                </div>
+           {% elif col.datatype == 'enum' %}
+                   <div class="form-group">
+                            <label class="col-md-2 control-label">{{col.description}}</label>
+                            <div class="col-md-9">
+                              <select name="{{col.name}}" class="form-control">
+                                  {% for key,value in enum_col_data.items %}
+                                        {% if key == col.name%}
+                                            {% for item in value%}
+                                                  <option value="{{item}}"
+                                                      {% for key,value in data.items %}
+                                                                {% if key == col.name %}
+                                                                    {% if value == item%}
+                                                                          selected
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                          {% endfor %}
+                                                          >{{item}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                               </select>
+                            </div>
+                    </div>
+           {% else %}
+                <div class="form-group">
+                        <label class="col-md-2 control-label">{{col.description}}</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="{{col.name}}"  data-val="true" value="{{data|get_value:col.name}}"
+                                   {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
+                             {% ifnotequal col.required 0%}
+                               data-val-maxlength="{{col.description}}长度不能超过{{col.maxlength}}个字符"
+                                   data-val-maxlength-max="{{col.maxlength}}"/>{% endifnotequal %}
+                            <span class="field-validation-valid" data-valmsg-for="{1}" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+            {% endif %}
+       {% endfor %}
 
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">

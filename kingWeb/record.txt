@@ -1,21 +1,8 @@
-viewlist及相关功能未做
+viewlist 导入 导出 下载模板
 列类型，给几个预选 out enum
 
-数据库表外键关系 withmany....... && 用户权限
+用户权限
+系统日志 & 数据库表外键关系 withmany.......
 
 所有方法 return httpresponse 简化下 用jsonresponse什么的
-
-已完成：
-
-	角色管理
-	部门管理
-	角色授权
-	用户管理
-	用户部门
-	模块管理
-	菜单管理
-	系统参数
-	修改信息
-
-
 
