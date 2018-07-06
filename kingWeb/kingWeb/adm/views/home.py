@@ -3,12 +3,14 @@ Definition of views.
 """
 
 from django.shortcuts import render
-from django.http import HttpRequest
+from django.http import HttpRequest,FileResponse
+from django.utils.encoding import escape_uri_path
 from django.template import RequestContext
-
+from codecs import open
+import os
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from django.contrib.auth.models import User
+
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -23,6 +25,16 @@ def home(request,kwargs):
         {
             'title':'Home Page',
         })
+
+def download(request,kwargs):
+    fileurl = request.GET['fileurl']
+    filename = os.path.split(fileurl)[1]
+    file = open('kingWeb' +fileurl,'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = "attachment; filename*=utf-8''{}".format(escape_uri_path(filename))
+    return response
+
 def notfound(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,

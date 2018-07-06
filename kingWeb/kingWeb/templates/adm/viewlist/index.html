@@ -18,8 +18,10 @@
 
             $("#excelFile").change(function () {
                 var fileObj = document.getElementById("excelFile").files[0]; // js 获取文件对象
-                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
-                    alert("请选择excel文件");
+                filename = fileObj.name
+                var ext=filename.substring(filename.lastIndexOf(".")+1, filename.length);//后缀名
+                if (typeof (fileObj) == "undefined" || fileObj.size <= 0 || ext!='xlsx') {
+                    alert("请选择excel(.xlsx)文件");
                     return;
                 }
                 var formFile = new FormData();
@@ -86,15 +88,15 @@
 
         function DownloadTemplate() {
              $.ajax({
-                          url: "/adm/viewlist/download_import_template",
+                          url: "/adm/viewlist/download_import_template/",
                           type: "post",
                           dataType: "json",
-                          data: { param: {id:tableid}, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
+                          data: { tableid:tableid, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
                               {
-                                  window.open(data.data)
+                                   window.open('/adm/home/download?fileurl=' + data.data)
                               }
                               else {
                                   parent.layer.alert("操作失败");
@@ -110,15 +112,15 @@
 
         function Export() {
                  $.ajax({
-                          url: "/adm/viewlist/export/",
+                          url: "/adm/viewlist/post_export/",
                           type: "post",
                           dataType: "json",
-                          data: { param: {id:tableid}, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
+                          data: { tableid:tableid, csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
                           async: false,
                           success: function (data) {
                               if (data.flag == true)
                               {
-                                  window.open(data.data)
+                                  window.open('/adm/home/download?fileurl=' + data.data)
                               }
                               else {
                                   parent.layer.alert("操作失败");
@@ -150,9 +152,9 @@
                {% set hiddenstr = "{{'mData': '{0}','visible': false, 'sClass': 'text-center'}},"%}
                   {% for col in tablecolumns%}
                         {% ifequal 'Id' col.name  %}
-                          {'mData': '{{col.name}}','visible': false, 'sClass': 'text-center'},
+                          {'mData': '{{col.name}}','name':'{{col.name}}','visible': false, 'sClass': 'text-center'},
                         {% else %}
-                           {'mData': '{{col.name}}', 'sClass': 'text-center'},
+                           {'mData': '{{col.name}}','name':'{{col.name}}', 'sClass': 'text-center','bSortable': true},
                         {% endifequal %}
                     {% endfor %}
                {% ifnotequal table.extendfunction '' %}

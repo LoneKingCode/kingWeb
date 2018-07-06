@@ -7,7 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.contrib.sqlhelper import *
+from kingWeb.util.sqlhelper import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     tablelist = SysTableList.objects.values('id','name')

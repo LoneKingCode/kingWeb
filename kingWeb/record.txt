@@ -1,5 +1,8 @@
-viewlist 导入 导出 下载模板
-列类型，给几个预选 out enum
+设置下datatable name属性，排序
+
+viewlist 导入
+
+表结构管理，表管理，用个提示插件，提示的显眼点
 
 用户权限
 系统日志 & 数据库表外键关系 withmany.......

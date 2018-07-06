@@ -43,10 +43,13 @@
     <Compile Include="kingWeb\adm\views\role.py" />
     <Compile Include="kingWeb\adm\views\menu.py" />
     <Compile Include="kingWeb\adm\views\department.py" />
-    <Compile Include="kingWeb\contrib\sqlhelper.py">
+    <Compile Include="kingWeb\contrib\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\contrib\syshelper.py">
+    <Compile Include="kingWeb\util\sqlhelper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="kingWeb\util\syshelper.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\DynamicRouter\activator.py" />
@@ -69,7 +72,7 @@
     <Compile Include="kingWeb\adm\views\control.py" />
     <Compile Include="kingWeb\adm\views\__init__.py" />
     <Compile Include="kingWeb\adm\__init__.py" />
-    <Compile Include="kingWeb\contrib\__init__.py">
+    <Compile Include="kingWeb\util\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\migrations\0001_initial.py" />
@@ -102,9 +105,10 @@
     <Folder Include="kingWeb\adm\migrations\" />
     <Folder Include="kingWeb\adm\models\" />
     <Folder Include="kingWeb\adm\views\" />
-    <Folder Include="kingWeb\contrib\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\util\" />
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
+    <Folder Include="kingWeb\contrib\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />
@@ -249,6 +253,7 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
     <Folder Include="kingWeb\templates\adm\user\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\viewlist\" />
+    <Folder Include="kingWeb\util\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="kingWeb\static\css\login\css\base.css" />

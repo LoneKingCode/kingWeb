@@ -8,8 +8,8 @@ import json
 import time
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.contrib.sqlhelper import *
-from kingWeb.contrib.syshelper import *
+from kingWeb.util.sqlhelper import *
+from kingWeb.util.syshelper import *
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = kwargs.get('id','')
@@ -313,23 +313,22 @@ def get_page_data(request,kwargs):
 
 def post_import(request,kwargs):
     assert isinstance(request, HttpRequest)
-    return render(request,
-        'adm/viewlist/add.html',
-        {
-            'title':'添加XX',
-        })
+    tableid = request.POST.get('tableid','')
+    file = request.FILES['excelFile']
+    result  =  syshelper.import_excel(tableid,file)
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
+
 def post_export(request,kwargs):
     assert isinstance(request, HttpRequest)
-    return render(request,
-        'adm/viewlist/add.html',
-        {
-            'title':'添加XX',
-        })
+    tableid = request.POST.get('tableid','')
+    result = syshelper.export_excel(tableid)
+
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 def download_import_template(request,kwargs):
     assert isinstance(request, HttpRequest)
-    return render(request,
-        'adm/viewlist/add.html',
-        {
-            'title':'添加XX',
-        })
+    tableid = request.POST.get('tableid','')
+    result = syshelper.download_import_template(tableid)
+
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

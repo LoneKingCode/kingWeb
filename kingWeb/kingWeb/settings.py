@@ -18,6 +18,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__)-1
 APPS_DIR = ROOT_DIR.path('kingWeb')
 
+MEDIA_URL = '/upload/'
+#设置静态文件路径为主目录下
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
