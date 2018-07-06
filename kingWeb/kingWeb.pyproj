@@ -228,7 +228,6 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\system_option\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_column\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_list\" />
-    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\vewList\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\control\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\department\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\home\" />
