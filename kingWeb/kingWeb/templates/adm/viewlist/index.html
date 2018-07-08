@@ -26,7 +26,7 @@
                 }
                 var formFile = new FormData();
                 formFile.append("excelFile", fileObj); //加入文件对象
-                formFile.append("id", tableid);
+                formFile.append("tableid", tableid);
                 var token = lkWeb.GetCsrfToken();
                 formFile.append("csrfmiddlewaretoken", token);
                 var data = formFile;

@@ -207,6 +207,10 @@ def post_edit(request,kwargs):
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowedit != 1:
               return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        update_filter = SysTableList.objects.get(id=int(tableid)).forbiddenupdatefilter
+        condition = '1=1'
+        if forbidden_delete_filter != '':
+            condition = update_filter
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
     for col in tablecolumns:
@@ -219,8 +223,8 @@ def post_edit(request,kwargs):
     newvalues = ''
     for key,value in editmodel.items():
         newvalues += "{0}='{1}',".format(key,value)
-    newvalues= newvalues.rstrip(',')
-    sql = sql.format(table.name,newvalues,'Id=' + str(id))
+    newvalues = newvalues.rstrip(',')
+    sql = sql.format(table.name,newvalues,'Id=' + str(id) + ' and ' + condition)
     sqlhelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
@@ -232,6 +236,10 @@ def post_delete(request,kwargs):
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
     tableid = request.POST.get('value','')
+    forbidden_delete_filter = SysTableList.objects.get(id=int(tableid)).forbiddendeletefilter
+    condition = '1=1'
+    if forbidden_delete_filter != '':
+        condition = forbidden_delete_filter
     if len(ids) <= 0:
         result.msg = '操作失败'
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -243,7 +251,7 @@ def post_delete(request,kwargs):
 
     sqllist = []
     for id in ids:
-        sqllist.append('delete from {0} where {1}'.format(table.name,'Id=' + str(id)))
+        sqllist.append('delete from {0} where {1}'.format(table.name,'Id=' + str(id) + ' and ' + condition))
     sqlhelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
@@ -315,7 +323,7 @@ def post_import(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
     file = request.FILES['excelFile']
-    result  =  syshelper.import_excel(tableid,file)
+    result = syshelper.import_excel(tableid,file)
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 
