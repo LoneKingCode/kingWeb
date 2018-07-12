@@ -16,7 +16,7 @@ from django.core import serializers
 
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
-
+from kingWeb.adm.permission import check_permission
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -25,7 +25,7 @@ def index(request,kwargs):
         {
             'title':'用户管理',
         })
-
+@check_permission
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     statuslist = []
@@ -37,7 +37,7 @@ def add(request,kwargs):
             'title':'添加用户',
             'statuslist':statuslist
         })
-
+ 
 def authen(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')

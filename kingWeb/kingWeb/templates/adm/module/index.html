@@ -3,53 +3,53 @@
 
 {% block scripts %}
     <script>
-        $(function () {
-            InitDataTable();
+    $(function () {
+        InitDataTable();
 
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-            $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), lkTable);
-
-            })
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        function AddModel() {
-            lkWeb.GoAction("adm","module", "add", 0);
-        }
-        function EditModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "")
-                parent.layer.alert("请选择");
-            else
-                lkWeb.GoAction("adm","module", "edit", id);
-        }
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), lkTable);
 
-        function DelModel() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "module", lkTable);
-        }
+        })
+    });
 
-        var lkTable;
-        function InitDataTable() {
-            var dataUrl = '/adm/module/get_page_data/';
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+    function AddModel() {
+        lkWeb.GoAction("adm", "module", "add", 0);
+    }
+    function EditModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "")
+            parent.layer.alert("请选择");
+        else
+            lkWeb.GoAction("adm", "module", "edit", id);
+    }
+
+    function DelModel() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        lkWeb.DeleteMulti("adm", ids, "module", lkTable);
+    }
+
+    var lkTable;
+    function InitDataTable() {
+        var dataUrl = '/adm/module/get_page_data/';
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "name", "sClass": "text-center" },
-                { "mData": "description", "sClass": "text-center" }
-            ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center" },
+            { "mData": "name", "name": "name", "sClass": "text-center" },
+            { "mData": "description", "sClass": "text-center" }
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
     }
     </script>
 {% endblock %}

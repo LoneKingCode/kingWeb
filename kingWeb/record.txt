@@ -1,14 +1,15 @@
-允许添加条件
-设置下datatable name属性，排序
 
-封装 读写excel方法
+用户权限
+
+允许添加条件
+
+统计图,日志
 
 自定清除 temp ，设置时间在 系统参数里
 
 表结构管理，表管理，用个提示插件，提示的显眼点
 
-用户权限
-系统日志 & 数据库表外键关系 withmany.......
+数据库表外键关系 withmany.......
 
 所有方法 return httpresponse 简化下 用jsonresponse什么的
 

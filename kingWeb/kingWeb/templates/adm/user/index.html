@@ -60,15 +60,14 @@
                     "bSortable": false
                 },
                 { "mData": "rownum",  "sClass": "text-center" },
-                { "mData": "user__username",  "sClass": "text-center" },
-                { "mData": "realname",   "sClass": "text-center" },
+                { "mData": "user__username","name":"user__username", "sClass": "text-center" },
+                { "mData": "realname", "sClass": "text-center" },
                 { "mData": "user__email", "sClass": "text-center", "bSortable": false },
-                { "mData": "status",   "sClass": "text-center" },
+                { "mData": "status", "name":"status",  "sClass": "text-center" },
                 { "mData": "user__last_login",   "sClass": "text-center" },
             ];
             lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
-            console.log('1')
-        }
+         }
     </script>
 {% endblock %}
 

@@ -3,41 +3,41 @@
 
 {% block scripts %}
     <script>
-        $(function () {
-            InitDataTable();
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-          $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), table_login);
-
-            })
-
+    $(function () {
+        InitDataTable();
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        var table_operation;
-        function InitDataTable() {
-            var dataUrl = '@Url.Action("GetPageDataWithOperation")';   //后天获取json数据的地址
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), table_login);
+
+        })
+
+    });
+
+    var table_operation;
+    function InitDataTable() {
+        var dataUrl = '/adm/log/get_operation_log/';   //后天获取json数据的地址
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rowNum", "sClass": "text-center" },
-                { "mData": "userName", "sClass": "text-center" },
-                { "mData": "operationUrl", "sClass": "text-center" },
-                { "mData": "operationDescription", "sClass": "text-center" },
-                { "mData": "clientIP", "sClass": "text-center" },
-                { "mData": "clientMac", "sClass": "text-center", "bSortable": false },
-                { "mData": "createDateTime", "sClass": "text-center" }
-            ];
-            table_operation = lkWeb.LoadTable("table_operation", columns, dataUrl);
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center" },
+            { "mData": "username", "name": "username", "sClass": "text-center" },
+            { "mData": "operationurl", "name": "username", "sClass": "text-center" },
+            { "mData": "operationdescription", "name": "username", "sClass": "text-center" },
+            { "mData": "clientip", "name": "username", "sClass": "text-center" },
+            { "mData": "clientmac", "name": "username", "sClass": "text-center", "bSortable": false },
+            { "mData": "createdatetime", "name": "username", "sClass": "text-center" }
+        ];
+        table_operation = lkWeb.LoadTable("table_operation", columns, dataUrl);
     }
 
 
