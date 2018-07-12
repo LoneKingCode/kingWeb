@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response,HttpResponse,redirect
 from kingWeb.models import ResultModel
 import json
 def process(request,**kwargs):
-    '''接收所有匹配url的请求，根据请求url中的参 数，通过反射动态指定view中的方法'''
+    '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
 
     app = kwargs.get('app',None)
     controller = kwargs.get('controller',None)

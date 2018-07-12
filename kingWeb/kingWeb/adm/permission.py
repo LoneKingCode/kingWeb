@@ -2,6 +2,9 @@ from django.core.urlresolvers import resolve
 from django.shortcuts import render,redirect
 from kingWeb.models import *
 
+#检测用户是否有访问此url权限
+#前提是此url已经才 菜单表 中存在
+#菜单表 中不存在的url都放过
 def perm_check(*args,**kwargs):
     app = args[1]['app']
     controller = args[1]['controller']
