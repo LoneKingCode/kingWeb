@@ -1,6 +1,7 @@
 from django.core.urlresolvers import resolve
-from django.shortcuts import render,redirect
+from django.shortcuts import render,render_to_response,HttpResponse,redirect
 from kingWeb.models import *
+import json
 
 #检测用户是否有访问此url权限
 #前提是此url已经才 菜单表 中存在
@@ -10,6 +11,7 @@ def perm_check(*args,**kwargs):
     controller = args[1]['controller']
     action = args[1]['action']
     url = "/" + app + "/" + controller + "/" + action
+    #菜单表 中不存在的url都放过
     try:
         menu = SysMenu.objects.get(url=url)
     except Exception as e:
@@ -45,7 +47,13 @@ def check_permission(func):
     def wrapper(*args,**kwargs):
         #如果没权限
         if not perm_check(*args,**kwargs):
-            #args[0]即为request
-            return render(args[0],'adm/home/access_denied.html')
+            request = args[0]
+            if request.method == 'POST':
+                result = ResultModel()
+                result.flag = False
+                result.msg = '无权限操作'
+                return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+            else:
+                return render(request,'adm/home/access_denied.html')
         return func(*args,**kwargs)
     return wrapper

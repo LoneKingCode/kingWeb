@@ -18,6 +18,16 @@ from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 from kingWeb.adm.permission import check_permission
 
+def logout(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    auth.logout(request)
+    return render(request,
+        'adm/user/login.html',
+        {
+            'title':'用户登陆',
+        })
+
+@check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -37,7 +47,7 @@ def add(request,kwargs):
             'title':'添加用户',
             'statuslist':statuslist
         })
- 
+@check_permission
 def authen(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
@@ -49,6 +59,7 @@ def authen(request,kwargs):
             'userid':userid,
             'realname':user.last_name + user.first_name,
         })
+@check_permission
 def department(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -67,7 +78,7 @@ def select_user(request,kwargs):
         })
 
 
-
+@check_permission
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
@@ -95,6 +106,30 @@ def edit(request,kwargs):
             'allow_modify_status':allow_modify_status,
         })
 
+@check_permission
+def modifyinfo(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    id = request.user.id
+    allow_modify_status = 0 #不允许修改账户状态
+    object = SysUserProfile.objects.filter(user__id=id)\
+        .values('status','user__email','user__first_name','user__last_name',\
+        'user__id','user__last_login','user__username').first()
+    statuslist = []
+    for s in UserStatus:
+        statuslist.append(s)
+    return render(request,
+        'adm/user/modifyinfo.html',
+        {
+            'title':'编辑信息',
+            'id':object['user__id'],
+            'username':object['user__username'],
+            'lastname':object['user__last_name'],
+            'firstname':object['user__first_name'],
+            'email':object['user__email'],
+            'status':object['status'],
+            'statuslist':statuslist,
+            'allow_modify_status':allow_modify_status,
+        })
 
 
 def login(request,kwargs):
@@ -114,10 +149,16 @@ def post_login(request,kwargs):
         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
     user = auth.authenticate(username=request.POST.get('UserName'), password=request.POST.get('Password'))
     if user is not None:
-          auth.login(request, user)
-          result.data = user.username
-          result.flag = True
-          result.msg = '登陆成功'
+          userprofile = SysUserProfile.objects.get(user=user)
+          if userprofile.status == UserStatus.已激活.value:
+                auth.login(request, user)
+                result.data = user.username
+                result.flag = True
+                result.msg = '登陆成功'
+          else:
+                result.data = user.username
+                result.flag = False
+                result.msg = '登陆失败:用户状态为' + UserStatus(userprofile.status).name
     else:
         result.msg = '登陆失败'
 
@@ -142,9 +183,34 @@ def post_add(request,kwargs):
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-
 @csrf_exempt
 def post_edit(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    result = ResultModel()
+    username = request.POST.get('UserName','')
+    lastname = request.POST.get('LastName','')
+    firstname = request.POST.get('FirstName','')
+    email = request.POST.get('Email','')
+    password = request.POST.get('Password','')
+    status = request.POST.get('Status','')
+    id = request.POST.get('Id','')
+    user = User.objects.get(id=Id)
+    if user is not None:
+            user.last_name = lastname
+            user.first_name = firstname
+            user.set_password(password)
+            user.save()
+            user_profile = SysUserProfile.objects.get(user=user)
+            user_profile.status = status
+            user_profile.save()
+            result.msg = '操作成功'
+            result.flag = True
+    else:
+        result.msg = '用户Id不存在'
+    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
+@csrf_exempt
+def post_modify_info(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     username = request.POST.get('UserName','')
@@ -170,7 +236,8 @@ def post_edit(request,kwargs):
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
-def post_delete(request,kwargs):
+@check_permission
+def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')

@@ -99,7 +99,10 @@
                                    window.open('/adm/home/download?fileurl=' + data.data)
                               }
                               else {
-                                  parent.layer.alert("操作失败");
+                                   if (IsNotEmpty(result.msg))
+                                       parent.layer.alert(result.msg);
+                                   else
+                                       parent.layer.alert("操作失败")
                               }
                           },
                           err: function (err) {

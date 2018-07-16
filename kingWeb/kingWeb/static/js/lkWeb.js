@@ -56,7 +56,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
     parent.layer.confirm("确认删除" + ids.length + "条数据？", {
         btn: ["确认", "取消"]
     }, function () {
-        var postUrl = '/' + area + '/' + ctrl + '/post_delete/';
+        var postUrl = '/' + area + '/' + ctrl + '/delete/';
         var _value = "";
         if (IsNotEmpty(value))
             _value = value;

@@ -1151,6 +1151,7 @@
     <Content Include="kingWeb\templates\adm\user\authen.html" />
     <Content Include="kingWeb\templates\adm\user\department.html" />
     <Content Include="kingWeb\templates\adm\user\edit.html" />
+    <Content Include="kingWeb\templates\adm\user\modifyinfo.html" />
     <Content Include="kingWeb\templates\adm\user\forget_pwd.html" />
     <Content Include="kingWeb\templates\adm\user\index.html" />
     <Content Include="kingWeb\templates\adm\user\login.html" />

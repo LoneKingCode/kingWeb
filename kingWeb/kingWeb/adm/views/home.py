@@ -12,7 +12,7 @@ from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.adm.permission import check_permission
 
-@check_permission
+ 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,

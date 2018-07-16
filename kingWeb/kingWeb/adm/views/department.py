@@ -7,7 +7,8 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-
+from kingWeb.adm.permission import check_permission
+@check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -15,7 +16,7 @@ def index(request,kwargs):
         {
             'title':'部门管理',
         })
-
+@check_permission
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     departments = SysDepartment.objects.values('id','name')
@@ -26,7 +27,7 @@ def add(request,kwargs):
             'departments':departments
         })
 
-
+@check_permission
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
@@ -74,7 +75,8 @@ def post_edit(request,kwargs):
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
-def post_delete(request,kwargs):
+@check_permission
+def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')

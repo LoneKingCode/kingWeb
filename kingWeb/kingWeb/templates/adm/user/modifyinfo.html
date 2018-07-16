@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content %}
-<form class="form-horizontal" action="/adm/user/post_edit/" method="post" id="lkForm">
+<form class="form-horizontal" action="/adm/user/post_modify_info/" method="post" id="lkForm">
  <input type="hidden"  name="Id" value="{{id}}" />
     {%csrf_token%}
     <div class="form-group">
@@ -50,6 +50,14 @@
             <input type="email" class="form-control" id="txtEmail" name="Email" value="{{email}}"
                    data-val-required="邮箱不能为空" data-val="true" />
             <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">旧密码</label>
+        <div class="col-md-7">
+            <input type="password" class="form-control" id="txtNewPwd" name="OldPassword"
+                   data-val="true" data-val-maxlength="密码长度不能超过20个字符" data-val-maxlength-max="20" />
+            <span class="field-validation-valid" data-valmsg-for="OldPassword" data-valmsg-replace="true"></span>
         </div>
     </div>
     <div class="form-group">

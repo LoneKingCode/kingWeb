@@ -7,6 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
+from kingWeb.adm.permission import check_permission
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -18,7 +19,7 @@ def index(request,kwargs):
 
 
 @csrf_exempt
-def post_delete_login(request,kwargs):
+def delete_login(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
@@ -31,7 +32,7 @@ def post_delete_login(request,kwargs):
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
-def post_delete_operation(request,kwargs):
+def delete_operation(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')

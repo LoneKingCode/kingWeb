@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 from kingWeb.DynamicRouter import urls
+from kingWeb.adm.permission import check_permission
 
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)

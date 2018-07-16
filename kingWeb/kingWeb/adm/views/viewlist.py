@@ -10,6 +10,9 @@ from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.util.sqlhelper import *
 from kingWeb.util.syshelper import *
+from kingWeb.adm.permission import check_permission
+
+@check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = kwargs.get('id','')
@@ -31,6 +34,7 @@ def index(request,kwargs):
             'table':table
         })
 
+@check_permission
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = kwargs.get('id','')
@@ -74,6 +78,7 @@ def add(request,kwargs):
             'out_col_data':out_col_data,
         })
 
+@check_permission
 def detail(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
@@ -114,7 +119,7 @@ def detail(request,kwargs):
             'out_col_data':out_col_data,
             'data':data,
         })
-
+@check_permission
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
@@ -231,7 +236,8 @@ def post_edit(request,kwargs):
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
-def post_delete(request,kwargs):
+@check_permission
+def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
@@ -319,6 +325,7 @@ def get_page_data(request,kwargs):
 
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
+@check_permission
 def post_import(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
@@ -326,7 +333,7 @@ def post_import(request,kwargs):
     result = syshelper.import_excel(tableid,file)
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
-
+@check_permission
 def post_export(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
