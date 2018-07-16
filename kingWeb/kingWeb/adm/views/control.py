@@ -6,17 +6,46 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 from kingWeb.DynamicRouter import urls
 from kingWeb.adm.permission import check_permission
+from kingWeb.models import *
+from django.db.models import Q
 
+@login_required
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
+    userid = request.user.id
+    result = render(request,
+             'adm/control/index.html',
+             {
+                    'username':request.user.username,
+              })
+    if userid == None and userid == '':
+         return result
+
+    userroles = SysUserRole.objects.filter(userid=userid)
+    if len(userroles) < 1:
+        return result
+    roleids = []
+    for ur in userroles:
+        roleids.append(ur.roleid)
+    rolemenus = SysRoleMenu.objects.filter(roleid__in=roleids)
+    if len(rolemenus) < 1:
+        return result
+    menuids = []
+    for rm in rolemenus:
+        menuids.append(rm.menuid)
+
+    menus = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.菜单.value))
+    modules = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.模块.value))
 
     return render(request,
         'adm/control/index.html',
         {
-            'username':request.user.username
-
+            'username':request.user.username,
+            'menus':menus,
+            'modules':modules,
         })
 
 

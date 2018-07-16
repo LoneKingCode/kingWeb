@@ -17,6 +17,7 @@ from django.core import serializers
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 from kingWeb.adm.permission import check_permission
+from kingWeb.util.webhelper import *
 
 def logout(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -68,6 +69,7 @@ def department(request,kwargs):
             'title':'用户部门',
         })
 
+@check_permission
 def select_user(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -138,6 +140,7 @@ def login(request,kwargs):
         'adm/user/login.html',
         {
             'title':'用户登录',
+            'next':request.GET.get('next','')
          })
 
 @csrf_exempt
@@ -162,6 +165,10 @@ def post_login(request,kwargs):
     else:
         result.msg = '登陆失败'
 
+    ip = webhelper.get_client_ip(request)
+    agent = webhelper.get_client_agent(request)
+    SysLoginlog.objects.create(clientip=ip,clientinfo = agent,username=user.username,description=result.msg)
+
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
@@ -183,6 +190,7 @@ def post_add(request,kwargs):
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+
 @csrf_exempt
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -415,6 +423,7 @@ def get_department_user(request,kwargs):
     return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
 
 @csrf_exempt
+@check_permission
 def remove_department_user(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
@@ -426,6 +435,7 @@ def remove_department_user(request,kwargs):
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @csrf_exempt
+@check_permission
 def set_user_department(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)

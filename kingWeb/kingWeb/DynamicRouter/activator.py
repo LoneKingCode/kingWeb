@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response,HttpResponse,redirect
-from kingWeb.models import ResultModel
+from kingWeb.models import ResultModel,SysOperationLog
+from kingWeb.util.webhelper import *
 import json
 def process(request,**kwargs):
     '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
@@ -7,6 +8,14 @@ def process(request,**kwargs):
     app = kwargs.get('app',None)
     controller = kwargs.get('controller',None)
     action = kwargs.get('action',None)
+
+    ip = webhelper.get_client_ip(request)
+    agent = webhelper.get_client_agent(request)
+    user = request.user
+    url = request.get_full_path()
+    SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\
+        operationurl = url)
+
     try:
         viewObj = __import__("%s.%s.views" % ('kingWeb',app),fromlist=(controller,))
         ctrlObj = getattr(viewObj, controller)
@@ -15,17 +24,17 @@ def process(request,**kwargs):
         result = actionObj(request,kwargs)
         return result
     except(ImportError,AttributeError) as e:
-        if request.method=='POST':
+        if request.method == 'POST':
             result = ResultModel()
-            result.flag=False
+            result.flag = False
             result.msg = '操作失败:' + str(e)
             return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
         else:
            return redirect('/adm/home/notfound')
     except Exception as e:
-        if request.method=='POST':
+        if request.method == 'POST':
             result = ResultModel()
-            result.flag=False
+            result.flag = False
             result.msg = '操作失败:' + str(e)
             return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
         else:

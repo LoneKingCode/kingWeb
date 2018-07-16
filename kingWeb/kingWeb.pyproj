@@ -75,6 +75,9 @@
     <Compile Include="kingWeb\adm\views\control.py" />
     <Compile Include="kingWeb\adm\views\__init__.py" />
     <Compile Include="kingWeb\adm\__init__.py" />
+    <Compile Include="kingWeb\util\webhelper.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\util\__init__.py">
       <SubType>Code</SubType>
     </Compile>

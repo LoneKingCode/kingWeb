@@ -22,6 +22,8 @@ MEDIA_URL = '/upload/'
 #设置静态文件路径为主目录下
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 
+LOGIN_URL = '/adm/user/login'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 

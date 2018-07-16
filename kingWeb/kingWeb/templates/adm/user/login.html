@@ -25,7 +25,11 @@
     <script type="text/javascript">
     $(function () {
         lkWeb.FormValidation($("#loginForm"), function () {
-            lkWeb.GoAction("adm", "control", "index")
+            var next= '{{next}}'
+            if (next != '')
+                window.location.href = next
+            else
+                lkWeb.GoAction("adm", "control", "index")
         }, "登陆成功")
 
     })

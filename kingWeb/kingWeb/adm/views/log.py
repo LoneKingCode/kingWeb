@@ -17,6 +17,30 @@ def index(request,kwargs):
             'title':'日志管理',
         })
 
+def login(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/log/login.html',
+        {
+            'title':'登陆日志',
+        })
+
+
+def operation(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/log/operation.html',
+        {
+            'title':'操作管理',
+        })
+
+def chart(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    return render(request,
+        'adm/log/chart.html',
+        {
+            'title':'统计图表',
+        })
 
 @csrf_exempt
 def delete_login(request,kwargs):
@@ -66,10 +90,10 @@ def get_login_log(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysLoginlog.objects.filter(Q(description__icontains=searchkey)|Q(username__icontains=searchkey)).order_by(_orderby).\
-        values('clientip','description','id','clientmac','username')
+        values('clientip','clientinfo','description','id','username')
     else:
         alldata = SysLoginlog.objects.order_by(_orderby).\
-        values('clientip','description','id','clientmac','username')
+        values('clientip','clientinfo','description','id','username')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
@@ -102,10 +126,10 @@ def get_operation_log(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysOperationLog.objects.filter(Q(operationdescription__icontains=searchkey)|Q(username__icontains=searchkey)).order_by(_orderby).\
-        values('clientip','operationdescription','clientmac','operationurl','username')
+        values('clientip','clientinfo','operationdescription','operationurl','username')
     else:
         alldata = SysOperationLog.objects.order_by(_orderby).\
-        values('clientip','operationdescription','clientmac','operationurl','username')
+        values('clientip','clientinfo','operationdescription','operationurl','username')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)

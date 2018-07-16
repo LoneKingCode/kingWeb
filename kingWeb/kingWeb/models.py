@@ -108,7 +108,7 @@ class SysDepartment(BaseModel):
         db_table = 'Sys_Department'
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)  # Field name made lowercase.
-    clientmac = models.CharField(db_column='ClientMac', max_length=40, blank=True, null=True)  # Field name made lowercase.
+    clientinfo = models.CharField(db_column='ClientInfo', max_length=200, blank=True, null=True)  # Field name made lowercase.
     username = models.CharField(db_column='UserName', max_length=20)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=40, blank=True, null=True)  # Field name made lowercase.
     def __str__(self):
@@ -142,7 +142,7 @@ class SysModule(BaseModel):
 
 class SysOperationLog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15)  # Field name made lowercase.
-    clientmac = models.CharField(db_column='ClientMac', max_length=40)  # Field name made lowercase.
+    clientinfo = models.CharField(db_column='ClientInfo', max_length=200, blank=True, null=True)  # Field name made lowercase.
     operationdescription = models.CharField(db_column='OperationDescription', max_length=100)  # Field name made lowercase.
     operationurl = models.CharField(db_column='OperationUrl', max_length=300, blank=True, null=True)  # Field name made lowercase.
     username = models.TextField(db_column='UserName', blank=True, null=True)  # Field name made lowercase.
@@ -228,28 +228,6 @@ class SysTableList(BaseModel):
         return self.name + ' ' + self.description
     class Meta:
         db_table = 'Sys_TableList'
-
-
-class SysUser(BaseModel):
-    accessfailedcount = models.IntegerField(db_column='AccessFailedCount')  # Field name made lowercase.
-    email = models.CharField(db_column='Email', max_length=256, blank=True, null=True)  # Field name made lowercase.
-    emailconfirmed = models.IntegerField(db_column='EmailConfirmed')  # Field name made lowercase.
-    lockoutenabled = models.IntegerField(db_column='LockoutEnabled')  # Field name made lowercase.
-    lockoutend = models.TextField(db_column='LockoutEnd', blank=True, null=True)  # Field name made lowercase.
-    normalizedemail = models.CharField(db_column='NormalizedEmail', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    normalizedusername = models.CharField(db_column='NormalizedUserName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    passwordhash = models.TextField(db_column='PasswordHash', blank=True, null=True)  # Field name made lowercase.
-    phonenumber = models.TextField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
-    phonenumberconfirmed = models.IntegerField(db_column='PhoneNumberConfirmed')  # Field name made lowercase.
-    realname = models.TextField(db_column='RealName', blank=True, null=True)  # Field name made lowercase.
-    securitystamp = models.TextField(db_column='SecurityStamp', blank=True, null=True)  # Field name made lowercase.
-    status = models.IntegerField(db_column='Status')  # Field name made lowercase.
-    twofactorenabled = models.IntegerField(db_column='TwoFactorEnabled')  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=256, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'Sys_User'
-
 
 class SysUserDepartment(BaseModel):
     departmentid = models.IntegerField(db_column='DepartmentId')  # Field name made lowercase.

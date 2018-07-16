@@ -159,6 +159,7 @@ def get_role_menus(request,kwargs):
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt
+@check_permission
 def auth_menus(request,kwargs):
     assert isinstance(request,HttpRequest)
     result = ResultModel()
