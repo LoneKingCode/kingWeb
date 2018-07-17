@@ -17,7 +17,7 @@
 
     });
 
-    var table_operation;
+    var lkTable;
     function InitDataTable() {
         var dataUrl = '/adm/log/get_operation_log/';   //后天获取json数据的地址
         var columns = [
@@ -37,16 +37,25 @@
             { "mData": "clientinfo", "name": "clientip", "sClass": "text-center" },
             { "mData": "createdatetime", "name": "createdatetime", "sClass": "text-center" }
         ];
-        table_operation = lkWeb.LoadTable("table_operation", columns, dataUrl);
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl);
     }
 
-
-    </script>
-
+    function Clear() {
+        lkWeb.AjaxPost("/adm/log/clear_operation/", {}, function () {
+            parent.layer.alert("清除成功");
+            lkTable.draw(false);
+        })
+    }
+</script>
 {% endblock %}
 
 
 {% block content %}
+
+
+<div class="form-group">
+    <button type="button" class="btn btn-warning" onclick="Clear()">清空</button>
+</div>
 
 <div class="form-group">
     <div class="input-group">
@@ -57,7 +66,7 @@
     </div>
 </div>
 {%csrf_token%}
-<table class="table table-striped table-hover" id="table_operation">
+<table class="table table-striped table-hover" id="lkTable">
     <thead>
         <tr>
             <th>

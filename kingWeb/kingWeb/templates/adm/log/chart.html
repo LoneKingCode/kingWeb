@@ -2,7 +2,6 @@
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
-    <script src="{% static 'lib/echart/echarts-all.js'%}"></script>
     <script>
         $(function () {
             LoadChartByDay();
@@ -46,7 +45,7 @@
                 ],
                 series: [
                     {
-                        name: '访客数',
+                        name: '用户数',
                         type: 'bar',
                         data: result.visitors,
                         markPoint: {
@@ -64,7 +63,7 @@
                     {
                         name: '页面访问数',
                         type: 'bar',
-                        data: result.visitPage,
+                        data: result.visitedPage,
 
                         markLine: {
                             data: [
@@ -84,7 +83,7 @@
             $.ajax({
                 type: "post",
                 datatype: "json",
-                url:'@Url.Action("GetChartDataByDay")',
+                url:'/adm/log/get_chart_by_day/',
                 data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
                 success: function (result) {
                     ShowChart(myChart, "当日站点访问统计", result);
@@ -95,13 +94,13 @@
 
             })
         }
-                function LoadChartByWeek() {
+        function LoadChartByWeek() {
             var myChart = echarts.init(document.getElementById('chartByWeek'));
             myChart.showLoading({ text: '数据获取中', effect: 'whirling' });
             $.ajax({
                 type: "post",
                 datatype: "json",
-                url:'@Url.Action("GetChartDataByWeek")',
+                url:'/adm/log/get_chart_by_week/',
                 data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
                 success: function (result) {
                     ShowChart(myChart, "一周站点访问统计", result);
@@ -118,7 +117,7 @@
                     $.ajax({
                         type: "post",
                         datatype: "json",
-                        url: '@Url.Action("GetChartDataByMonth")',
+                     url:'/adm/log/get_chart_by_month/',
                         data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
                         success: function (result) {
                             ShowChart(myChart, "一个月内站点访问统计", result);
@@ -135,7 +134,7 @@
             $.ajax({
                 type: "post",
                 datatype: "json",
-                url:'@Url.Action("GetChartDataByYear")',
+                url:'/adm/log/get_chart_by_year/',
                 data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
                 success: function (result) {
                     ShowChart(myChart, "一年内站点访问统计", result);
@@ -152,7 +151,7 @@
 
 {% block content %}
 
-
+{%csrf_token%}
 <div id="chartByDay" style="width: 90%; height: 400px;"></div>
 <div id="chartByWeek" style="width: 90%; height: 400px;"></div>
 <div id="chartByMonth" style="width: 90%; height: 400px;"></div>

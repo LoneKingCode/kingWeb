@@ -102,7 +102,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
         btn: ["确认", "取消"]
     },
         function () {
-            var postUrl = '/' + area + '/' + ctrl + '/Delete';
+            var postUrl = '/' + area + '/' + ctrl + '/delete';
             var _value = "";
             if (IsNotEmpty(value))
                 _value = value;
@@ -141,7 +141,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
     )
 }
 
-lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack, table) {
+lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack) {
     data.csrfmiddlewaretoken = lkWeb.GetCsrfToken();
     $.ajax(
         {
@@ -170,8 +170,34 @@ lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack, table) {
             }
         })
 }
-lkWeb.AjaxGet = function () {
-
+lkWeb.AjaxGet = function (url, data, successCallBack, errorCallBack) {
+    data.csrfmiddlewaretoken = lkWeb.GetCsrfToken();
+    $.ajax(
+        {
+            type: 'get',
+            url: url,
+            data: data,
+            success: function (result) {
+                if (result.flag == true) {
+                    if (IsFunction(successCallBack))
+                        successCallBack();
+                    else
+                        parent.layer.alert("操作成功");
+                }
+                else {
+                    if (IsNotEmpty(result.msg))
+                        parent.layer.alert(result.msg);
+                    else
+                        parent.layer.alert("操作失败");
+                }
+            },
+            error: function (err) {
+                parent.layer.alert("操作失败");
+                if (IsFunction(errorCallBack))
+                    errorCallBack();
+                console.log(err);
+            }
+        })
 }
 
 //form validation
