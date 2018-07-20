@@ -49,10 +49,10 @@
     <Compile Include="kingWeb\contrib\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\util\sqlhelper.py">
+    <Compile Include="kingWeb\util\SqlHelper.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\util\syshelper.py">
+    <Compile Include="kingWeb\util\SysHelper.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\DynamicRouter\activator.py" />
@@ -75,7 +75,7 @@
     <Compile Include="kingWeb\adm\views\control.py" />
     <Compile Include="kingWeb\adm\views\__init__.py" />
     <Compile Include="kingWeb\adm\__init__.py" />
-    <Compile Include="kingWeb\util\webhelper.py">
+    <Compile Include="kingWeb\util\WebHelper.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\util\__init__.py">

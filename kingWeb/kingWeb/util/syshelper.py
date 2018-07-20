@@ -3,15 +3,15 @@ import os
 import time
 from openpyxl import Workbook
 from openpyxl.reader.excel import load_workbook
-from kingWeb.util.sqlhelper import *
+from kingWeb.util.SqlHelper import *
 from kingWeb.models import *
 from django.db.models import Q
-class syshelper(object):
+class SysHelper(object):
 
        @staticmethod
        def get_column_names(tableid,condition,orderby):
            sql = 'select * from Sys_TableColumn where TableId={0} and {1} order By {2}'
-           column_data = sqlhelper.query(sql.format(tableid,condition,orderby))
+           column_data = SqlHelper.query(sql.format(tableid,condition,orderby))
            column_names = ''
            for row in column_data:
                column_names+= row['Name'] + ','
@@ -23,14 +23,14 @@ class syshelper(object):
            if colvalue == '0' or colvalue == 0:
                return '无'
            sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-           outdata = sqlhelper.single(sql.format(tableid,colname))
+           outdata = SqlHelper.single(sql.format(tableid,colname))
            outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
            colnames = outdata_arr[0].split(',') # value,text
            tablename = outdata_arr[1]
            condition = outdata_arr[2]
            primarkey = colnames[0] #作为下拉菜单value的列
            textkey = colnames[1] #作为下拉菜单的text的列
-           value = sqlhelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,colvalue))
+           value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,colvalue))
            if value == '':
                return '无'
            return value
@@ -39,14 +39,14 @@ class syshelper(object):
            if colvalue == '' or colvalue == 0:
                return '无'
            sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-           outdata = sqlhelper.single(sql.format(tableid,colname))
+           outdata = SqlHelper.single(sql.format(tableid,colname))
            outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
            colnames = outdata_arr[0].split(',') # value,text
            tablename = outdata_arr[1]
            condition = outdata_arr[2]
            primarkey = colnames[0] #作为下拉菜单value的列
            textkey = colnames[1] #作为下拉菜单的text的列
-           value = sqlhelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
+           value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
            if value == '':
                return '无'
            return value
@@ -123,7 +123,7 @@ class syshelper(object):
                         english_colname = columnsdict[cn_colname]
 
                         if coldatatype[english_colname] == 'out':
-                            outvalue = syshelper.get_out_value_id(tableid,english_colname,col.value)
+                            outvalue = SysHelper.get_out_value_id(tableid,english_colname,col.value)
                             if outvalue == '':
                                 err = True
                                 result.msg+=' ' + cn_colname + ' 值获取失败 '
@@ -153,11 +153,11 @@ class syshelper(object):
                     addmodel['Modifier'] = '0'
                     sqllist.append(sql.format(table.name,','.join(addmodel.keys()),\
         "'" + ','.join(addmodel.values()).replace(',' , "','") + "'"))
-                sqlhelper.bulk_execute(sqllist)
+                SqlHelper.bulk_execute(sqllist)
                 result.flag = True
             elif table.importtype == TableImportType.更新.value:
                 sql = 'update {0} set {1} where {2}'
-                primarkey = sqlhelper.single('select Name from Sys_TableColumn where PrimarKey=1 and TableId=' + tableid)
+                primarkey = SqlHelper.single('select Name from Sys_TableColumn where PrimarKey=1 and TableId=' + tableid)
                 if primarkey == '':
                     result.msg = '请设置主键，因为导入类型为更新'
                     return result
@@ -172,9 +172,9 @@ class syshelper(object):
                     newvalues +="ModifyDateTime='" + time.strftime("%Y-%m-%d %H:%M:%S") + "',"
                     newvalues +="Modifier='" + str(0) + "'"
                     sqllist.append(sql.format(table.name,newvalues,condition))
-                sqlhelper.bulk_execute(sqllist)
+                SqlHelper.bulk_execute(sqllist)
                 result.flag = True
-                sqlhelper.bulk_execute(sqllist)
+                SqlHelper.bulk_execute(sqllist)
             else:
                 result.msg = '请设置表管理中导入类型'
             return result
@@ -211,12 +211,12 @@ class syshelper(object):
                 coldatatype[col.name] = col.datatype
             columnstr = columnstr.rstrip(',')
             ws.append(table_head)
-            tabledata = sqlhelper.query('select {0} from {1}'.format(columnstr,table.name))
+            tabledata = SqlHelper.query('select {0} from {1}'.format(columnstr,table.name))
             for row in tabledata:
                 rowdata = []
                 for key,value in row.items():
                     if coldatatype[key] == 'out':
-                        rowdata.append(syshelper.get_out_value(tableid,key,value))
+                        rowdata.append(SysHelper.get_out_value(tableid,key,value))
                     else:
                         rowdata.append(str(value))
                 ws.append(rowdata)

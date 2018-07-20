@@ -1,4 +1,4 @@
-class webhelper(object):
+class WebHelper(object):
     @staticmethod
     def get_client_ip(request):
         try:

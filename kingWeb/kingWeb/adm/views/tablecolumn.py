@@ -7,7 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.util.sqlhelper import *
+from kingWeb.util.SqlHelper import *
 from kingWeb.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
@@ -214,7 +214,7 @@ def setvalue(request,kwargs):
     for id in ids:
         sqllist.append('update Sys_TableColumn set {0} = {1} where Id={2}'.format(filedname,value,id))
         pass
-    sqlhelper.bulk_execute(sqllist)
+    SqlHelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

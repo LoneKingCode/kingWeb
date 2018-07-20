@@ -1,6 +1,6 @@
 from django.db import connection,transaction,IntegrityError
 
-class sqlhelper(object):
+class SqlHelper(object):
 
     @staticmethod
     def execute(sql):
@@ -43,7 +43,7 @@ class sqlhelper(object):
 
     @staticmethod
     def single(sql):
-        query_result = sqlhelper.query(sql)
+        query_result = SqlHelper.query(sql)
         if len(query_result) > 0:
             firstrow = query_result[0]
             return firstrow[list(firstrow.keys())[0]]

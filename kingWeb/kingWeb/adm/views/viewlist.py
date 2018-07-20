@@ -8,8 +8,8 @@ import json
 import time
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.util.sqlhelper import *
-from kingWeb.util.syshelper import *
+from kingWeb.util.SqlHelper import *
+from kingWeb.util.SysHelper import *
 from kingWeb.adm.permission import check_permission
 
 @check_permission
@@ -56,7 +56,7 @@ def add(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = sqlhelper.query('select {0} from {1} where {2}'.\
+            outdatalist = SqlHelper.query('select {0} from {1} where {2}'.\
                 format(outdata_arr[0],tablename,condition))
             out_col_data[col.name] = outdatalist
         elif col.datatype == 'enum':
@@ -93,8 +93,8 @@ def detail(request,kwargs):
         if table.allowview != 1:
               return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)))
-    columnnames = syshelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
-    data = sqlhelper.query('select {0} from {1} where {2}'\
+    columnnames = SysHelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
+    data = SqlHelper.query('select {0} from {1} where {2}'\
         .format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
@@ -104,7 +104,7 @@ def detail(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outvalue = sqlhelper.query('select {0} from {1} where {2}'.\
+            outvalue = SqlHelper.query('select {0} from {1} where {2}'.\
                 format(outdata_arr[0],tablename,'Id=' + str(data[col.name])))
             out_col_data[col.name] = outvalue
 
@@ -135,8 +135,8 @@ def edit(request,kwargs):
         if table.allowedit != 1:
               return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
-    columnnames = syshelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
-    data = sqlhelper.query('select {0} from {1} where {2}'\
+    columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
+    data = SqlHelper.query('select {0} from {1} where {2}'\
         .format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
@@ -146,7 +146,7 @@ def edit(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = sqlhelper.query('select {0} from {1} where {2}'.\
+            outdatalist = SqlHelper.query('select {0} from {1} where {2}'.\
                 format(outdata_arr[0],tablename,condition))
             out_col_data[col.name] = outdatalist
         elif col.datatype == 'enum':
@@ -194,7 +194,7 @@ def post_add(request,kwargs):
     sql = sql.format(table.name,\
         ','.join(addmodel.keys()),\
         "'" + ','.join(addmodel.values()).replace(',' , "','") + "'")
-    sqlhelper.execute(sql)
+    SqlHelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -230,7 +230,7 @@ def post_edit(request,kwargs):
         newvalues += "{0}='{1}',".format(key,value)
     newvalues = newvalues.rstrip(',')
     sql = sql.format(table.name,newvalues,'Id=' + str(id) + ' and ' + condition)
-    sqlhelper.execute(sql)
+    SqlHelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -258,7 +258,7 @@ def delete(request,kwargs):
     sqllist = []
     for id in ids:
         sqllist.append('delete from {0} where {1}'.format(table.name,'Id=' + str(id) + ' and ' + condition))
-    sqlhelper.bulk_execute(sqllist)
+    SqlHelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
@@ -293,7 +293,7 @@ def get_page_data(request,kwargs):
     condition = '1=1'
     alldata = None
     if searchkey != '':
-       search_columns = syshelper.get_column_names(tableid, "SearchVisible=1", "ListOrder").split(',')
+       search_columns = SysHelper.get_column_names(tableid, "SearchVisible=1", "ListOrder").split(',')
        condition = ''
        for sc in search_columns:
            condition+=" {0} like '%{1}%' or".format(sc,searchkey)
@@ -303,10 +303,10 @@ def get_page_data(request,kwargs):
         condition += ' and ' + table.defaultfilter
 
     sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'
-    list_columns = syshelper.get_column_names(tableid, "ListVisible=1", "ListOrder")
-    pagedata = sqlhelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
-    data_count = sqlhelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
-    out_type_column_names = syshelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
+    list_columns = SysHelper.get_column_names(tableid, "ListVisible=1", "ListOrder")
+    pagedata = SqlHelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
+    data_count = SqlHelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
+    out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
 
     rownum = int(start)
     for dic in pagedata:
@@ -314,7 +314,7 @@ def get_page_data(request,kwargs):
         dic['rownum'] = rownum
         for key in dic:
             if key in out_type_column_names:
-                dic[key] = syshelper.get_out_value(tableid,key,dic[key])
+                dic[key] = SysHelper.get_out_value(tableid,key,dic[key])
             else:
                 if key == 'CreateDateTime' or key == 'ModifyDateTime':
                     dic[key] = str(dic[key])
@@ -330,20 +330,20 @@ def post_import(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
     file = request.FILES['excelFile']
-    result = syshelper.import_excel(tableid,file)
+    result = SysHelper.import_excel(tableid,file)
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 @check_permission
 def post_export(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
-    result = syshelper.export_excel(tableid)
+    result = SysHelper.export_excel(tableid)
 
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
 
 def download_import_template(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
-    result = syshelper.download_import_template(tableid)
+    result = SysHelper.download_import_template(tableid)
 
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

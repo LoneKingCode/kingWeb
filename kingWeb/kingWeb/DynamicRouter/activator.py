@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response,HttpResponse,redirect
 from kingWeb.models import ResultModel,SysOperationLog
-from kingWeb.util.webhelper import *
+from kingWeb.util.WebHelper import *
 import json
 def process(request,**kwargs):
     '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
@@ -9,8 +9,8 @@ def process(request,**kwargs):
     controller = kwargs.get('controller',None)
     action = kwargs.get('action',None)
 
-    ip = webhelper.get_client_ip(request)
-    agent = webhelper.get_client_agent(request)
+    ip = WebHelper.get_client_ip(request)
+    agent = WebHelper.get_client_agent(request)
     user = request.user
     url = request.get_full_path()
     SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\

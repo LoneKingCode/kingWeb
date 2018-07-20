@@ -17,7 +17,7 @@ from django.core import serializers
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 from kingWeb.adm.permission import check_permission
-from kingWeb.util.webhelper import *
+from kingWeb.util.WebHelper import *
 
 def logout(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -165,8 +165,8 @@ def post_login(request,kwargs):
     else:
         result.msg = '登陆失败'
 
-    ip = webhelper.get_client_ip(request)
-    agent = webhelper.get_client_agent(request)
+    ip = WebHelper.get_client_ip(request)
+    agent = WebHelper.get_client_agent(request)
     SysLoginlog.objects.create(clientip=ip,clientinfo = agent,username=user.username,description=result.msg)
 
     return HttpResponse(json.dumps(result.tojson()), content_type="application/json")

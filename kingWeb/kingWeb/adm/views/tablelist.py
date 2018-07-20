@@ -7,7 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.util.sqlhelper import *
+from kingWeb.util.SqlHelper import *
 from kingWeb.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
@@ -203,7 +203,7 @@ def post_build_column(request,kwargs):
     tableid = request.POST.get('id','')
     tablename = SysTableList.objects.get(id=tableid).name
 
-    query_result = sqlhelper.query('desc ' + tablename)
+    query_result = SqlHelper.query('desc ' + tablename)
     newmodels = []
     for row in query_result:
         field = row['Field']
