@@ -254,6 +254,7 @@ class SysUserProfile(BaseModel):
             profile = SysUserProfile()
             profile.user = instance
             profile.save()
+    #当创建User实体且保存时，会同时建立对应用户的SysUserProfile
     post_save.connect(create_user_profile, sender=User)
 
 class TestLeader(BaseModel):

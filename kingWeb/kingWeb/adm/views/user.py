@@ -208,6 +208,7 @@ def post_edit(request,kwargs):
             user.first_name = firstname
             user.set_password(password)
             user.save()
+            #执行过user.save()时 对应的SysUserProfile对象已经建立
             user_profile = SysUserProfile.objects.get(user=user)
             user_profile.status = status
             user_profile.save()
