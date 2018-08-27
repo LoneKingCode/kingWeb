@@ -261,6 +261,7 @@
     <Folder Include="kingWeb\util\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="kingWeb.sql" />
     <Content Include="kingWeb\static\css\login\css\base.css" />
     <Content Include="kingWeb\static\css\login\css\login.css" />
     <Content Include="kingWeb\static\css\login\images\admin_logo.png" />

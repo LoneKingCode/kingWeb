@@ -7,6 +7,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
+
 from kingWeb.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
