@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
@@ -78,7 +77,7 @@ def post_add(request,kwargs):
         icon = icon,listorder = listorder,type = type,url = url)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -97,7 +96,7 @@ def post_edit(request,kwargs):
         icon = icon,listorder = listorder,type = type,url = url)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -107,11 +106,11 @@ def delete(request,kwargs):
     ids = request.POST.getlist('ids[]')
     if ids == '':
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
     object = SysMenu.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -166,7 +165,7 @@ def get_page_data(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_list(request,kwargs):
@@ -193,8 +192,8 @@ def get_list(request,kwargs):
             row['typename'] = MenuType(int(type)).name
         else:
             row['typename'] = '无'
-    data = {'value':pagedata} #suggest 插件需要的数据格式
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    result = {'value':pagedata} #suggest 插件需要的数据格式
+    return JsonResponse(result)
 
 def get_menu_type(parentid):
     if parentid == '':

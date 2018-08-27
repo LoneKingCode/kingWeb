@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response,HttpResponse,redirect
 from kingWeb.models import ResultModel,SysOperationLog
-from kingWeb.util.WebHelper import *
+from kingWeb.util.WebHelper import WebHelper
 import json
 def process(request,**kwargs):
     '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
@@ -28,7 +28,7 @@ def process(request,**kwargs):
             result = ResultModel()
             result.flag = False
             result.msg = '操作失败:' + str(e)
-            return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+            return JsonResponse(result.tojson())
         else:
            return redirect('/adm/home/notfound')
     except Exception as e:
@@ -36,7 +36,7 @@ def process(request,**kwargs):
             result = ResultModel()
             result.flag = False
             result.msg = '操作失败:' + str(e)
-            return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+            return JsonResponse(result.tojson())
         else:
             return redirect('/adm/home/error')
 

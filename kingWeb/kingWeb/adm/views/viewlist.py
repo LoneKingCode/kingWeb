@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 import json
 import time
@@ -91,7 +90,7 @@ def detail(request,kwargs):
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowview != 1:
-              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+              return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)))
     columnnames = SysHelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
     data = SqlHelper.query('select {0} from {1} where {2}'\
@@ -133,7 +132,7 @@ def edit(request,kwargs):
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowedit != 1:
-              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+              return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
     data = SqlHelper.query('select {0} from {1} where {2}'\
@@ -180,7 +179,7 @@ def post_add(request,kwargs):
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowadd != 1:
-              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+              return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
     addmodel = {}
     for col in tablecolumns:
@@ -197,7 +196,7 @@ def post_add(request,kwargs):
     SqlHelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -211,7 +210,7 @@ def post_edit(request,kwargs):
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowedit != 1:
-              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+              return JsonResponse(result.tojson())
         update_filter = SysTableList.objects.get(id=int(tableid)).forbiddenupdatefilter
         condition = '1=1'
         if forbidden_delete_filter != '':
@@ -233,7 +232,7 @@ def post_edit(request,kwargs):
     SqlHelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -248,12 +247,12 @@ def delete(request,kwargs):
         condition = forbidden_delete_filter
     if len(ids) <= 0:
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
 
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowdelete != 1:
-              return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+              return JsonResponse(result.tojson())
 
     sqllist = []
     for id in ids:
@@ -261,7 +260,7 @@ def delete(request,kwargs):
     SqlHelper.bulk_execute(sqllist)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -277,7 +276,7 @@ def get_page_data(request,kwargs):
 
     table = SysTableList.objects.get(id=tableid)
     if table.allowview != 1:
-        return HttpResponse('', content_type="application/json")
+        return JsonResponse({'msg':'请求参数错误'})
 
     _orderby = ''
     if orderdir == 'desc':
@@ -323,7 +322,7 @@ def get_page_data(request,kwargs):
 
     datatable = DataTableModel(draw,data_count,data_count,pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @check_permission
 def post_import(request,kwargs):
@@ -331,7 +330,7 @@ def post_import(request,kwargs):
     tableid = request.POST.get('tableid','')
     file = request.FILES['excelFile']
     result = SysHelper.import_excel(tableid,file)
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @check_permission
 def post_export(request,kwargs):
@@ -339,11 +338,11 @@ def post_export(request,kwargs):
     tableid = request.POST.get('tableid','')
     result = SysHelper.export_excel(tableid)
 
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 def download_import_template(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
     result = SysHelper.download_import_template(tableid)
 
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())

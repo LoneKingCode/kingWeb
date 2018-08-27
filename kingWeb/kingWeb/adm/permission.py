@@ -52,7 +52,7 @@ def check_permission(func):
                 result = ResultModel()
                 result.flag = False
                 result.msg = '无权限操作'
-                return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+                return JsonResponse(result.tojson())
             else:
                 return render(request,'adm/home/access_denied.html')
         return func(*args,**kwargs)

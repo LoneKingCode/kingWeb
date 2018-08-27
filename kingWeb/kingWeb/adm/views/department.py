@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
@@ -59,7 +58,7 @@ def post_add(request,kwargs):
     object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -73,7 +72,7 @@ def post_edit(request,kwargs):
     object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -83,7 +82,7 @@ def delete(request,kwargs):
     ids = request.POST.getlist('ids[]')
     if ids == '':
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
     hassub = False
     for id in ids:
         objs = SysDepartment.objects.filter(parentid=id)
@@ -95,11 +94,11 @@ def delete(request,kwargs):
                  result.msg +=o.name + ' '
             result.msg+='</br>'
     if(hassub):
-         return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+         return JsonResponse(result.tojson())
     object = SysDepartment.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -141,7 +140,7 @@ def get_page_data(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_list(request,kwargs):
@@ -150,4 +149,4 @@ def get_list(request,kwargs):
     result = []
     for row in departments:
             result.append({'pId':'0','name': row['name'] ,'id':str(row['id'])})
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)

@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
@@ -58,7 +57,7 @@ def post_add(request,kwargs):
     object = SysRole.objects.create(name=name,description=description)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -70,7 +69,7 @@ def post_edit(request,kwargs):
     object = SysRole.objects.filter(id=id).update(name=name,description=description)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -80,12 +79,12 @@ def delete(request,kwargs):
     ids = request.POST.getlist('ids[]')
     if ids == '':
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
 
     object = SysRole.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -123,7 +122,7 @@ def get_page_data(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_list(request,kwargs):
@@ -132,7 +131,7 @@ def get_list(request,kwargs):
     result = []
     for row in alldata:
         result.append({'pId':0,'name':row['name'],'id':row['id']})
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 def get_menu_list(request,kwargs):
@@ -146,7 +145,7 @@ def get_menu_list(request,kwargs):
         result.append({'pId': str(pId),'name':row['name'],'id':str(row['id']),'open':type == MenuType.模块.value})
     for row in allmodule:
             result.append({'pId':'0','name':'--------' + row['name'] + '--------' ,'id':str(row['id']) + '_m','open':True,'type':'module'})
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 def get_role_menus(request,kwargs):
@@ -156,7 +155,7 @@ def get_role_menus(request,kwargs):
     result = []
     for row in alldata:
         result.append({'id':row['id'],'menuId':row['menuid']})
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 @check_permission
@@ -177,4 +176,4 @@ def auth_menus(request,kwargs):
         result.flag = True
     else:
         result.msg='操作失败'
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())

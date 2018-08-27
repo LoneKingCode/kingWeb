@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
@@ -93,7 +92,7 @@ def post_add(request,kwargs):
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -124,7 +123,7 @@ def post_edit(request,kwargs):
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -134,11 +133,11 @@ def delete(request,kwargs):
     ids = request.POST.getlist('ids[]')
     if ids == '':
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
     object = SysTableList.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -181,7 +180,7 @@ def get_page_data(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def post_copy(request,kwargs):
@@ -193,7 +192,7 @@ def post_copy(request,kwargs):
     object.save()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -213,5 +212,5 @@ def post_build_column(request,kwargs):
     objects = SysTableColumn.objects.bulk_create(newmodels)
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 

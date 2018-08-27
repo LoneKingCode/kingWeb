@@ -1,8 +1,7 @@
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpRequest
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 from django.db.models.aggregates import Count
 import json
@@ -54,7 +53,7 @@ def clear_login(request,kwargs):
     object = SysLoginlog.objects.all().delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -64,7 +63,7 @@ def clear_operation(request,kwargs):
     object = SysOperationLog.objects.all().delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 
 @csrf_exempt
@@ -102,7 +101,7 @@ def get_login_log(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_operation_log(request,kwargs):
@@ -139,7 +138,7 @@ def get_operation_log(request,kwargs):
 
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_chart_by_day(request,kwargs):
@@ -158,7 +157,7 @@ def get_chart_by_day(request,kwargs):
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 def get_chart_by_week(request,kwargs):
@@ -179,7 +178,7 @@ def get_chart_by_week(request,kwargs):
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 def get_chart_by_month(request,kwargs):
@@ -200,7 +199,7 @@ def get_chart_by_month(request,kwargs):
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 
 @csrf_exempt
 def get_chart_by_year(request,kwargs):
@@ -222,5 +221,5 @@ def get_chart_by_year(request,kwargs):
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return HttpResponse(json.dumps(result), content_type="application/json")
+    return JsonResponse(result)
 

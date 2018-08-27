@@ -4,8 +4,7 @@ Definition of views.
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render
-from django.http import HttpRequest
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
 from django.template import RequestContext
 from datetime import datetime
@@ -147,10 +146,12 @@ def login(request,kwargs):
 def post_login(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
+    username = request.POST.get('UserName')
+    pwd = request.POST.get('Password')
     if request.method == 'GET':
         result.msg = 'Method not allowed'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
-    user = auth.authenticate(username=request.POST.get('UserName'), password=request.POST.get('Password'))
+        return JsonResponse(result.tojson())
+    user = auth.authenticate(username=username, password=pwd)
     if user is not None:
           userprofile = SysUserProfile.objects.get(user=user)
           if userprofile.status == UserStatus.已激活.value:
@@ -167,9 +168,9 @@ def post_login(request,kwargs):
 
     ip = WebHelper.get_client_ip(request)
     agent = WebHelper.get_client_agent(request)
-    SysLoginlog.objects.create(clientip=ip,clientinfo = agent,username=user.username,description=result.msg)
+    SysLoginlog.objects.create(clientip=ip,clientinfo = agent,username=username,description=result.msg)
 
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_add(request,kwargs):
@@ -189,7 +190,7 @@ def post_add(request,kwargs):
     user_profile.save()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_edit(request,kwargs):
@@ -202,7 +203,7 @@ def post_edit(request,kwargs):
     password = request.POST.get('Password','')
     status = request.POST.get('Status','')
     id = request.POST.get('Id','')
-    user = User.objects.get(id=Id)
+    user = User.objects.get(id=id)
     if user is not None:
             user.last_name = lastname
             user.first_name = firstname
@@ -216,7 +217,7 @@ def post_edit(request,kwargs):
             result.flag = True
     else:
         result.msg = '用户Id不存在'
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def post_modify_info(request,kwargs):
@@ -242,7 +243,7 @@ def post_modify_info(request,kwargs):
             result.flag = True
     else:
         result.msg = '旧密码错误'
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -252,11 +253,11 @@ def delete(request,kwargs):
     ids = request.POST.getlist('ids[]')
     if ids == '':
         result.msg = '操作失败'
-        return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+        return JsonResponse(result.tojson())
     object = User.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def get_page_data(request,kwargs):
@@ -294,7 +295,7 @@ def get_page_data(request,kwargs):
         row['user__last_login'] = str(row['user__last_login'])
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def delete_role(request,kwargs):
@@ -305,7 +306,7 @@ def delete_role(request,kwargs):
     objects = SysUserRole.objects.filter(Q(roleid__in=roleids) & Q(userid=userid)).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def auth_role(request,kwargs):
@@ -322,7 +323,7 @@ def auth_role(request,kwargs):
         result.flag = True
     else:
         result.msg = '操作失败'
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 def get_user_role(request,kwargs):
@@ -330,13 +331,13 @@ def get_user_role(request,kwargs):
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
     if userid == '':
-        return HttpResponse('', content_type="application/json")
+        return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
     role_data = SysRole.objects.filter(id__in = user_role_data).values('id','name')
 
     datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_not_user_role(request,kwargs):
@@ -344,13 +345,13 @@ def get_not_user_role(request,kwargs):
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
     if userid == '':
-        return HttpResponse('', content_type="application/json")
+        return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
     role_data = SysRole.objects.exclude(id__in = user_role_data).values('id','name')
 
     datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 def get_not_department_user(request,kwargs):
@@ -370,7 +371,7 @@ def get_not_department_user(request,kwargs):
         _orderby +='id'
 
     if departmentid == '':
-        return HttpResponse('', content_type="application/json")
+        return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
     users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
         .values('status','user__email','user__first_name','user__last_name','user__id','user__username')
@@ -385,7 +386,7 @@ def get_not_department_user(request,kwargs):
 
     datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 
 @csrf_exempt
@@ -406,7 +407,7 @@ def get_department_user(request,kwargs):
         _orderby +='id'
 
     if departmentid == '':
-        return HttpResponse('', content_type="application/json")
+        return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
     users = SysUserProfile.objects.filter(user__id__in=user_department).order_by(_orderby)\
         .values('status','user__email','user__first_name','user__last_name','user__id','user__username','id')
@@ -421,7 +422,7 @@ def get_department_user(request,kwargs):
 
     datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))
 
-    return HttpResponse(json.dumps(datatable.tojson()), content_type="application/json")
+    return JsonResponse(datatable.tojson())
 
 @csrf_exempt
 @check_permission
@@ -433,7 +434,7 @@ def remove_department_user(request,kwargs):
     objects = SysUserDepartment.objects.filter(Q(departmentid = departmentid) & Q(userid__in=userids)).delete()
     result.msg = '操作成功'
     result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())
 
 @csrf_exempt
 @check_permission
@@ -449,4 +450,4 @@ def set_user_department(request,kwargs):
         SysUserDepartment.objects.bulk_create(newobjects)
         result.msg = '操作成功'
         result.flag = True
-    return HttpResponse(json.dumps(result.tojson()), content_type="application/json")
+    return JsonResponse(result.tojson())

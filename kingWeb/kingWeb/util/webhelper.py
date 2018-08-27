@@ -10,6 +10,7 @@ class WebHelper(object):
             except:
                 regip = ""
         return regip
+    @staticmethod
     def get_client_agent(request):
         agent = request.META.get('HTTP_USER_AGENT',None)
         return agent
