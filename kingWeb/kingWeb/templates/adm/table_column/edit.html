@@ -4,11 +4,13 @@
 {% block scripts %}
 
     <script type="text/javascript">
-        $(function () {
-            lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm", "tablecolumn", "index")
-            }, "操作成功")
-        })
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+
+        lkWeb.FormValidation($("#lkForm"), function () {
+            lkWeb.GoAction("adm", "tablecolumn", "index")
+        }, "操作成功")
+    })
 
     </script>
 {% endblock %}

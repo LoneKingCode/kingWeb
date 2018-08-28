@@ -131,7 +131,7 @@ def get_list(request,kwargs):
     result = []
     for row in alldata:
         result.append({'pId':0,'name':row['name'],'id':row['id']})
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def get_menu_list(request,kwargs):
@@ -145,7 +145,7 @@ def get_menu_list(request,kwargs):
         result.append({'pId': str(pId),'name':row['name'],'id':str(row['id']),'open':type == MenuType.模块.value})
     for row in allmodule:
             result.append({'pId':'0','name':'--------' + row['name'] + '--------' ,'id':str(row['id']) + '_m','open':True,'type':'module'})
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def get_role_menus(request,kwargs):
@@ -155,7 +155,7 @@ def get_role_menus(request,kwargs):
     result = []
     for row in alldata:
         result.append({'id':row['id'],'menuId':row['menuid']})
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 @check_permission

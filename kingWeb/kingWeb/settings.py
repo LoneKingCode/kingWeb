@@ -41,10 +41,17 @@ ALLOWED_HOSTS = ['*']
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'Asia/Shanghai'
+USE_TZ = False
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'zh-CN'
+LANGUAGE_CODE = 'zh-Hans'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = False
 
 # Application definition
 INSTALLED_APPS = [
@@ -126,18 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [{
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.9/topics/i18n/
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

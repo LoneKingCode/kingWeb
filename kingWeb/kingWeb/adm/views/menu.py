@@ -193,7 +193,7 @@ def get_list(request,kwargs):
         else:
             row['typename'] = '无'
     result = {'value':pagedata} #suggest 插件需要的数据格式
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 def get_menu_type(parentid):
     if parentid == '':

@@ -149,4 +149,4 @@ def get_list(request,kwargs):
     result = []
     for row in departments:
             result.append({'pId':'0','name': row['name'] ,'id':str(row['id'])})
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)

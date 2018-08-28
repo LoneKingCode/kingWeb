@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
-from django.db.models.aggregates import Count
+from django.db.models.aggregates import Count, Sum
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
@@ -12,6 +12,8 @@ from datetime import datetime,timedelta
 import calendar
 from dateutil.relativedelta import relativedelta
 from kingWeb.adm.permission import check_permission
+from django.utils import timezone
+import pytz
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
@@ -147,17 +149,17 @@ def get_chart_by_day(request,kwargs):
     visitors = []
     visitedpage = []
     result = {}
-    nowdate = datetime.now()
+    nowdate = timezone.now()
     for hour in range(0,24):
         xaxis.append(str(hour) + '时')
         start = nowdate.strftime("%Y-%m-%d ") + str(hour).zfill(2) + ":00:00"
         end = nowdate.strftime("%Y-%m-%d ") + str(hour).zfill(2) + ":23:59"
-        visitors.append(len(SysOperationLog.objects.annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
+        visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
         visitedpage.append(len(SysOperationLog.objects.filter(createdatetime__range=(start,end))))
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def get_chart_by_week(request,kwargs):
@@ -166,19 +168,19 @@ def get_chart_by_week(request,kwargs):
     visitors = []
     visitedpage = []
     result = {}
-    lastweekdate = datetime.now() + relativedelta(days=-7)
+    lastweekdate = timezone.now() + relativedelta(days=-7)
     for week in range(1,8):
         lastweekdate = lastweekdate + relativedelta(days=+1)
         xaxis.append(lastweekdate.strftime("%Y-%m-%d"))
         start = lastweekdate.strftime("%Y-%m-%d") + " 00:00:00"
         end = lastweekdate.strftime("%Y-%m-%d") + " 23:59:59"
-        visitors.append(len(SysOperationLog.objects.annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
+        visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
         visitedpage.append(len(SysOperationLog.objects.filter(createdatetime__range=(start,end))))
 
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def get_chart_by_month(request,kwargs):
@@ -187,19 +189,19 @@ def get_chart_by_month(request,kwargs):
     visitors = []
     visitedpage = []
     result = {}
-    lastmonthdate = datetime.now() - relativedelta(months=+1)
+    lastmonthdate = timezone.now() - relativedelta(months=+1)
     for day in range(1,31):
         lastmonthdate += relativedelta(days=+1)
         xaxis.append(lastmonthdate.strftime("%Y-%m-%d"))
         start = lastmonthdate.strftime("%Y-%m-%d") + " 00:00:00"
         end = lastmonthdate.strftime("%Y-%m-%d") + " 23:59:59"
-        visitors.append(len(SysOperationLog.objects.annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
+        visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
         visitedpage.append(len(SysOperationLog.objects.filter(createdatetime__range=(start,end))))
 
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def get_chart_by_year(request,kwargs):
@@ -208,18 +210,18 @@ def get_chart_by_year(request,kwargs):
     visitors = []
     visitedpage = []
     result = {}
-    lastyeardate = datetime.now() - relativedelta(years=+1)
+    lastyeardate = timezone.now() - relativedelta(years=+1)
     for month in range(0,12):
         lastyeardate += relativedelta(months=+1)
         xaxis.append(lastyeardate.strftime("%Y-%m"))
         start = lastyeardate.strftime("%Y-%m") + "-01 00:00:00"
         monthrange = calendar.monthrange(lastyeardate.year,lastyeardate.month)[1]
         end = lastyeardate.strftime("%Y-%m-") + str(monthrange) + " 23:59:59"
-        visitors.append(len(SysOperationLog.objects.annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
+        visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
         visitedpage.append(len(SysOperationLog.objects.filter(createdatetime__range=(start,end))))
 
     result['xAxis'] = xaxis
     result['visitors'] = visitors
     result['visitedPage'] = visitedpage
-    return JsonResponse(result)
+    return JsonResponse(result,safe=False)
 

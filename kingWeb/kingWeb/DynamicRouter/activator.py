@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response,HttpResponse,redirect
+from django.shortcuts import render_to_response,redirect
 from kingWeb.models import ResultModel,SysOperationLog
+from django.http import HttpResponse,JsonResponse,HttpRequest
 from kingWeb.util.WebHelper import WebHelper
 import json
 def process(request,**kwargs):
