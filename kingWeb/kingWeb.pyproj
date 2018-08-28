@@ -52,6 +52,10 @@
     <Compile Include="kingWeb\contrib\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="kingWeb\crontab\cron.py" />
+    <Compile Include="kingWeb\util\LogHelper.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\util\SqlHelper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -118,6 +122,8 @@
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
     <Folder Include="kingWeb\contrib\" />
+    <Folder Include="kingWeb\crontab\" />
+    <Folder Include="kingWeb\log\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />

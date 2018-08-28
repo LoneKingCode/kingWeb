@@ -6,7 +6,7 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.util.SqlHelper import *
+from kingWeb.util.SqlHelper import SqlHelper
 from kingWeb.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
@@ -48,7 +48,6 @@ def edit(request,kwargs):
             'description':object.description,
             'deletetablename':object.deletetablename,
             'allowview':object.allowview,
-            'allowadd':object.allowadd,
             'allowedit':object.allowedit,
             'allowdelete':object.allowdelete,
             'allowimport':object.allowimport,
@@ -72,7 +71,6 @@ def post_add(request,kwargs):
     description = request.POST.get('Description','')
     deletetablename = request.POST.get('DeleteTableName','')
     allowview = request.POST.get('AllowView','')
-    allowadd = request.POST.get('AllowAdd','')
     allowedit = request.POST.get('AllowEdit','')
     allowdelete = request.POST.get('AllowDelete','')
     allowimport = request.POST.get('AllowImport','')
@@ -86,8 +84,8 @@ def post_add(request,kwargs):
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
 
-    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
-      allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview\
+        ,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
@@ -103,7 +101,6 @@ def post_edit(request,kwargs):
     description = request.POST.get('Description','')
     deletetablename = request.POST.get('DeleteTableName','')
     allowview = request.POST.get('AllowView','')
-    allowadd = request.POST.get('AllowAdd','')
     allowedit = request.POST.get('AllowEdit','')
     allowdelete = request.POST.get('AllowDelete','')
     allowimport = request.POST.get('AllowImport','')
@@ -118,7 +115,7 @@ def post_edit(request,kwargs):
     extendfunction = request.POST.get('ExtendFunction','')
 
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
-      allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+      allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
@@ -161,10 +158,10 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysTableList.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('id','name','description','allowview','allowadd','allowedit','allowdelete','isview')
+        values('id','name','description','allowview','allowedit','allowdelete','isview')
     else:
         alldata = SysTableList.objects.order_by(_orderby).\
-        values('id','name','description','allowview','allowadd','allowedit','allowdelete','isview')
+        values('id','name','description','allowview','allowedit','allowdelete','isview')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
@@ -172,7 +169,6 @@ def get_page_data(request,kwargs):
         rownum = rownum + 1
         row['rownum'] = rownum
         row['allowview'] = '是' if row['allowview'] == 1 else '否'
-        row['allowadd'] = '是' if row['allowadd'] == 1 else '否'
         row['allowedit'] = '是' if row['allowedit'] == 1 else '否'
         row['allowdelete'] = '是' if row['allowdelete'] == 1 else '否'
         row['isview'] = '是' if row['isview'] == 1 else '否'

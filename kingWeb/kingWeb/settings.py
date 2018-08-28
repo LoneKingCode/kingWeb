@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',]
+    'django.contrib.staticfiles',
+    'django_crontab',
+    ]
 
 MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -81,6 +83,11 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = 'kingWeb.wsgi.application'
 
+#定时任务
+CRONJOBS = [
+    #('47 11 * * *', 'django.core.management.call_command',['closepoll'],{},'>> /var/run.log'),
+     ('*/1 * * * *', 'kingWeb.crontab.cron.clear_temp_file'),
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases

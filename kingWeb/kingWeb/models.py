@@ -223,7 +223,6 @@ class SysTableList(BaseModel):
     allowexport = models.IntegerField(db_column='AllowExport', default=0)  # Field name made lowercase.
     allowimport = models.IntegerField(db_column='AllowImport', default=0)  # Field name made lowercase.
     allowview = models.IntegerField(db_column='AllowView', default=0)  # Field name made lowercase.
-    allowadd = models.IntegerField(db_column='AllowAdd', default=0)  # Field name made lowercase.
     def __str__(self):
         return self.name + ' ' + self.description
     class Meta:

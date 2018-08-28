@@ -1,7 +1,6 @@
 from django.db import connection,transaction,IntegrityError
 
 class SqlHelper(object):
-
     @staticmethod
     def execute(sql):
         cursor = connection.cursor()

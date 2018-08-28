@@ -7,7 +7,6 @@ from kingWeb.util.SqlHelper import *
 from kingWeb.models import *
 from django.db.models import Q
 class SysHelper(object):
-
        @staticmethod
        def get_column_names(tableid,condition,orderby):
            sql = 'select * from Sys_TableColumn where TableId={0} and {1} order By {2}'

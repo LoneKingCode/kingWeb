@@ -7,8 +7,8 @@ import json
 import time
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.util.SqlHelper import *
-from kingWeb.util.SysHelper import *
+from kingWeb.util.SqlHelper import SqlHelper
+from kingWeb.util.SysHelper import SysHelper
 from kingWeb.adm.permission import check_permission
 
 @check_permission
