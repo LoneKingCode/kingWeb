@@ -153,7 +153,7 @@ def get_chart_by_day(request,kwargs):
     for hour in range(0,24):
         xaxis.append(str(hour) + '时')
         start = nowdate.strftime("%Y-%m-%d ") + str(hour).zfill(2) + ":00:00"
-        end = nowdate.strftime("%Y-%m-%d ") + str(hour).zfill(2) + ":23:59"
+        end = nowdate.strftime("%Y-%m-%d ") + str(hour).zfill(2) + ":59:59"
         visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))
         visitedpage.append(len(SysOperationLog.objects.filter(createdatetime__range=(start,end))))
     result['xAxis'] = xaxis
@@ -192,7 +192,7 @@ def get_chart_by_month(request,kwargs):
     lastmonthdate = timezone.now() - relativedelta(months=+1)
     for day in range(1,31):
         lastmonthdate += relativedelta(days=+1)
-        xaxis.append(lastmonthdate.strftime("%Y-%m-%d"))
+        xaxis.append(lastmonthdate.strftime("%m-%d"))
         start = lastmonthdate.strftime("%Y-%m-%d") + " 00:00:00"
         end = lastmonthdate.strftime("%Y-%m-%d") + " 23:59:59"
         visitors.append(len(SysOperationLog.objects.values('clientip').annotate(clientcount=Count('clientip')).filter(createdatetime__range=(start,end))))

@@ -14,8 +14,10 @@ def process(request,**kwargs):
     agent = WebHelper.get_client_agent(request)
     user = request.user
     url = request.get_full_path()
-    SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\
-        operationurl = url)
+    #POST请求就不写入日志了
+    if request.method != 'POST':
+        SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\
+            operationurl = url)
 
     try:
         viewObj = __import__("%s.%s.views" % ('kingWeb',app),fromlist=(controller,))
