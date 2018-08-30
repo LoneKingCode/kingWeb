@@ -52,6 +52,7 @@ def edit(request,kwargs):
             'allowdelete':object.allowdelete,
             'allowimport':object.allowimport,
             'allowexport':object.allowexport,
+            'allowadd':object.allowadd,
             'importtype':object.importtype,
             'isview':object.isview,
             'defaultsort':object.defaultsort,
@@ -72,6 +73,7 @@ def post_add(request,kwargs):
     deletetablename = request.POST.get('DeleteTableName','')
     allowview = request.POST.get('AllowView','')
     allowedit = request.POST.get('AllowEdit','')
+    allowadd = request.POST.get('AllowAdd','')
     allowdelete = request.POST.get('AllowDelete','')
     allowimport = request.POST.get('AllowImport','')
     allowexport = request.POST.get('AllowExport','')
@@ -84,8 +86,8 @@ def post_add(request,kwargs):
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
 
-    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview\
-        ,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
+       allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
@@ -100,6 +102,7 @@ def post_edit(request,kwargs):
     name = request.POST.get('Name','')
     description = request.POST.get('Description','')
     deletetablename = request.POST.get('DeleteTableName','')
+    allowadd = request.POST.get('AllowAdd','')
     allowview = request.POST.get('AllowView','')
     allowedit = request.POST.get('AllowEdit','')
     allowdelete = request.POST.get('AllowDelete','')
@@ -115,7 +118,7 @@ def post_edit(request,kwargs):
     extendfunction = request.POST.get('ExtendFunction','')
 
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
-      allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
+       allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
     result.msg = '操作成功'
@@ -158,10 +161,10 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysTableList.objects.filter(description__icontains=searchkey).order_by(_orderby).\
-        values('id','name','description','allowview','allowedit','allowdelete','isview')
+        values('id','name','description','allowview','allowedit','allowadd','allowdelete','isview')
     else:
         alldata = SysTableList.objects.order_by(_orderby).\
-        values('id','name','description','allowview','allowedit','allowdelete','isview')
+        values('id','name','description','allowview','allowedit','allowadd','allowdelete','isview')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
@@ -169,6 +172,7 @@ def get_page_data(request,kwargs):
         rownum = rownum + 1
         row['rownum'] = rownum
         row['allowview'] = '是' if row['allowview'] == 1 else '否'
+        row['allowadd'] = '是' if row['allowadd'] == 1 else '否'
         row['allowedit'] = '是' if row['allowedit'] == 1 else '否'
         row['allowdelete'] = '是' if row['allowdelete'] == 1 else '否'
         row['isview'] = '是' if row['isview'] == 1 else '否'

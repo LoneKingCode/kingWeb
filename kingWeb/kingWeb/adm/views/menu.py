@@ -72,6 +72,8 @@ def post_add(request,kwargs):
     name = request.POST.get('Name','')
     listorder = request.POST.get('ListOrder','')
     url = request.POST.get('Url','')
+    if parentid == '':
+        parentid = '0'
     type = get_menu_type(parentid) #根据父菜单设置此子菜单的类型
     object = SysMenu.objects.create(parentid = parentid,name = name,moduleid = moduleid,\
         icon = icon,listorder = listorder,type = type,url = url)
@@ -91,6 +93,8 @@ def post_edit(request,kwargs):
     name = request.POST.get('Name','')
     listorder = request.POST.get('ListOrder','')
     url = request.POST.get('Url','')
+    if parentid == '':
+        parentid = '0'
     type = get_menu_type(parentid) #根据父菜单设置此子菜单的类型
     object = SysMenu.objects.filter(id=id).update(parentid = parentid,name = name,moduleid = moduleid,\
         icon = icon,listorder = listorder,type = type,url = url)
@@ -196,7 +200,7 @@ def get_list(request,kwargs):
     return JsonResponse(result,safe=False)
 
 def get_menu_type(parentid):
-    if parentid == '':
+    if parentid == '0' or parentid == '':
         return MenuType.模块.value
 
     parentmenu = SysMenu.objects.get(id=parentid)

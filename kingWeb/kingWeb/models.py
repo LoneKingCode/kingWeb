@@ -100,7 +100,7 @@ class SysDepartment(BaseModel):
     description = models.CharField(db_column='Description', max_length=100)
     leader = models.CharField(db_column='Leader', max_length=20)
     name = models.CharField(db_column='Name', max_length=20)
-    parentid = models.IntegerField(db_column='ParentId')
+    parentid = models.IntegerField(db_column='ParentId', blank=True, null=True)
     def __str__(self):
         return self.name
     class Meta:
@@ -119,7 +119,7 @@ class SysLoginlog(BaseModel):
 class SysMenu(BaseModel):
     name = models.CharField(db_column='Name', max_length=18)
     listorder = models.IntegerField(db_column='ListOrder')
-    parentid = models.IntegerField(db_column='ParentId')
+    parentid = models.IntegerField(db_column='ParentId' ,blank=True, null=True)
     type = models.IntegerField(db_column='Type')
     url = models.CharField(db_column='Url', max_length=300)
     moduleid = models.IntegerField(db_column='ModuleId')
@@ -217,6 +217,7 @@ class SysTableList(BaseModel):
     importtype = models.IntegerField(db_column='ImportType', blank=True)
     isview = models.IntegerField(db_column='IsView', default=0)
     name = models.TextField(db_column='Name', blank=True, null=True)
+    allowadd = models.IntegerField(db_column='AllowAdd', default=0)
     allowdelete = models.IntegerField(db_column='AllowDelete', default=0)
     allowedit = models.IntegerField(db_column='AllowEdit', default=0)
     allowexport = models.IntegerField(db_column='AllowExport', default=0)
