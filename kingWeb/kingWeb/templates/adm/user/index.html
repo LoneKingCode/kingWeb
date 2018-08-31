@@ -26,11 +26,11 @@
                 parent.layer.alert("请选择用户");
                 return;
             }
-              lkWeb.GoAction("adm","user", "authen", userId, true, "角色授权",'100%','100%');
+              lkWeb.GoAction("adm","user", "authen", userId, true, "角色授权",'90%','90%');
         }
 
         function AddModel() {
-            lkWeb.GoAction("adm","user", "add", 0);
+            lkWeb.GoAction("adm","user", "add", 0,true,'添加','90%','90%');
         }
         function DelModel()
         {
@@ -43,7 +43,7 @@
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","user", "edit", id);
+                lkWeb.GoAction("adm","user", "edit", id,true,'编辑','90%','90%');
 
         }
         var lkTable;
@@ -61,7 +61,7 @@
                 },
                 { "mData": "rownum",  "sClass": "text-center" },
                 { "mData": "user__username","name":"user__username", "sClass": "text-center" },
-                { "mData": "realname", "sClass": "text-center" },
+                { "mData": "personname", "sClass": "text-center" },
                 { "mData": "user__email", "sClass": "text-center", "bSortable": false },
                 { "mData": "status", "name":"status",  "sClass": "text-center" },
                 { "mData": "user__last_login",   "sClass": "text-center" },

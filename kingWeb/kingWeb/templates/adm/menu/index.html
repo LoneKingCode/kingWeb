@@ -3,70 +3,70 @@
 
 {% block scripts %}
     <script>
-        $(function () {
-            InitDataTable();
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-          $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), lkTable);
-
-            })
-
+    $(function () {
+        InitDataTable();
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        function EditModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "")
-                parent.layer.alert("请选择");
-            else
-                lkWeb.GoAction("adm","menu", "edit", id);
-        }
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), lkTable);
 
-        function DelModel() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "menu", lkTable);
-        }
-        function AddModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            //如果选中有菜单 直接默认为 添加为此菜单的子菜单
-            if(id != "")
-                lkWeb.GoAction("adm","menu", "add", id);
-            else
-                lkWeb.GoAction("adm","menu", "add");
-        }
+        })
 
-        var lkTable;
-        function InitDataTable() {
-            var dataUrl = '/adm/menu/get_page_data/';   //后台获取json数据的地址
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+    });
+
+    function EditModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "")
+            parent.layer.alert("请选择");
+        else
+            lkWeb.GoAction("adm", "menu", "edit", id, true, '编辑', '90%', '90%');
+    }
+
+    function DelModel() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        lkWeb.DeleteMulti("adm", ids, "menu", lkTable);
+    }
+    function AddModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        //如果选中有菜单 直接默认为 添加为此菜单的子菜单
+        if (id != "")
+            lkWeb.GoAction("adm", "menu", "add", id, true, '添加', '90%', '90%');
+        else
+            lkWeb.GoAction("adm", "menu", "add", 0, true, '添加', '90%', '90%');
+    }
+
+    var lkTable;
+    function InitDataTable() {
+        var dataUrl = '/adm/menu/get_page_data/';   //后台获取json数据的地址
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "modulename", "name":"moduleid","sClass": "text-center" },
-                { "mData": "parentname","name":"parentid", "sClass": "text-center" },
-                { "mData": "typename","name":"type", "sClass": "text-center" },
-                { "mData": "name","name":"name", "sClass": "text-center" },
-                { "mData": "url", "name":"url","sClass": "text-center" },
-                {
-                    "sClass": "text-center",
-                    "mData": "icon",
-                    "mRender": function (data, type, row) {
-                        return ' <i class="' + data + '"></i>';
-                    },
-                    "bSortable": false
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center" },
+            { "mData": "modulename", "name": "moduleid", "sClass": "text-center" },
+            { "mData": "parentname", "name": "parentid", "sClass": "text-center" },
+            { "mData": "typename", "name": "type", "sClass": "text-center" },
+            { "mData": "name", "name": "name", "sClass": "text-center" },
+            { "mData": "url", "name": "url", "sClass": "text-center" },
+            {
+                "sClass": "text-center",
+                "mData": "icon",
+                "mRender": function (data, type, row) {
+                    return ' <i class="' + data + '"></i>';
                 },
-                { "mData": "listorder", "sClass": "text-center" },
-            ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl);
+                "bSortable": false
+            },
+            { "mData": "listorder", "sClass": "text-center" },
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl);
     }
 
 

@@ -5,7 +5,8 @@
     <script type="text/javascript">
         $(function () {
             lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm", "viewlist", "index", "{{tableid}}")
+                //lkWeb.GoAction("adm", "viewlist", "index", "{{tableid}}")
+                lkWeb.RefreshAndClose()
             }, "操作成功")
         })
 
@@ -28,15 +29,15 @@
                                     {% for key,value in out_col_data.items %}
                                         {% if key == col.name%}
                                             {% for item in value%}
-                                                  <option value="{{item.Id}}"
+                                                  <option value="{{item.value}}"
                                                           {% for key,value in data.items %}
-                                                                {% if key == col.name %}
-                                                                     {% if value == item.Id%}
+                                                                {% if key == col.text %}
+                                                                     {% if value == item.value%}
                                                                           selected
                                                                     {% endif %}
                                                                 {% endif %}
                                                           {% endfor %}
-                                                   >{{item.Name}}</option>
+                                                   >{{item.text}}</option>
                                             {% endfor %}
                                         {% endif %}
                                     {% endfor %}
@@ -85,7 +86,7 @@
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
             <button type="submit" class="btn btn-success">确定</button>
-            <button type="button" class="btn btn-default" onclick="history.go(-1)">返回</button>
+            <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
 </form>

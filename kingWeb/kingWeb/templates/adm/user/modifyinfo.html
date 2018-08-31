@@ -5,8 +5,9 @@
 
     <script type="text/javascript">
         $(function () {
+              $("[data-toggle='tooltip']").tooltip();
             lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm","user", "index")
+                lkWeb.RefreshAndClose()
             }, "操作成功")
         })
     </script>
@@ -20,27 +21,18 @@
     <div class="form-group">
         <label class="col-md-3 control-label">用户名</label>
         <div class="col-md-7">
-            <input type="text" class="form-control" id="txtUserName" name="UserName" value="{{username}}"
+            <input type="text" class="form-control" id="txtUserName" name="UserName" value="{{username}}"  disabled
                    data-val="true" data-val-maxlength="用户名长度不能超过20个字符" data-val-maxlength-max="20"
                    data-val-minlength="用户名长度不能少于2个字符" data-val-minlength-min="2" data-val-required="用户名不能为空" />
             <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-3 control-label">姓</label>
+        <label class="col-md-3 control-label">姓名</label>
         <div class="col-md-7">
-            <input type="text" class="form-control" name="LastName" value="{{lastname}}"
-                   data-val="true" data-val-maxlength="姓长度不能超过8个字符" data-val-maxlength-max="8"
+            <input type="text" class="form-control" name="PersonName" value="{{personname}}"
+                   data-val="true" data-val-maxlength="姓名长度不能超12个字符" data-val-maxlength-max="8"
               data-val-required="姓名不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="RealName" data-valmsg-replace="true"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-3 control-label">名</label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" name="FirstName" value="{{firstname}}"
-                   data-val="true" data-val-maxlength="名长度不能超过8个字符" data-val-maxlength-max="8"
-                   data-val-required="姓名不能为空" />
             <span class="field-validation-valid" data-valmsg-for="RealName" data-valmsg-replace="true"></span>
         </div>
     </div>
@@ -64,7 +56,7 @@
         <label class="col-md-3 control-label">新密码</label>
         <div class="col-md-7">
             <input type="password" class="form-control" id="txtNewPwd" name="Password" value="{{password}}"
-                   data-val="true" data-val-maxlength="密码长度不能超过20个字符" data-val-maxlength-max="20" />
+                   data-val="true" data-val-maxlength="密码长度不能超过20个字符" data-val-maxlength-max="20" data-toggle="tooltip" title="密码为空则不修改密码" />
             <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
         </div>
     </div>
@@ -72,7 +64,7 @@
         <label class="col-md-3 control-label">再次输入</label>
         <div class="col-md-7">
             <input type="password" class="form-control" id="txtNewPwdAgain" name="PasswordAgain"
-                   data-val="true" data-val-equalto-other="Password" data-val-equalto="两次输入的密码不相同" />
+                   data-val="true" data-val-equalto-other="Password" data-val-equalto="两次输入的密码不相同" data-toggle="tooltip" title="密码为空则不修改密码"/>
             <span class="field-validation-valid" data-valmsg-for="PasswordAgain" data-valmsg-replace="true"></span>
         </div>
     </div>
@@ -90,7 +82,7 @@
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
             <button type="submit" class="btn btn-success">保存</button>
-            <button type="button" class="btn btn-default" onclick="history.go(-1)">返回</button>
+            <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
 </form>

@@ -23,7 +23,7 @@ def index(request,kwargs):
         if table.allowview != 1:
             return render(request,'/adm/home/error.html')
         table_desc = table.description
-        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(listvisible=1)))
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(listvisible=1)).order_by('listorder'))
     return render(request,
         'adm/viewlist/index.html',
         {
@@ -46,7 +46,7 @@ def add(request,kwargs):
         if table.allowadd != 1:
             return render(request,'/adm/home/error.html')
         table_desc = table.description
-        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)).order_by('listorder'))
     for col in tablecolumns:
         if col.datatype == 'out':
             outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
@@ -55,8 +55,8 @@ def add(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = SqlHelper.query('select {0} from {1} where {2}'.\
-                format(outdata_arr[0],tablename,condition))
+            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
+                format(primarkey,textkey,tablename,condition))
             out_col_data[col.name] = outdatalist
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
@@ -91,7 +91,7 @@ def detail(request,kwargs):
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowview != 1:
               return JsonResponse(result.tojson())
-        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)))
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)).order_by('listorder'))
     columnnames = SysHelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
     data = SqlHelper.query('select {0} from {1} where {2}'\
         .format(columnnames,table.name,'Id=' + str(id)))[0]
@@ -103,9 +103,9 @@ def detail(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outvalue = SqlHelper.query('select {0} from {1} where {2}'.\
-                format(outdata_arr[0],tablename,'Id=' + str(data[col.name])))
-            out_col_data[col.name] = outvalue
+            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
+                format(primarkey,textkey,tablename,'Id=' + str(data[col.name])))
+            out_col_data[col.name] = outdatalist
 
     return render(request,
         'adm/viewlist/detail.html',
@@ -133,7 +133,7 @@ def edit(request,kwargs):
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowedit != 1:
               return JsonResponse(result.tojson())
-        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
+        tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)).order_by('listorder'))
     columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
     data = SqlHelper.query('select {0} from {1} where {2}'\
         .format(columnnames,table.name,'Id=' + str(id)))[0]
@@ -145,8 +145,8 @@ def edit(request,kwargs):
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = SqlHelper.query('select {0} from {1} where {2}'.\
-                format(outdata_arr[0],tablename,condition))
+            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
+                format(primarkey,textkey,tablename,condition))
             out_col_data[col.name] = outdatalist
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
@@ -213,7 +213,7 @@ def post_edit(request,kwargs):
               return JsonResponse(result.tojson())
         update_filter = SysTableList.objects.get(id=int(tableid)).forbiddenupdatefilter
         condition = '1=1'
-        if forbidden_delete_filter != '':
+        if update_filter != '':
             condition = update_filter
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
@@ -299,6 +299,7 @@ def get_page_data(request,kwargs):
        condition = '(' + condition.rstrip('or') + ')'
 
     if table.defaultfilter != '':
+        table.defaultfilter = table.defaultfilter.replace('{UserId}',str(request.user.id))
         condition += ' and ' + table.defaultfilter
 
     sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'

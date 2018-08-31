@@ -58,7 +58,7 @@ def edit(request,kwargs):
             'listorder':object.listorder,
             'parentid':object.parentid,
             'moduleid':object.moduleid,
-            'parentname': SysMenu.objects.get(id=object.parentid).name,
+            'parentname': SysMenu.objects.get(id=object.parentid).name if object.parentid != 0 else '',
             'modules':modules
          })
 
@@ -137,7 +137,7 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysMenu.objects.filter(name__icontains=searchkey)\
+        alldata = SysMenu.objects.filter(Q(url__icontains=searchkey) | Q(name__icontains=searchkey))\
             .order_by(_orderby).values('name','parentid','listorder','type','id','url','moduleid','icon')
     else:
         alldata = SysMenu.objects.order_by(_orderby).\
@@ -174,11 +174,11 @@ def get_page_data(request,kwargs):
 @csrf_exempt
 def get_list(request,kwargs):
     assert isinstance(request, HttpRequest)
-    searchkey = request.POST.get('id','')
+    searchkey = request.GET.get('searchKey','')
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey) | Q(name__icontains=searchkey))\
+        alldata = SysMenu.objects.filter(Q(url__icontains=searchkey) | Q(name__icontains=searchkey))\
             .order_by('id').values('name','parentid','listorder','type','id','url')
     else:
         alldata = SysMenu.objects.order_by('id').\

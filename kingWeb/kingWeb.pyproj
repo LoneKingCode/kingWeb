@@ -49,9 +49,6 @@
     <Compile Include="kingWeb\adm\views\role.py" />
     <Compile Include="kingWeb\adm\views\menu.py" />
     <Compile Include="kingWeb\adm\views\department.py" />
-    <Compile Include="kingWeb\contrib\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="kingWeb\crontab\cron.py" />
     <Compile Include="kingWeb\util\LogHelper.py">
       <SubType>Code</SubType>
@@ -121,7 +118,6 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\util\" />
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
-    <Folder Include="kingWeb\contrib\" />
     <Folder Include="kingWeb\crontab\" />
     <Folder Include="kingWeb\log\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />

@@ -57,7 +57,7 @@ def authen(request,kwargs):
         {
             'title':'角色授权',
             'userid':userid,
-            'realname':user.last_name + user.first_name,
+            'personname':user.username
         })
 @check_permission
 def department(request,kwargs):
@@ -88,7 +88,7 @@ def edit(request,kwargs):
        id = request.user.id
        allow_modify_status = 0 #如果是从后台 访问的修改信息，是修改自身信息，不允许修改账户状态
     object = SysUserProfile.objects.filter(user__id=id)\
-        .values('status','user__email','user__first_name','user__last_name',\
+        .values('status','user__email','personname',\
         'user__id','user__last_login','user__username').first()
     statuslist = []
     for s in UserStatus:
@@ -99,8 +99,7 @@ def edit(request,kwargs):
             'title':'编辑用户',
             'id':object['user__id'],
             'username':object['user__username'],
-            'lastname':object['user__last_name'],
-            'firstname':object['user__first_name'],
+            'personname':object['personname'],
             'email':object['user__email'],
             'status':object['status'],
             'statuslist':statuslist,
@@ -113,7 +112,7 @@ def modifyinfo(request,kwargs):
     id = request.user.id
     allow_modify_status = 0 #不允许修改账户状态
     object = SysUserProfile.objects.filter(user__id=id)\
-        .values('status','user__email','user__first_name','user__last_name',\
+        .values('status','user__email','personname',\
         'user__id','user__last_login','user__username').first()
     statuslist = []
     for s in UserStatus:
@@ -124,8 +123,7 @@ def modifyinfo(request,kwargs):
             'title':'编辑信息',
             'id':object['user__id'],
             'username':object['user__username'],
-            'lastname':object['user__last_name'],
-            'firstname':object['user__first_name'],
+            'personname':object['personname'],
             'email':object['user__email'],
             'status':object['status'],
             'statuslist':statuslist,
@@ -177,16 +175,15 @@ def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     username = request.POST.get('UserName','')
-    lastname = request.POST.get('LastName','')
-    firstname = request.POST.get('FirstName','')
+    personname = request.POST.get('PersonName','')
     email = request.POST.get('Email','')
     password = request.POST.get('Password','')
     status = request.POST.get('Status','')
 
-    user = User.objects.create_user(username=username,email=email,first_name=firstname,\
-        last_name=lastname,password=password) #is_active=is_active)
+    user = User.objects.create_user(username=username,email=email,password=password) #is_active=is_active)
     user_profile = SysUserProfile.objects.get(user=user)
     user_profile.status = status
+    user_profile.personname = personname
     user_profile.save()
     result.msg = '操作成功'
     result.flag = True
@@ -197,24 +194,24 @@ def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     username = request.POST.get('UserName','')
-    lastname = request.POST.get('LastName','')
-    firstname = request.POST.get('FirstName','')
+    personname = request.POST.get('PersonName','')
     email = request.POST.get('Email','')
     password = request.POST.get('Password','')
     status = request.POST.get('Status','')
     id = request.POST.get('Id','')
     user = User.objects.get(id=id)
     if user is not None:
-            user.last_name = lastname
-            user.first_name = firstname
+
+        #密码可以为空 就不修改密码了
+        if password != '':
             user.set_password(password)
-            user.save()
-            #执行过user.save()时 对应的SysUserProfile对象已经建立
-            user_profile = SysUserProfile.objects.get(user=user)
-            user_profile.status = status
-            user_profile.save()
-            result.msg = '操作成功'
-            result.flag = True
+        user.save()
+        #执行过user.save()时 对应的SysUserProfile对象已经建立
+        user_profile = SysUserProfile.objects.get(user=user)
+        user_profile.personname = personname
+        user_profile.save()
+        result.msg = '操作成功'
+        result.flag = True
     else:
         result.msg = '用户Id不存在'
     return JsonResponse(result.tojson())
@@ -223,24 +220,22 @@ def post_edit(request,kwargs):
 def post_modify_info(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    username = request.POST.get('UserName','')
-    lastname = request.POST.get('LastName','')
-    firstname = request.POST.get('FirstName','')
+    username = request.user.username
+    personname = request.POST.get('PersonName','')
     email = request.POST.get('Email','')
     password = request.POST.get('Password','')
     oldpassword = request.POST.get('OldPassword','')
-    status = request.POST.get('Status','')
     user = auth.authenticate(username=username, password=oldpassword)
     if user is not None:
-            user.last_name = lastname
-            user.first_name = firstname
+        #密码可以为空 就不修改密码了
+        if password != '':
             user.set_password(password)
-            user.save()
-            user_profile = SysUserProfile.objects.get(user=user)
-            user_profile.status = status
-            user_profile.save()
-            result.msg = '操作成功'
-            result.flag = True
+        user.save()
+        user_profile = SysUserProfile.objects.get(user=user)
+        user_profile.personname = personname
+        user_profile.save()
+        result.msg = '操作成功'
+        result.flag = True
     else:
         result.msg = '旧密码错误'
     return JsonResponse(result.tojson())
@@ -280,17 +275,16 @@ def get_page_data(request,kwargs):
     alldata = None
     if searchkey != '':
         alldata = SysUserProfile.objects.filter(__name__icontains=searchkey).order_by(_orderby)\
-        .values('status','user__email','user__first_name','user__last_name','user__id','user__last_login','user__username')
+        .values('status','user__email','personname','','user__id','user__last_login','user__username')
     else:
         alldata = SysUserProfile.objects.order_by(_orderby)\
-        .values('status','user__email','user__first_name','user__last_name','user__id','user__last_login','user__username')
+        .values('status','user__email','personname','user__id','user__last_login','user__username')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        row['realname'] = row['user__last_name'] + row['user__first_name']
         row['status'] = UserStatus(int(row['status'])).name
         row['user__last_login'] = str(row['user__last_login'])
     datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
@@ -374,14 +368,13 @@ def get_not_department_user(request,kwargs):
         return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
     users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
-        .values('status','user__email','user__first_name','user__last_name','user__id','user__username')
+        .values('status','user__email','personname','user__id','user__username')
     pagedata = list(users[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        row['realname'] = row['user__last_name'] + row['user__first_name']
         row['status'] = UserStatus(int(row['status'])).name
 
     datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))
@@ -410,14 +403,13 @@ def get_department_user(request,kwargs):
         return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
     users = SysUserProfile.objects.filter(user__id__in=user_department).order_by(_orderby)\
-        .values('status','user__email','user__first_name','user__last_name','user__id','user__username','id')
+        .values('status','personname','user__email','user__id','user__username','id')
     pagedata = list(users[int(start):int(length) + int(start)])
 
     rownum = int(start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
-        row['realname'] = row['user__last_name'] + row['user__first_name']
         row['status'] = UserStatus(int(row['status'])).name
 
     datatable = DataTableModel(draw,users.count(),users.count(),list(pagedata))

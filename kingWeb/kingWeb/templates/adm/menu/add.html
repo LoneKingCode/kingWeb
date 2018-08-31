@@ -3,43 +3,43 @@
 
 {% block scripts %}
     <script type="text/javascript">
-        $(function () {
-            lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm","menu", "index")
-            }, "操作成功")
+    $(function () {
+        lkWeb.FormValidation($("#lkForm"), function () {
+            lkWeb.RefreshAndClose()
+        }, "操作成功")
 
-            $("#menuList").focusin(function () {
-                 $("#menuList").bsSuggest('init', {
-                    allowNoKeyword: !0,
-                    multiWord: !0,
-                    showHeader: !0,
-                    effectiveFieldsAlias: {
-                        parentname:"上级菜单",
-                        id: "Id",
-                        name: "名称",
-                        typename: "类型",
-                        url: "URL地址"
-                    },
-                    effectiveFields: ["parentname","id", "name", "typename", "url"],
-                    getDataMethod: "url",
-                    url: "/adm/menu/get_list/", //最后一个参数为关键字请求参数
-                    idField: "id",
-                    keyField: "name"
-                }).on('onDataRequestSuccess', function (e, result) {
+        $("#menuList").focusin(function () {
+            $("#menuList").bsSuggest('init', {
+                allowNoKeyword: !0,
+                multiWord: !0,
+                showHeader: !0,
+                effectiveFieldsAlias: {
+                    parentname: "上级菜单",
+                    id: "Id",
+                    name: "名称",
+                    typename: "类型",
+                    url: "URL地址"
+                },
+                effectiveFields: ["parentname", "id", "name", "typename", "url"],
+                getDataMethod: "url",
+                url: "/adm/menu/get_list/?searchKey=", //最后一个参数为关键字请求参数
+                idField: "id",
+                keyField: "name"
+            }).on('onDataRequestSuccess', function (e, result) {
 
-                }).on('onSetSelectValue', function (e, keyword, data) {
-                     $("#txtParentId").val(keyword.id);
-                }).on('onUnsetSelectValue', function () {
-                 });
-            })
+            }).on('onSetSelectValue', function (e, keyword, data) {
+                $("#txtParentId").val(keyword.id);
+            }).on('onUnsetSelectValue', function () {
+            });
         })
-        function SelectModule(value) {
-            $("#txtModuleId").val(value);
-        }
-        function ViewIcon() {
-            var url = " http://www.fontawesome.com.cn/faicons/";
-            lkWeb.OpenLayer(url, "图标库", "80%", "500px");
-        }
+    })
+    function SelectModule(value) {
+        $("#txtModuleId").val(value);
+    }
+    function ViewIcon() {
+        var url = " http://www.fontawesome.com.cn/faicons/";
+        lkWeb.OpenLayer(url, "图标库", "80%", "500px");
+    }
     </script>
 {% endblock %}
 
@@ -112,7 +112,7 @@
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
             <button type="submit" class="btn btn-success">确定</button>
-            <button type="button" class="btn btn-default" onclick="history.go(-1)">返回</button>
+            <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
 </form>

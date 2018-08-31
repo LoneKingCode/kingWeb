@@ -7,7 +7,7 @@
         $("[data-toggle='tooltip']").tooltip();
 
         lkWeb.FormValidation($("#lkForm"), function () {
-            lkWeb.GoAction("adm", "TableColumn", "index")
+            lkWeb.RefreshAndClose()
         }, "操作成功")
     })
 
@@ -134,7 +134,7 @@
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
             <button type="submit" class="btn btn-success">确定</button>
-            <button type="button" class="btn btn-default" onclick="history.go(-1)">返回</button>
+            <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
 </form>

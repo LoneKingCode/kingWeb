@@ -18,14 +18,14 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("adm","tablecolumn", "add", 0);
+            lkWeb.GoAction("adm","tablecolumn", "add", 0,true,'添加','90%','90%');
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","tablecolumn", "edit", id);
+                lkWeb.GoAction("adm","tablecolumn", "edit", id,true,'编辑','90%','90%');
         }
 
         function DelModel() {
@@ -81,7 +81,7 @@
                  yes: function (index, layero) {
                      SetValue(filedName);
                      layer.close(index);
-                                     }
+                  }
                 , cancel: function (index, layero) {
                     layer.close(index)
                 },
@@ -98,6 +98,7 @@
                 lkWeb.AjaxPost("/adm/tablecolumn/setvalue/", { ids: ids, value: value, filedname: filedName }, function () {
                     parent.layer.alert("修改成功");
                     lkTable.draw(false);
+                    $(".checkAll").prop("checked", false);
                 })
             })
         }

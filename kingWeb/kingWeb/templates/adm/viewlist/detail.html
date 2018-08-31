@@ -24,7 +24,7 @@
                                     {% for key,value in out_col_data.items %}
                                         {% if key == col.name%}
                                             {% for item in value%}
-                                                  <input type="text" class="form-control" name="{{col.name}}"   value="{{item.Name}}" readonly/>
+                                                  <input type="text" class="form-control" name="{{col.name}}"   value="{{item.text}}" readonly/>
                                             {% endfor %}
                                         {% endif %}
                                     {% endfor %}
@@ -42,7 +42,7 @@
 
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
-            <button type="button" class="btn btn-danger" onclick="parent.lkWeb.CloseLayert()">关闭</button>
+            <button type="button" class="btn btn-danger" onclick="lkWeb.RefreshAndClose()">关闭</button>
         </div>
     </div>
 </form>

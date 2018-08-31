@@ -43,10 +43,17 @@ lkWeb.OpenLayer = function (url, title, width, height) {
     });
 }
 
-lkWeb.CloseLayert = function () {
+lkWeb.CloseLayer = function () {
     layer.close(lkWeb.LayerIndex);
     //    var index = parent.layer.getFrameIndex(window.name);
 }
+
+//主要用在 添加/编辑页面
+lkWeb.RefreshAndClose = function () {
+    parent.lkTable.draw(false)
+    parent.lkWeb.CloseLayer()
+}
+
 //删除多个
 lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
     if (ids.length < 1) {

@@ -6,7 +6,7 @@
     <script type="text/javascript">
         $(function () {
             lkWeb.FormValidation($("#lkForm"), function () {
-                lkWeb.GoAction("adm","user", "index")
+                lkWeb.RefreshAndClose()
             }, "操作成功")
         })
     </script>
@@ -26,20 +26,11 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-3 control-label">姓</label>
+        <label class="col-md-3 control-label">姓名</label>
         <div class="col-md-7">
-            <input type="text" class="form-control" name="LastName"
-                   data-val="true" data-val-maxlength="姓长度不能超过8个字符" data-val-maxlength-max="8"
+            <input type="text" class="form-control" name="PersonName"
+                   data-val="true" data-val-maxlength="姓名长度不能超过8个字符" data-val-maxlength-max="12"
                     data-val-required="姓名不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="RealName" data-valmsg-replace="true"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-3 control-label">名</label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" name="FirstName"
-                   data-val="true" data-val-maxlength="名长度不能超过8个字符" data-val-maxlength-max="8"
-                   data-val-required="姓名不能为空" />
             <span class="field-validation-valid" data-valmsg-for="RealName" data-valmsg-replace="true"></span>
         </div>
     </div>
@@ -82,7 +73,7 @@
     <div class="form-group">
         <div class="col-md-3 col-md-offset-3">
             <button type="submit" class="btn btn-success">确定</button>
-            <button type="button" class="btn btn-default" onclick="history.go(-1)">返回</button>
+            <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
 </form>

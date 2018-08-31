@@ -26,7 +26,7 @@
                 },
                 { "mData": "rownum", "sClass": "text-center" },
                 { "mData": "user__username",   "sClass": "text-center" },
-                { "mData": "realname",  "sClass": "text-center" },
+                { "mData": "personname",  "sClass": "text-center" },
                 { "mData": "user__email",  "sClass": "text-center", "bSortable": false },
                 { "mData": "status","sClass": "text-center" }
         ];
@@ -51,7 +51,7 @@
                   success: function (result) {
                       if (result.flag == true) {
                           parent.layer.alert("操作成功");
-                          parent.SelectUser();
+                          lkWeb.RefreshAndClose()
                       }
                       else {
                           if (result.msg.IsNotEmpty())

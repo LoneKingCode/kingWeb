@@ -13,9 +13,9 @@ class MenuType(IntEnum):
     按钮 = 2,
 
 class UserStatus(IntEnum):
-    未激活=0,
-    已激活=1,
-    禁用=2,
+    未激活 = 0,
+    已激活 = 1,
+    禁用 = 2,
 
 class TableImportType(IntEnum):
     插入 = 0,
@@ -245,6 +245,7 @@ class SysUserRole(models.Model):
 class SysUserProfile(BaseModel):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     status = models.SmallIntegerField(db_column='Status',default=0)
+    personname = models.CharField(db_column='PersonName',max_length=50,blank=True,null=True)
     imagepath = models.CharField(db_column='ImagePath',max_length=256,blank=True,null=True)
     class Meta:
         db_table = 'Sys_UserProfile'
