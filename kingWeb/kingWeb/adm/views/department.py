@@ -34,7 +34,7 @@ def edit(request,kwargs):
     if id == '':
         return render(request, 'adm/department/index')
     object = SysDepartment.objects.get(id=id)
-    departments = SysDepartment.objects.values('id','name')
+    departments = SysDepartment.objects.values('id','name').filter(~Q(id=id))
     return render(request,
         'adm/department/edit.html',
         {
@@ -121,7 +121,7 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
+        alldata = SysDepartment.objects.filter(Q(description__icontains=searchkey) | Q(name__icontains=searchkey)).order_by(_orderby).\
         values('name','parentid','leader','description','id')
     else:
         alldata = SysDepartment.objects.order_by(_orderby).\
