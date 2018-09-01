@@ -105,6 +105,7 @@ class SysDepartment(BaseModel):
         return self.name
     class Meta:
         db_table = 'Sys_Department'
+
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)
     clientinfo = models.CharField(db_column='ClientInfo', max_length=200, blank=True, null=True)
@@ -163,8 +164,8 @@ class SysRole(BaseModel):
 class SysRoleMenu(BaseModel):
     id = models.AutoField(db_column='Id', primary_key=True)
     createdatetime = models.DateTimeField(db_column='CreateDateTime', blank=True, null=True)
-    menuid = models.IntegerField(db_column='MenuId')
-    roleid = models.IntegerField(db_column='RoleId')
+    menu =  models.ForeignKey(SysMenu,on_delete=models.CASCADE)
+    role =  models.ForeignKey(SysRole,on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Sys_RoleMenu'
@@ -229,16 +230,14 @@ class SysTableList(BaseModel):
         db_table = 'Sys_TableList'
 
 class SysUserDepartment(BaseModel):
-    departmentid = models.IntegerField(db_column='DepartmentId')
-    userid = models.IntegerField(db_column='UserId')
-
+    department = models.ForeignKey(SysDepartment,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     class Meta:
         db_table = 'Sys_UserDepartment'
 
 class SysUserRole(models.Model):
-    userid = models.IntegerField(db_column='UserId')
-    roleid = models.IntegerField(db_column='RoleId')
-
+    role = models.ForeignKey(SysRole,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     class Meta:
         db_table = 'Sys_UserRole'
 

@@ -366,7 +366,7 @@ def get_not_department_user(request,kwargs):
 
     if departmentid == '':
         return JsonResponse({'msg':'请求参数错误'})
-    user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
+    user_department = SysUserDepartment.objects.filter(department__id=departmentid).values('user__id')
     users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
         .values('status','user__email','personname','user__id','user__username')
     pagedata = list(users[int(start):int(length) + int(start)])
@@ -401,7 +401,8 @@ def get_department_user(request,kwargs):
 
     if departmentid == '':
         return JsonResponse({'msg':'请求参数错误'})
-    user_department = SysUserDepartment.objects.filter(departmentid=departmentid).values('userid')
+
+    user_department = SysUserDepartment.objects.filter(department__id=int(departmentid)).values('user__id')
     users = SysUserProfile.objects.filter(user__id__in=user_department).order_by(_orderby)\
         .values('status','personname','user__email','user__id','user__username','id')
     pagedata = list(users[int(start):int(length) + int(start)])
@@ -423,7 +424,7 @@ def remove_department_user(request,kwargs):
     assert isinstance(request, HttpRequest)
     departmentid = request.POST.get('DepartmentId','')
     userids = request.POST.getlist('UserIDs[]','')
-    objects = SysUserDepartment.objects.filter(Q(departmentid = departmentid) & Q(userid__in=userids)).delete()
+    objects = SysUserDepartment.objects.filter(Q(department__id = departmentid) & Q(user__id__in=userids)).delete()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -437,7 +438,7 @@ def set_user_department(request,kwargs):
     userids = request.POST.getlist('UserIDs[]','')
     newobjects = []
     for userid in userids:
-        newobjects.append(SysUserDepartment(userid=userid,departmentid=departmentid))
+        newobjects.append(SysUserDepartment(user=User.objects.get(id=userid),department=SysDepartment.objects.get(id=departmentid)))
     if len(newobjects) > 0:
         SysUserDepartment.objects.bulk_create(newobjects)
         result.msg = '操作成功'

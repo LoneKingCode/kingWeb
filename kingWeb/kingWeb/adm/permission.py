@@ -17,13 +17,13 @@ def perm_check(*args,**kwargs):
     except Exception as e:
         return True
     user = args[0].user
-    userroles = SysUserRole.objects.filter(userid=user.id)
+    userroles = SysUserRole.objects.filter(user__id=user.id)
     #如果用户没有角色 直接禁止访问
     if len(userroles) < 1:
         return False
     roleids = []
     for ur in userroles:
-        roleids.append(ur.roleid)
+        roleids.append(ur.role.id)
 
     rolemenus = SysRoleMenu.objects.filter(roleid__in=roleids)
     #如果角色没有授权菜单 直接禁止访问
