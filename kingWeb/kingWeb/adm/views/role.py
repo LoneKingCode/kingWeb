@@ -151,10 +151,10 @@ def get_menu_list(request,kwargs):
 def get_role_menus(request,kwargs):
     assert isinstance(request,HttpRequest)
     roleid = request.POST.get('roleId','')
-    alldata = SysRoleMenu.objects.filter(roleid=roleid).values('id','menuid')
+    alldata = SysRoleMenu.objects.filter(role__id=roleid).values('id','menu__id')
     result = []
     for row in alldata:
-        result.append({'id':row['id'],'menuId':row['menuid']})
+        result.append({'id':row['id'],'menuId':row['menu__id']})
     return JsonResponse(result,safe=False)
 
 @csrf_exempt
@@ -165,12 +165,14 @@ def auth_menus(request,kwargs):
     roleids = request.POST.getlist('RoleIds[]')
     menuids = request.POST.getlist('MenuIds[]')
     newmodels = []
-    if len(menuids) > 0 and len(roleids) > 0:
-        SysRoleMenu.objects.filter(roleid__in=roleids).delete()
-        for roleid in roleids:
-            SysRoleMenu.objects.filter(roleid=roleid).delete()
-            for menuid in menuids:
-                newmodels.append(SysRoleMenu(roleid=roleid,menuid=menuid))
+    roles = SysRole.objects.filter(id__in=roleids)
+    menus = SysMenu.objects.filter(id__in=menuids)
+    if len(menus) > 0 and len(roles) > 0:
+        SysRoleMenu.objects.filter(role__in=roles).delete()
+        for role in roles:
+            SysRoleMenu.objects.filter(role=role).delete()
+            for menu in menus:
+                newmodels.append(SysRoleMenu(role=role,menu=menu))
         SysRoleMenu.objects.bulk_create(newmodels)
         result.msg = '操作成功'
         result.flag = True

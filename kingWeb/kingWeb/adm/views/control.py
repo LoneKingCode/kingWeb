@@ -23,19 +23,19 @@ def index(request,kwargs):
               })
     if userid == None and userid == '':
          return result
- 
+
     userroles = SysUserRole.objects.filter(user__id=userid)
     if len(userroles) < 1:
         return result
     roles = []
     for ur in userroles:
-        roles.append(ur.role.id)
-    rolemenus = SysRoleMenu.objects.filter(roleid__in=roles)
+        roles.append(ur.role)
+    rolemenus = SysRoleMenu.objects.filter(role__in=roles)
     if len(rolemenus) < 1:
         return result
     menuids = []
     for rm in rolemenus:
-        menuids.append(rm.menuid)
+        menuids.append(rm.menu.id)
 
     menus = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.菜单.value))
     modules = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.模块.value))

@@ -297,7 +297,7 @@ def delete_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = request.POST.get('UserId','')
     roleids = request.POST.getlist('RoleIds[]','')
-    objects = SysUserRole.objects.filter(Q(roleid__in=roleids) & Q(userid=userid)).delete()
+    objects = SysUserRole.objects.filter(Q(role__id__in=roleids) & Q(user__id=userid)).delete()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -309,8 +309,10 @@ def auth_role(request,kwargs):
     userid = request.POST.get('UserId','')
     roleids = request.POST.getlist('RoleIds[]','')
     user_role = []
-    for roleid in roleids:
-        user_role.append(SysUserRole(userid=userid,roleid=roleid))
+    roles = SysRole.objects.filter(id__in = roleids)
+    user = User.objects.get(id=userid)
+    for role in roles:
+        user_role.append(SysUserRole(user=user,role=role))
     if len(user_role) > 0:
         objects = SysUserRole.objects.bulk_create(user_role)
         result.msg = '操作成功'
@@ -326,7 +328,7 @@ def get_user_role(request,kwargs):
     draw = request.POST.get('draw','')
     if userid == '':
         return JsonResponse({'msg':'请求参数错误'})
-    user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
+    user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.filter(id__in = user_role_data).values('id','name')
 
     datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
@@ -340,7 +342,7 @@ def get_not_user_role(request,kwargs):
     draw = request.POST.get('draw','')
     if userid == '':
         return JsonResponse({'msg':'请求参数错误'})
-    user_role_data = SysUserRole.objects.filter(userid=userid).values('roleid')
+    user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.exclude(id__in = user_role_data).values('id','name')
 
     datatable = DataTableModel(draw,role_data.count(),role_data.count(),list(role_data))
@@ -437,8 +439,10 @@ def set_user_department(request,kwargs):
     departmentid = request.POST.get('DepartmentId','')
     userids = request.POST.getlist('UserIDs[]','')
     newobjects = []
-    for userid in userids:
-        newobjects.append(SysUserDepartment(user=User.objects.get(id=userid),department=SysDepartment.objects.get(id=departmentid)))
+    users = User.objects.get(id__in=userids)
+    department = SysDepartment.objects.get(id=departmentid)
+    for user in users:
+        newobjects.append(SysUserDepartment(user=user,department=department))
     if len(newobjects) > 0:
         SysUserDepartment.objects.bulk_create(newobjects)
         result.msg = '操作成功'

@@ -17,26 +17,26 @@ def perm_check(*args,**kwargs):
     except Exception as e:
         return True
     user = args[0].user
-    userroles = SysUserRole.objects.filter(user__id=user.id)
+    userroles = SysUserRole.objects.filter(user__id = user.id)
     #如果用户没有角色 直接禁止访问
     if len(userroles) < 1:
         return False
-    roleids = []
+    roles = []
     for ur in userroles:
-        roleids.append(ur.role.id)
+        roles.append(ur.role)
 
-    rolemenus = SysRoleMenu.objects.filter(roleid__in=roleids)
+    rolemenus = SysRoleMenu.objects.filter(role__in=roles)
     #如果角色没有授权菜单 直接禁止访问
     if len(rolemenus) < 1:
         return False
     menuids = []
     for rm in rolemenus:
-        menuids.append(rm.menuid)
+        menuids.append(rm.menu.id)
 
     user_role_menus = SysMenu.objects.filter(id__in=menuids)
-    for menus in user_role_menus:
+    for menu in user_role_menus:
         #如果用户角色有权限的菜单包含这个url 放过
-        if menus.url == url:
+        if menu.url == url:
             return True
 
     return False
