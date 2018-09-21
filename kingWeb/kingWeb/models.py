@@ -179,33 +179,6 @@ class SysSystemOption(BaseModel):
     class Meta:
         db_table = 'Sys_SystemOption'
 
-
-class SysTableColumn(BaseModel):
-    addvisible = models.IntegerField(db_column='AddVisible',default=0)
-    datatype = models.TextField(db_column='DataType',blank=True, null=True)
-    description = models.TextField(db_column='Description', blank=True, null=True)
-    editorder = models.IntegerField(db_column='EditOrder',default=0)
-    editvisible = models.IntegerField(db_column='EditVisible',default=0)
-    enumrange = models.TextField(db_column='EnumRange', blank=True, null=True)
-    exportvisible = models.IntegerField(db_column='ExportVisible',default=0)
-    importvisible = models.IntegerField(db_column='ImportVisible',default=0)
-    listorder = models.IntegerField(db_column='ListOrder',default=0)
-    listvisible = models.IntegerField(db_column='ListVisible',default=0)
-    maxlength = models.IntegerField(db_column='MaxLength',default=0)
-    name = models.TextField(db_column='Name', blank=True, null=True)
-    outsql = models.TextField(db_column='OutSql', blank=True, null=True)
-    primarkey = models.IntegerField(db_column='PrimarKey',default=0)
-    required = models.IntegerField(db_column='Required',default=0)
-    searchvisible = models.IntegerField(db_column='SearchVisible',default=0)
-    tableid = models.IntegerField(db_column='TableId')
-    vieworder = models.IntegerField(db_column='ViewOrder',default=0)
-    viewvisible = models.IntegerField(db_column='ViewVisible',default=0)
-    def __str__(self):
-        return self.name + ' ' + self.description
-    class Meta:
-        db_table = 'Sys_TableColumn'
-
-
 class SysTableList(BaseModel):
     defaultfilter = models.TextField(db_column='DefaultFilter', blank=True, null=True)
     defaultsort = models.TextField(db_column='DefaultSort', blank=True, null=True)
@@ -228,6 +201,32 @@ class SysTableList(BaseModel):
         return self.name + ' ' + self.description
     class Meta:
         db_table = 'Sys_TableList'
+
+class SysTableColumn(BaseModel):
+    addvisible = models.IntegerField(db_column='AddVisible',default=0)
+    datatype = models.TextField(db_column='DataType',blank=True, null=True)
+    description = models.TextField(db_column='Description', blank=True, null=True)
+    editorder = models.IntegerField(db_column='EditOrder',default=0)
+    editvisible = models.IntegerField(db_column='EditVisible',default=0)
+    enumrange = models.TextField(db_column='EnumRange', blank=True, null=True)
+    exportvisible = models.IntegerField(db_column='ExportVisible',default=0)
+    importvisible = models.IntegerField(db_column='ImportVisible',default=0)
+    listorder = models.IntegerField(db_column='ListOrder',default=0)
+    listvisible = models.IntegerField(db_column='ListVisible',default=0)
+    maxlength = models.IntegerField(db_column='MaxLength',default=0)
+    name = models.TextField(db_column='Name', blank=True, null=True)
+    outsql = models.TextField(db_column='OutSql', blank=True, null=True)
+    primarkey = models.IntegerField(db_column='PrimarKey',default=0)
+    required = models.IntegerField(db_column='Required',default=0)
+    searchvisible = models.IntegerField(db_column='SearchVisible',default=0)
+    vieworder = models.IntegerField(db_column='ViewOrder',default=0)
+    viewvisible = models.IntegerField(db_column='ViewVisible',default=0)
+    tableid = models.IntegerField(db_column='TableId')
+    def __str__(self):
+        return self.name + ' ' + self.description
+    class Meta:
+        db_table = 'Sys_TableColumn'
+
 
 class SysUserDepartment(BaseModel):
     department = models.ForeignKey(SysDepartment,on_delete=models.CASCADE)

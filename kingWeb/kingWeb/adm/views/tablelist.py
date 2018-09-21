@@ -135,6 +135,7 @@ def delete(request,kwargs):
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     object = SysTableList.objects.filter(id__in=ids).delete()
+    SysTableColumn.objects.filter(tableid__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
