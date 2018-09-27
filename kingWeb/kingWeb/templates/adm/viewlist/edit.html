@@ -30,9 +30,9 @@
                                         {% if key == col.name%}
                                             {% for item in value%}
                                                   <option value="{{item.value}}"
-                                                          {% for key,value in data.items %}
-                                                                {% if key == col.text %}
-                                                                     {% if value == item.value%}
+                                                          {% for k,v in data.items %}
+                                                                {% if k == col.name %}
+                                                                     {% if v == item.value%}
                                                                           selected
                                                                     {% endif %}
                                                                 {% endif %}
@@ -54,9 +54,9 @@
                                         {% if key == col.name%}
                                             {% for item in value%}
                                                   <option value="{{item}}"
-                                                      {% for key,value in data.items %}
-                                                                {% if key == col.name %}
-                                                                    {% if value == item%}
+                                                      {% for k,v in data.items %}
+                                                                {% if k == col.name %}
+                                                                    {% if v == item%}
                                                                           selected
                                                                     {% endif %}
                                                                 {% endif %}
