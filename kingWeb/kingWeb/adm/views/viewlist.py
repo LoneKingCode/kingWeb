@@ -49,15 +49,7 @@ def add(request,kwargs):
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)).order_by('listorder'))
     for col in tablecolumns:
         if col.datatype == 'out':
-            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
-            colnames = outdata_arr[0].split(',') # value,text
-            tablename = outdata_arr[1]
-            condition = outdata_arr[2]
-            primarkey = colnames[0] #作为下拉菜单value的列
-            textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
-                format(primarkey,textkey,tablename,condition))
-            out_col_data[col.name] = outdatalist
+            out_col_data[col.name] = SysHelper.get_out_list(col.outsql)
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
             enumlist = []
@@ -86,7 +78,7 @@ def detail(request,kwargs):
         return render(request, 'adm/viewlist/index')
     tablecolumns = None
     table = None
-    out_col_data = {}
+    out_col_data = {} 
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowview != 1:
@@ -139,15 +131,7 @@ def edit(request,kwargs):
         .format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
-            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
-            colnames = outdata_arr[0].split(',') # value,text
-            tablename = outdata_arr[1]
-            condition = outdata_arr[2]
-            primarkey = colnames[0] #作为下拉菜单value的列
-            textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
-                format(primarkey,textkey,tablename,condition))
-            out_col_data[col.name] = outdatalist
+            out_col_data[col.name] = SysHelper.get_out_list(col.outsql)
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
             enumlist = []

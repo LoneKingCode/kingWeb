@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response,redirect
 from kingWeb.models import ResultModel,SysOperationLog
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from kingWeb.util.WebHelper import WebHelper
+from kingWeb.util.SysHelper import SysHelper
 import json
 def process(request,**kwargs):
     '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
@@ -18,7 +19,7 @@ def process(request,**kwargs):
     if request.method != 'POST':
         SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\
             operationurl = url)
-
+    SysHelper.userid = user.id
     try:
         viewObj = __import__("%s.%s.views" % ('kingWeb',app),fromlist=(controller,))
         ctrlObj = getattr(viewObj, controller)

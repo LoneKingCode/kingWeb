@@ -6,52 +6,69 @@ from openpyxl.reader.excel import load_workbook
 from kingWeb.util.SqlHelper import *
 from kingWeb.models import *
 from django.db.models import Q
+
 class SysHelper(object):
-       @staticmethod
-       def get_column_names(tableid,condition,orderby):
-           sql = 'select * from Sys_TableColumn where TableId={0} and {1} order By {2}'
-           column_data = SqlHelper.query(sql.format(tableid,condition,orderby))
-           column_names = ''
-           for row in column_data:
-               column_names+= row['Name'] + ','
-           column_names = column_names.rstrip(',')
-           return column_names
+        userid = '' #记录当前登陆用户id
+        @staticmethod
+        def get_column_names(tableid,condition,orderby):
+            sql = 'select * from Sys_TableColumn where TableId={0} and {1} order By {2}'
+            column_data = SqlHelper.query(sql.format(tableid,condition,orderby))
+            column_names = ''
+            for row in column_data:
+                column_names+= row['Name'] + ','
+            column_names = column_names.rstrip(',')
+            return column_names
 
-       @staticmethod
-       def get_out_value(tableid,colname,colvalue):
-           if colvalue == '0' or colvalue == 0:
-               return '无'
-           sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-           outdata = SqlHelper.single(sql.format(tableid,colname))
-           outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
-           colnames = outdata_arr[0].split(',') # value,text
-           tablename = outdata_arr[1]
-           condition = outdata_arr[2]
-           primarkey = colnames[0] #作为下拉菜单value的列
-           textkey = colnames[1] #作为下拉菜单的text的列
-           value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,colvalue))
-           if value == '':
-               return '无'
-           return value
+        @staticmethod
+        def get_out_list(outsql):
+            outdata_arr = outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2].replace('{UserId}',str(SysHelper.userid))
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
+                format(primarkey,textkey,tablename,condition))
+            return outdatalist
 
-       def get_out_value_id(tableid,colname,colvalue):
-           if colvalue == '' or colvalue == 0:
-               return '无'
-           sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-           outdata = SqlHelper.single(sql.format(tableid,colname))
-           outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
-           colnames = outdata_arr[0].split(',') # value,text
-           tablename = outdata_arr[1]
-           condition = outdata_arr[2]
-           primarkey = colnames[0] #作为下拉菜单value的列
-           textkey = colnames[1] #作为下拉菜单的text的列
-           value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
-           if value == '':
-               return '无'
-           return value
+        #获取外键值对应的值
+        @staticmethod
+        def get_out_value(tableid,colname,colvalue):
+            if colvalue == '0' or colvalue == 0:
+                return '无'
+            sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
+            outdata = SqlHelper.single(sql.format(tableid,colname))
+            outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2]
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,colvalue))
+            if value == '':
+                return '无'
+            return value
 
-       @staticmethod
-       def import_excel(tableid, file):
+        #获取值对应的外键id
+        @staticmethod
+        def get_out_value_id(tableid,colname,colvalue):
+            if colvalue == '' or colvalue == 0:
+                return '无'
+            sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
+            outdata = SqlHelper.single(sql.format(tableid,colname))
+            outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
+            colnames = outdata_arr[0].split(',') # value,text
+            tablename = outdata_arr[1]
+            condition = outdata_arr[2]
+            primarkey = colnames[0] #作为下拉菜单value的列
+            textkey = colnames[1] #作为下拉菜单的text的列
+            value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
+            if value == '':
+                return '无'
+            return value
+
+        @staticmethod
+        def import_excel(tableid, file):
             result = ResultModel()
             table = SysTableList.objects.get(id=tableid)
             if table == None:
@@ -136,7 +153,7 @@ class SysHelper(object):
                 rowcount = rowcount + 1
             #如果有错误信息 直接返回结果不继续执行
             if result.msg != '':
-                 return result
+                    return result
 
             sqllist = []
             if  table.importtype == TableImportType.插入.value:
@@ -144,7 +161,7 @@ class SysHelper(object):
                 for row in values:
                     addmodel = {}
                     for key,value in row.items():
-                       addmodel[key] = str(value)
+                        addmodel[key] = str(value)
 
                     addmodel['CreateDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
                     addmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -165,9 +182,9 @@ class SysHelper(object):
                 for row in values:
                     newvalues = ''
                     for key,value in row.items():
-                       if key == primarkey:
-                           condition = key + "= '" + str(value) + "'"
-                       newvalues += key + "='" + str(value) + "',"
+                        if key == primarkey:
+                            condition = key + "= '" + str(value) + "'"
+                        newvalues += key + "='" + str(value) + "',"
                     newvalues +="ModifyDateTime='" + time.strftime("%Y-%m-%d %H:%M:%S") + "',"
                     newvalues +="Modifier='" + str(0) + "'"
                     sqllist.append(sql.format(table.name,newvalues,condition))
@@ -177,8 +194,8 @@ class SysHelper(object):
             else:
                 result.msg = '请设置表管理中导入类型'
             return result
-
-       def export_excel(tableid):
+        @staticmethod
+        def export_excel(tableid):
             result = ResultModel()
             table = SysTableList.objects.get(id=tableid)
             if table == None:
@@ -224,8 +241,8 @@ class SysHelper(object):
             result.data = fileurl
             result.flag = True
             return result
-
-       def download_import_template(tableid):
+        @staticmethod
+        def download_import_template(tableid):
             result = ResultModel()
             table = SysTableList.objects.get(id=tableid)
             if table == None:
