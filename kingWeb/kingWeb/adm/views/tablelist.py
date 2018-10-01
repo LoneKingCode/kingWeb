@@ -47,6 +47,7 @@ def edit(request,kwargs):
             'name':object.name,
             'description':object.description,
             'deletetablename':object.deletetablename,
+            'allowdetail':object.allowdetail,
             'allowview':object.allowview,
             'allowedit':object.allowedit,
             'allowdelete':object.allowdelete,
@@ -71,6 +72,7 @@ def post_add(request,kwargs):
     name = request.POST.get('Name','')
     description = request.POST.get('Description','')
     deletetablename = request.POST.get('DeleteTableName','')
+    allowdetail = request.POST.get('AllowDetail','')
     allowview = request.POST.get('AllowView','')
     allowedit = request.POST.get('AllowEdit','')
     allowadd = request.POST.get('AllowAdd','')
@@ -89,7 +91,7 @@ def post_add(request,kwargs):
     object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,allowdetail=allowdetail)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -102,6 +104,7 @@ def post_edit(request,kwargs):
     name = request.POST.get('Name','')
     description = request.POST.get('Description','')
     deletetablename = request.POST.get('DeleteTableName','')
+    allowdetail = request.POST.get('AllowDetail','')
     allowadd = request.POST.get('AllowAdd','')
     allowview = request.POST.get('AllowView','')
     allowedit = request.POST.get('AllowEdit','')
@@ -120,7 +123,7 @@ def post_edit(request,kwargs):
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,allowdetail=allowdetail)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

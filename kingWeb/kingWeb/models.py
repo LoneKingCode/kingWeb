@@ -197,6 +197,7 @@ class SysTableList(BaseModel):
     allowexport = models.IntegerField(db_column='AllowExport', default=0)
     allowimport = models.IntegerField(db_column='AllowImport', default=0)
     allowview = models.IntegerField(db_column='AllowView', default=0)
+    allowdetail = models.IntegerField(db_column='AllowDetail', default=0)
     def __str__(self):
         return self.name + ' ' + self.description
     class Meta:
