@@ -190,6 +190,24 @@ def post_add(request,kwargs):
     return JsonResponse(result.tojson())
 
 @csrf_exempt
+def post_register(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    result = ResultModel()
+    username = request.POST.get('UserName')
+    pwd = request.POST.get('Password')
+    email = request.POST.get('Email')
+    reg_user = User.objects.create_user(username=username,email=email,password=pwd)
+    user_profile = SysUserProfile.objects.get(user=reg_user)
+    user_profile.status = '1'
+    user_profile.save()
+    role = SysRole.objects.get(id=5) #获取 用户 角色
+    user_role = SysUserRole.objects.create(role=role,user=reg_user)
+    result.msg = '操作成功'
+    result.flag=True
+    return JsonResponse(result.tojson())
+
+
+@csrf_exempt
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
