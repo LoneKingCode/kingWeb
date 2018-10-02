@@ -37,8 +37,8 @@ def index(request,kwargs):
     for rm in rolemenus:
         menuids.append(rm.menu.id)
 
-    menus = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.菜单.value))
-    modules = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.模块.value))
+    menus = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.menu.value))
+    modules = SysMenu.objects.filter(Q(id__in=menuids) & Q(type = MenuType.module.value))
 
     return render(request,
         'adm/control/index.html',

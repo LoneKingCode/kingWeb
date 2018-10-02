@@ -141,8 +141,8 @@ def get_menu_list(request,kwargs):
     result = []
     for row in allmenu:
         type = int(row['type'])
-        pId = (str(row['moduleid']) + '_m') if type == MenuType.模块.value else row['parentid']
-        result.append({'pId': str(pId),'name':row['name'],'id':str(row['id']),'open':type == MenuType.模块.value})
+        pId = (str(row['moduleid']) + '_m') if type == MenuType.module.value else row['parentid']
+        result.append({'pId': str(pId),'name':row['name'],'id':str(row['id']),'open':type == MenuType.module.value})
     for row in allmodule:
             result.append({'pId':'0','name':'--------' + row['name'] + '--------' ,'id':str(row['id']) + '_m','open':True,'type':'module'})
     return JsonResponse(result,safe=False)

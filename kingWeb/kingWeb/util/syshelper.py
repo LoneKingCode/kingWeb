@@ -156,7 +156,7 @@ class SysHelper(object):
                     return result
 
             sqllist = []
-            if  table.importtype == TableImportType.插入.value:
+            if  table.importtype == TableImportType.insert.value:
                 sql = 'insert into {0}({1}) values({2})'
                 for row in values:
                     addmodel = {}
@@ -171,7 +171,7 @@ class SysHelper(object):
         "'" + ','.join(addmodel.values()).replace(',' , "','") + "'"))
                 SqlHelper.bulk_execute(sqllist)
                 result.flag = True
-            elif table.importtype == TableImportType.更新.value:
+            elif table.importtype == TableImportType.update.value:
                 sql = 'update {0} set {1} where {2}'
                 primarkey = SqlHelper.single('select Name from Sys_TableColumn where PrimarKey=1 and TableId=' + tableid)
                 if primarkey == '':

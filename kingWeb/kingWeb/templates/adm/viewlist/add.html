@@ -62,7 +62,7 @@
                              {% ifnotequal col.required 0%}
                                data-val-maxlength="{{col.description}}长度不能超过{{col.maxlength}}个字符"
                                    data-val-maxlength-max="{{col.maxlength}}"/>{% endifnotequal %}
-                            <span class="field-validation-valid" data-valmsg-for="{1}" data-valmsg-replace="true"></span>
+                            <span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
                         </div>
                 </div>
             {% endif %}

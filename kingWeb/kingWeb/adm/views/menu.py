@@ -201,15 +201,15 @@ def get_list(request,kwargs):
 
 def get_menu_type(parentid):
     if parentid == '0' or parentid == '':
-        return MenuType.模块.value
+        return MenuType.module.value
 
     parentmenu = SysMenu.objects.get(id=parentid)
     parenttype = int(parentmenu.type)
-    if parenttype == MenuType.模块.value:
-        return MenuType.菜单.value
-    elif parenttype == MenuType.菜单.value:
-        return MenuType.按钮.value
-    elif parenttype == MenuType.按钮.value:
-        return MenuType.按钮.value
+    if parenttype == MenuType.module.value:
+        return MenuType.menu.value
+    elif parenttype == MenuType.menu.value:
+        return MenuType.button.value
+    elif parenttype == MenuType.button.value:
+        return MenuType.button.value
     else:
-        return MenuType.模块.value
+        return MenuType.module.value

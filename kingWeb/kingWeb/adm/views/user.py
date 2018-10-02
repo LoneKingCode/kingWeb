@@ -152,7 +152,7 @@ def post_login(request,kwargs):
     user = auth.authenticate(username=username, password=pwd)
     if user is not None:
           userprofile = SysUserProfile.objects.get(user=user)
-          if userprofile.status == UserStatus.已激活.value:
+          if userprofile.status == UserStatus.active.value:
                 auth.login(request, user)
                 result.data = user.username
                 result.flag = True
