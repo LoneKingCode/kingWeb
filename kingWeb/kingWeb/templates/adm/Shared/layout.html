@@ -18,39 +18,81 @@
     <link href="{%static 'lib/datatables/media/css/jquery.dataTables.min.css'%}" rel="stylesheet" />
     {% block styles %}   {% endblock %}
     <style>
-        .miniMenu{
-            width:50px;
-        }
-        .miniMenu title{
-            display:none;
-        }
+
+    .miniMenu .title { display: none }
+    .miniMenu .sidebar-menu a { padding: 9px; }
+    .miniMenu .profile-img { top: 6px; left: -10px; margin-top: 7px; width: 41px; height: 41px; position: relative; }
+    .miniMenu .profile-user { margin-top: 20px; padding: 2px; }
+    .miniMenu .parent-menu-name { display: none; }
+    .miniMenu .menuitem{display:none;}
+        .miniMenu .sidebar-footer > a:nth-child(n+2) { display: none; }
+        .miniMenu .sidebar-footer > a:nth-child(1) { position: relative; left: 16px; top: 2px; }
     </style>
-    <script type="text/javascript">
-        function collapseMenu() {
+
+    <script>
+    var collapse = false
+    $(function () {
+        $(".sidebar-menu").click(function () {
+            if (collapse) {
+                collapseMenu()
+            }
+        })
+    })
+    function collapseMenu() {
+
+        collapse = !collapse
+        if (collapse) {
+            $("#sidebar-wrapper").removeClass('miniMenu').addClass('miniMenu')
+
+            $("#sidebar-wrapper").animate({ width: "50px" }, 300, 'swing', function () {
+                $("#sidebar-wrapper").css('width', '50px')
+            });
+            $("#page-wrapper").animate({ marginLeft: "50px" }, 300, 'swing', function () {
+                $("#page-wrapper").css('margin-left', '50px')
+            });
+            $(".miniMenu .sidebar-footer").animate({ width: "50px" }, 300, 'swing', function () {
+                console.log('50')
+                $(".miniMenu .sidebar-footer").css('width', '50px')
+            });
+            //$("#sidebar-wrapper").css('width', '50px')
+            //$("#page-wrapper").css('margin-left', '50px')
 
         }
+        else {
+            $("#sidebar-wrapper").animate({ width: "200px" }, 300, 'swing', function () {
+                $("#sidebar-wrapper").css('width', '200px')
+            });
+            $("#page-wrapper").animate({ marginLeft: "200px" }, 300, 'swing', function () {
+                $("#page-wrapper").css('margin-left', '200px')
+            });
+            $(".miniMenu .sidebar-footer").animate({ width: "200px" }, 300, 'swing', function () {
+                $(".miniMenu .sidebar-footer").css('width', '200px')
+            });
+            $("#sidebar-wrapper").removeClass('miniMenu')
+        }
+    }
     </script>
 </head>
 <body>
     <div id="wrapper">
         <!-- 左侧导航栏开始-->
-        <nav class="navbar navbar-inverse navbar-fixed-top miniMenu" id="sidebar-wrapper" role="navigation">
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
             <div class="navbar-header profile">
                 <h2 class="title"><a href="#">lkWeb </a></h2>
-                <img src="{%static 'images/head.jpg'%}" alt="..." class="img-circle profile_img">
+                <img src="{%static 'images/head.jpg'%}" alt="..." class="img-circle profile-img">
 
-                <div style="padding:3px;">
+                <div style="padding: 3px; " class="profile-user">
                     <i class="fa fa-user"></i>
                    {{username}}
                 </div>
             </div>
             <div class="clearfix"></div>
-            <div class="sidebar-menu">
+            <div class="sidebar-menu" >
                 {% load set_val %}
                     {% for module in modules %}
                     <a href="#a{{module.id}}" class="nav-header menu-first collapsed"
-                                 data-toggle="collapse"><i class="{{module.icon}}"></i>{{module.name}}</a>
-                           <ul id="a{{module.id}}" class="nav nav-list collapse menu-second">
+                                 data-toggle="collapse"><i class="{{module.icon}}"></i><span class="parent-menu-name">{{module.name}}</span></a>
+                           <ul id="a{{module.id}}" class="nav nav-list collapse menu-second menuitem">
                            {% for menu in menus %}
                                 {% if menu.parentid == module.id %}
                                    {% if menu.name != '基础数据菜单权限'%}
@@ -75,10 +117,10 @@
         <div id="page-wrapper">
             <!--右侧顶部开始-->
             <div class="row border-bottom">
-                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0 ">
                     <ul class="nav navbar-top-links navbar-right">
 
-                        <li class="hidden-xs" style="padding:3px;">
+                        <li class="hidden-xs" style="padding: 3px; ">
                             <a href="/adm/user/logout"><i class="fa fa fa-sign-out"></i> 退出</a>
                         </li>
                     </ul>
@@ -91,7 +133,7 @@
                     <i class="glyphicon glyphicon-backward"></i>
                 </button>
                 <nav class="page-tabs J_menuTabs">
-                    <div class="page-tabs-content" style="margin-left: 0px;">
+                    <div class="page-tabs-content" style="margin-left: 0px; ">
                         <a href="javascript:;" class="active J_menuTab" data-id="/adm/control/welcome">首页</a>
                     </div>
                 </nav>
@@ -123,7 +165,7 @@
                 {% block content %}
 
                 {% endblock %}
-                <iframe id="frmBody" name="iframe0" class="J_iframe" data-id="/adm/control/welcome" style="width:calc(100%); height: calc(100%); border: 0; margin: 0; padding: 0; min-height: 400px;overflow-y:scroll" src="/adm/control/welcome"></iframe>
+                <iframe id="frmBody" name="iframe0" class="J_iframe" data-id="/adm/control/welcome" style="width: calc(100%); height: calc(100%); border: 0; margin: 0; padding: 0; min-height: 400px; overflow-y: scroll " src="/adm/control/welcome"></iframe>
 
             </div>
             <!--右侧框架内容结束-->
@@ -145,7 +187,7 @@
     <script src="{%static 'js/contabs.js'%}"></script>
     <script>
 
-    </script>
+</script>
     {% block scripts %}   {% endblock %}
 
 </body>
