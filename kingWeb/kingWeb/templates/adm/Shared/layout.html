@@ -13,64 +13,66 @@
     <link href="{%static 'lib/bootstrap/dist/css/bootstrap-theme.min.css'%}" rel="stylesheet" />
     <link href="{%static 'lib/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet" />
 
-    <script src="{%static 'js/lkWeb.js'%}"  ></script>
-    <link rel="stylesheet" href="{%static 'css/site.css'%}"   />
+    <script src="{%static 'js/lkWeb.js'%}"></script>
+    <link rel="stylesheet" href="{%static 'css/site.css'%}" />
     <link href="{%static 'lib/datatables/media/css/jquery.dataTables.min.css'%}" rel="stylesheet" />
     {% block styles %}   {% endblock %}
     <style>
 
-    .miniMenu .title { display: none }
-    .miniMenu .sidebar-menu a { padding: 9px; }
-    .miniMenu .profile-img { top: 6px; left: -10px; margin-top: 7px; width: 41px; height: 41px; position: relative; }
-    .miniMenu .profile-user { margin-top: 20px; padding: 2px; }
-    .miniMenu .parent-menu-name { display: none; }
-    .miniMenu .menuitem{display:none;}
+        .miniMenu .title { display: none }
+        .miniMenu .sidebar-menu a { padding: 9px; }
+        .miniMenu .profile-img { top: 6px; left: -10px; margin-top: 7px; width: 41px; height: 41px; position: relative; }
+        .miniMenu .profile-user { margin-top: 20px; padding: 2px; }
+        .miniMenu .parent-menu-name { display: none; }
+        .miniMenu .menuitem { display: none; }
         .miniMenu .sidebar-footer > a:nth-child(n+2) { display: none; }
         .miniMenu .sidebar-footer > a:nth-child(1) { position: relative; left: 16px; top: 2px; }
+
+        .miniMenu .profile-user > span { margin-left: 13px; position: relative; right: 26px; font-size: .8em; display: block; width: 44px; overflow-x: hidden; text-overflow: ellipsis; }
     </style>
 
     <script>
-    var collapse = false
-    $(function () {
-        $(".sidebar-menu").click(function () {
-            if (collapse) {
-                collapseMenu()
-            }
+        var collapse = false
+        $(function () {
+            $(".sidebar-menu").click(function () {
+                if (collapse) {
+                    collapseMenu()
+                }
+            })
         })
-    })
-    function collapseMenu() {
+        function collapseMenu() {
 
-        collapse = !collapse
-        if (collapse) {
-            $("#sidebar-wrapper").removeClass('miniMenu').addClass('miniMenu')
+            collapse = !collapse
+            if (collapse) {
+                $("#sidebar-wrapper").removeClass('miniMenu').addClass('miniMenu')
 
-            $("#sidebar-wrapper").animate({ width: "50px" }, 300, 'swing', function () {
-                $("#sidebar-wrapper").css('width', '50px')
-            });
-            $("#page-wrapper").animate({ marginLeft: "50px" }, 300, 'swing', function () {
-                $("#page-wrapper").css('margin-left', '50px')
-            });
-            $(".miniMenu .sidebar-footer").animate({ width: "50px" }, 300, 'swing', function () {
-                console.log('50')
-                $(".miniMenu .sidebar-footer").css('width', '50px')
-            });
-            //$("#sidebar-wrapper").css('width', '50px')
-            //$("#page-wrapper").css('margin-left', '50px')
+                $("#sidebar-wrapper").animate({ width: "50px" }, 300, 'swing', function () {
+                    $("#sidebar-wrapper").css('width', '50px')
+                });
+                $("#page-wrapper").animate({ marginLeft: "50px" }, 300, 'swing', function () {
+                    $("#page-wrapper").css('margin-left', '50px')
+                });
+                $(".miniMenu .sidebar-footer").animate({ width: "50px" }, 300, 'swing', function () {
+                    console.log('50')
+                    $(".miniMenu .sidebar-footer").css('width', '50px')
+                });
+                //$("#sidebar-wrapper").css('width', '50px')
+                //$("#page-wrapper").css('margin-left', '50px')
 
+            }
+            else {
+                $("#sidebar-wrapper").animate({ width: "200px" }, 300, 'swing', function () {
+                    $("#sidebar-wrapper").css('width', '200px')
+                });
+                $("#page-wrapper").animate({ marginLeft: "200px" }, 300, 'swing', function () {
+                    $("#page-wrapper").css('margin-left', '200px')
+                });
+                $(".miniMenu .sidebar-footer").animate({ width: "200px" }, 300, 'swing', function () {
+                    $(".miniMenu .sidebar-footer").css('width', '200px')
+                });
+                $("#sidebar-wrapper").removeClass('miniMenu')
+            }
         }
-        else {
-            $("#sidebar-wrapper").animate({ width: "200px" }, 300, 'swing', function () {
-                $("#sidebar-wrapper").css('width', '200px')
-            });
-            $("#page-wrapper").animate({ marginLeft: "200px" }, 300, 'swing', function () {
-                $("#page-wrapper").css('margin-left', '200px')
-            });
-            $(".miniMenu .sidebar-footer").animate({ width: "200px" }, 300, 'swing', function () {
-                $(".miniMenu .sidebar-footer").css('width', '200px')
-            });
-            $("#sidebar-wrapper").removeClass('miniMenu')
-        }
-    }
     </script>
 </head>
 <body>
@@ -83,26 +85,29 @@
 
                 <div style="padding: 3px; " class="profile-user">
                     <i class="fa fa-user"></i>
-                   {{username}}
+                    <span>{{username}}</span>
                 </div>
             </div>
             <div class="clearfix"></div>
-            <div class="sidebar-menu" >
+            <div class="sidebar-menu">
                 {% load set_val %}
-                    {% for module in modules %}
-                    <a href="#a{{module.id}}" class="nav-header menu-first collapsed"
-                                 data-toggle="collapse"><i class="{{module.icon}}"></i><span class="parent-menu-name">{{module.name}}</span></a>
-                           <ul id="a{{module.id}}" class="nav nav-list collapse menu-second menuitem">
-                           {% for menu in menus %}
-                                {% if menu.parentid == module.id %}
-                                   {% if menu.name != '基础数据菜单权限'%}
-                                  <li><a data-index="{{menu.listorder}}" data-url="{{menu.url}}" class="J_menuItem">
-                                    <i class="fa fa-chevron-right"></i>{{menu.name}}</a></li>
-                               {% endif %}
-                                {% endif %}
-                           {% endfor %}
-                            </ul>
-                   {% endfor %}
+                {% for module in modules %}
+                <a href="#a{{module.id}}" class="nav-header menu-first collapsed"
+                   data-toggle="collapse"><i class="{{module.icon}}"></i><span class="parent-menu-name">{{module.name}}</span></a>
+                <ul id="a{{module.id}}" class="nav nav-list collapse menu-second menuitem">
+                    {% for menu in menus %}
+                    {% if menu.parentid == module.id %}
+                    {% if menu.name != '基础数据菜单权限'%}
+                    <li>
+                        <a data-index="{{menu.listorder}}" data-url="{{menu.url}}" class="J_menuItem">
+                            <i class="fa fa-chevron-right"></i>{{menu.name}}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endfor %}
             </div>
 
             <div class="sidebar-footer">
@@ -187,7 +192,7 @@
     <script src="{%static 'js/contabs.js'%}"></script>
     <script>
 
-</script>
+    </script>
     {% block scripts %}   {% endblock %}
 
 </body>

@@ -24,8 +24,9 @@ def index(request,kwargs):
             return render(request,'/adm/home/error.html')
         table_desc = table.description
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(listvisible=1)).order_by('listorder'))
-
-        table_top_extendfunction = table.topextendfunction.replace('{UserId}',str(request.user.id))
+        table_top_extendfunction = ''
+        if table.topextendfunction and table.topextendfunction != 'None':
+            table_top_extendfunction = table.topextendfunction.replace('{UserId}',str(request.user.id))
     return render(request,
         'adm/viewlist/index.html',
         {

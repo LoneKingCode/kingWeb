@@ -200,7 +200,7 @@ def post_register(request,kwargs):
     user_profile = SysUserProfile.objects.get(user=reg_user)
     user_profile.status = '1'
     user_profile.save()
-    role = SysRole.objects.get(id=5) #获取 用户 角色
+    role = SysRole.objects.get(id=5) #获取 "用户" 角色
     user_role = SysUserRole.objects.create(role=role,user=reg_user)
     result.msg = '操作成功'
     result.flag=True
