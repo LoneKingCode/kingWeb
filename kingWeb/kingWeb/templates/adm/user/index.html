@@ -57,9 +57,10 @@
                     "mRender": function (data, type, row) {
                         return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                     },
-                    "bSortable": false
+                    "bSortable": false,
+
                 },
-                { "mData": "rownum",  "sClass": "text-center" },
+                { "mData": "rownum",  "sClass": "text-center" ,"bSortable": false},
                 { "mData": "user__username","name":"user__username", "sClass": "text-center" },
                 { "mData": "personname", "sClass": "text-center" },
                 { "mData": "user__email", "sClass": "text-center", "bSortable": false },

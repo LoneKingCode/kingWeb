@@ -4,53 +4,53 @@
 {% block scripts %}
 
     <script>
-        $(function () {
-            InitDataTable();
+    $(function () {
+        InitDataTable();
 
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-            $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), lkTable);
-
-            })
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        function AddModel() {
-            lkWeb.GoAction("adm","systemoption", "add", 0,true,'添加','90%','90%');
-        }
-        function EditModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "")
-                parent.layer.alert("请选择");
-            else
-                lkWeb.GoAction("adm","systemoption", "edit", id,true,'编辑','90%','90%');
-        }
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), lkTable);
 
-        function DelModel() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "systemoption", lkTable);
-        }
+        })
+    });
 
-        var lkTable;
-        function InitDataTable() {
-            var dataUrl = '/adm/systemoption/get_page_data/';
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+    function AddModel() {
+        lkWeb.GoAction("adm", "systemoption", "add", 0, true, '添加', '90%', '90%');
+    }
+    function EditModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "")
+            parent.layer.alert("请选择");
+        else
+            lkWeb.GoAction("adm", "systemoption", "edit", id, true, '编辑', '90%', '90%');
+    }
+
+    function DelModel() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        lkWeb.DeleteMulti("adm", ids, "systemoption", lkTable);
+    }
+
+    var lkTable;
+    function InitDataTable() {
+        var dataUrl = '/adm/systemoption/get_page_data/';
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "code","name":"name", "sClass": "text-center" },
-                { "mData": "value", "sClass": "text-center" }
-            ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center", "bSortable": false },
+            { "mData": "code", "name": "name", "sClass": "text-center" },
+            { "mData": "value", "sClass": "text-center" }
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
     }
     </script>
 {% endblock %}

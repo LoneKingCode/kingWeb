@@ -158,7 +158,7 @@ lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack) {
             success: function (result) {
                 if (result.flag == true) {
                     if (IsFunction(successCallBack))
-                        successCallBack();
+                        successCallBack(result);
                     else
                         parent.layer.alert("操作成功");
                 }
@@ -172,7 +172,7 @@ lkWeb.AjaxPost = function (url, data, successCallBack, errorCallBack) {
             error: function (err) {
                 parent.layer.alert("操作失败");
                 if (IsFunction(errorCallBack))
-                    errorCallBack();
+                    errorCallBack(result);
                 console.log(err);
             }
         })
@@ -187,7 +187,7 @@ lkWeb.AjaxGet = function (url, data, successCallBack, errorCallBack) {
             success: function (result) {
                 if (result.flag == true) {
                     if (IsFunction(successCallBack))
-                        successCallBack();
+                        successCallBack(result);
                     else
                         parent.layer.alert("操作成功");
                 }
@@ -201,7 +201,7 @@ lkWeb.AjaxGet = function (url, data, successCallBack, errorCallBack) {
             error: function (err) {
                 parent.layer.alert("操作失败");
                 if (IsFunction(errorCallBack))
-                    errorCallBack();
+                    errorCallBack(result);
                 console.log(err);
             }
         })
@@ -328,6 +328,7 @@ lkWeb.LoadTable = function (tableID, colums, dataUrl, value) {
         "info": true,
         "aoColumns": colums,
         "destroy": true,
+        "order": []
     };
     var table = $("#" + tableID).DataTable(config);
 

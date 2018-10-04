@@ -3,110 +3,110 @@
 
 {% block scripts %}
     <script>
-        $(function () {
-            InitDataTable();
+    $(function () {
+        InitDataTable();
 
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-            $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), lkTable);
-
-            })
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        function AddModel() {
-            lkWeb.GoAction("adm","tablecolumn", "add", 0,true,'添加','90%','90%');
-        }
-        function EditModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "")
-                parent.layer.alert("请选择");
-            else
-                lkWeb.GoAction("adm","tablecolumn", "edit", id,true,'编辑','90%','90%');
-        }
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), lkTable);
 
-        function DelModel() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "tablecolumn", lkTable);
+        })
+    });
+
+    function AddModel() {
+        lkWeb.GoAction("adm", "tablecolumn", "add", 0, true, '添加', '90%', '90%');
+    }
+    function EditModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "")
+            parent.layer.alert("请选择");
+        else
+            lkWeb.GoAction("adm", "tablecolumn", "edit", id, true, '编辑', '90%', '90%');
+    }
+
+    function DelModel() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        lkWeb.DeleteMulti("adm", ids, "tablecolumn", lkTable);
+    }
+    function CopyModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "") {
+            parent.layer.alert("请选择");
+            return;
         }
-        function CopyModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "") {
-                parent.layer.alert("请选择");
-                return;
-            }
-            lkWeb.Confirm("确认复制", function () {
-                lkWeb.AjaxPost("/adm/tablecolumn/post_copy/", { id: id }, function () {
-                    parent.layer.alert("复制成功");
+        lkWeb.Confirm("确认复制", function () {
+            lkWeb.AjaxPost("/adm/tablecolumn/post_copy/", { id: id }, function () {
+                parent.layer.alert("复制成功");
                 lkTable.draw(false);
-                 })
             })
-        }
-        var lkTable;
-        function InitDataTable() {
-            var dataUrl = '/adm/tablecolumn/get_page_data/';
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+        })
+    }
+    var lkTable;
+    function InitDataTable() {
+        var dataUrl = '/adm/tablecolumn/get_page_data/';
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "tablename","name":"tableid", "sClass": "text-center" },
-                { "mData": "name", "name":"name","sClass": "text-center" },
-                { "mData": "description", "sClass": "text-center" },
-                { "mData": "datatype", "sClass": "text-center" },
-                { "mData": "addvisible", "sClass": "text-center" },
-                { "mData": "editvisible", "sClass": "text-center" },
-                { "mData": "listvisible", "sClass": "text-center" },
-                { "mData": "searchvisible", "sClass": "text-center" },
-             ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
-        }
-        function ShowSetValue(filedName) {
-            layer.open({
-                type: 1,
-                title: "批量设置属性",
-                closeBtn: 1,
-                scrollbar :false,
-                 area: '30%',
-                 content: $('#setValue'),
-                 btn: ['确定', '取消'],
-                 yes: function (index, layero) {
-                     SetValue(filedName);
-                     layer.close(index);
-                  }
-                , cancel: function (index, layero) {
-                    layer.close(index)
-                },
-            });
-        }
-        function SetValue(filedName) {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            var value = $("#txtValue").val();
-            if (value != '1' && value != '0') {
-                alert('请输入1或0 代表是或否')
-                return
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center", "bSortable": false },
+            { "mData": "tablename", "name": "tableid", "sClass": "text-center" },
+            { "mData": "name", "name": "name", "sClass": "text-center" },
+            { "mData": "description", "sClass": "text-center" },
+            { "mData": "datatype", "sClass": "text-center" },
+            { "mData": "addvisible", "sClass": "text-center" },
+            { "mData": "editvisible", "sClass": "text-center" },
+            { "mData": "listvisible", "sClass": "text-center" },
+            { "mData": "searchvisible", "sClass": "text-center" },
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
+    }
+    function ShowSetValue(filedName) {
+        layer.open({
+            type: 1,
+            title: "批量设置属性",
+            closeBtn: 1,
+            scrollbar: false,
+            area: '30%',
+            content: $('#setValue'),
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                SetValue(filedName);
+                layer.close(index);
             }
-            lkWeb.Confirm("确认修改", function () {
-                lkWeb.AjaxPost("/adm/tablecolumn/setvalue/", { ids: ids, value: value, filedname: filedName }, function () {
-                    parent.layer.alert("修改成功");
-                    lkTable.draw(false);
-                    $(".checkAll").prop("checked", false);
-                })
+            , cancel: function (index, layero) {
+                layer.close(index)
+            },
+        });
+    }
+    function SetValue(filedName) {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        var value = $("#txtValue").val();
+        if (value != '1' && value != '0') {
+            alert('请输入1或0 代表是或否')
+            return
+        }
+        lkWeb.Confirm("确认修改", function () {
+            lkWeb.AjaxPost("/adm/tablecolumn/setvalue/", { ids: ids, value: value, filedname: filedName }, function () {
+                parent.layer.alert("修改成功");
+                lkTable.draw(false);
+                $(".checkAll").prop("checked", false);
             })
-        }
+        })
+    }
 
-        function SelectByTable() {
-            var tableId = $("#TableList").val();
-            lkWeb.Search("TableId|" + tableId, lkTable);
-        }
+    function SelectByTable() {
+        var tableId = $("#TableList").val();
+        lkWeb.Search("TableId|" + tableId, lkTable);
+    }
     </script>
 {% endblock %}
 

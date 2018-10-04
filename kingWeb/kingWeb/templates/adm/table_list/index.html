@@ -4,85 +4,85 @@
 {% block scripts %}
 
     <script>
-        $(function () {
-            InitDataTable();
+    $(function () {
+        InitDataTable();
 
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
-
-            $("#btnSearch").click(function () {
-                lkWeb.Search($("#txtSearchKey").val(), lkTable);
-
-            })
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
         });
 
-        function AddModel() {
-            lkWeb.GoAction("adm","tablelist", "add", 0,true,'添加','90%','90%');
-        }
-        function EditModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "")
-                parent.layer.alert("请选择");
-            else
-                lkWeb.GoAction("adm","tablelist", "edit", id,true,'编辑','90%','90%');
-        }
+        $("#btnSearch").click(function () {
+            lkWeb.Search($("#txtSearchKey").val(), lkTable);
 
-        function DelModel() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            lkWeb.DeleteMulti("adm",ids, "tablelist", lkTable);
+        })
+    });
+
+    function AddModel() {
+        lkWeb.GoAction("adm", "tablelist", "add", 0, true, '添加', '90%', '90%');
+    }
+    function EditModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "")
+            parent.layer.alert("请选择");
+        else
+            lkWeb.GoAction("adm", "tablelist", "edit", id, true, '编辑', '90%', '90%');
+    }
+
+    function DelModel() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        lkWeb.DeleteMulti("adm", ids, "tablelist", lkTable);
+    }
+    function CopyModel() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "") {
+            parent.layer.alert("请选择");
+            return;
         }
-        function CopyModel() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "") {
-                parent.layer.alert("请选择");
-                return;
-            }
-            lkWeb.Confirm("确认复制", function () {
-                lkWeb.AjaxPost("/adm/tablelist/post_copy/", { id: id }, function () {
-                    parent.layer.alert("复制成功");
+        lkWeb.Confirm("确认复制", function () {
+            lkWeb.AjaxPost("/adm/tablelist/post_copy/", { id: id }, function () {
+                parent.layer.alert("复制成功");
                 lkTable.draw(false);
             })
-            })
+        })
+    }
+    function BuildColumn() {
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        if (id == "") {
+            parent.layer.alert("请选择");
+            return;
         }
-        function BuildColumn() {
-            var id = lkWeb.GetCheckValue($(".checkChild"));
-            if (id == "") {
-                parent.layer.alert("请选择");
-                return;
-            }
-             lkWeb.Confirm("确认生成", function () {
-                lkWeb.AjaxPost("/adm/tablelist/post_build_column/", { id: id }, function () {
-                    parent.layer.alert("生成成功");
-             })
+        lkWeb.Confirm("确认生成", function () {
+            lkWeb.AjaxPost("/adm/tablelist/post_build_column/", { id: id }, function () {
+                parent.layer.alert("生成成功");
             })
-        }
+        })
+    }
 
-        var lkTable;
-        function InitDataTable() {
-            var dataUrl = '/adm/tablelist/get_page_data/';
-            var columns = [
-                {
-                    "sClass": "text-center",
-                    "mData": "id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
-                    },
-                    "bSortable": false
+    var lkTable;
+    function InitDataTable() {
+        var dataUrl = '/adm/tablelist/get_page_data/';
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
                 },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "id", "sClass": "text-center" },
-                { "mData": "name", "name":"name","sClass": "text-center" },
-                { "mData": "description", "sClass": "text-center" },
-                { "mData": "allowview", "sClass": "text-center" },
-                { "mData": "allowadd", "sClass": "text-center" },
-                { "mData": "allowedit", "sClass": "text-center" },
-                { "mData": "allowdelete", "sClass": "text-center" },
-                { "mData": "isview", "sClass": "text-center" }
-            ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
-        }
+                "bSortable": false
+            },
+            { "mData": "rownum", "sClass": "text-center", "bSortable": false },
+            { "mData": "id", "sClass": "text-center" },
+            { "mData": "name", "name": "name", "sClass": "text-center" },
+            { "mData": "description", "sClass": "text-center" },
+            { "mData": "allowview", "sClass": "text-center" },
+            { "mData": "allowadd", "sClass": "text-center" },
+            { "mData": "allowedit", "sClass": "text-center" },
+            { "mData": "allowdelete", "sClass": "text-center" },
+            { "mData": "isview", "sClass": "text-center" }
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl)
+    }
     </script>
 {% endblock %}
 

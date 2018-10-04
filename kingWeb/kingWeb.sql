@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 21, 2018 at 09:50 PM
+-- Generation Time: Oct 04, 2018 at 09:55 AM
 -- Server version: 5.5.56-log
 -- PHP Version: 5.5.38
 
@@ -152,7 +152,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$36000$rRRFPJvo98aG$5ahjAT8aQvzeWzTjxn4bpUIkiBsse5HDC/qyDBjB5Yk=', '2018-09-02 21:26:18', 1, 'sa', '管理员', '超级', 'sa@sa.com', 1, 1, '2018-06-09 10:00:16'),
+(1, 'pbkdf2_sha256$36000$rRRFPJvo98aG$5ahjAT8aQvzeWzTjxn4bpUIkiBsse5HDC/qyDBjB5Yk=', '2018-10-04 09:20:18', 1, 'sa', '管理员', '超级', 'sa@sa.com', 1, 1, '2018-06-09 10:00:16'),
 (9, 'pbkdf2_sha256$36000$Ryz1bomuMMVb$GtYX194lZfJHvO8Y0xiM4bZkBDn6Kv6eMsQuNaYXCJA=', '2018-08-31 23:58:33', 0, 'admin', '杰', '张', 'admin@admin.com', 0, 1, '2018-07-16 12:49:42'),
 (12, 'pbkdf2_sha256$36000$2GUKOPxtvP1G$28rOmr0EwQ+qC+ya1UVrptiDxzsrJo/zSc+D5E+0uvQ=', '2018-09-02 21:25:54', 0, 'employee', '', '', 'asd@123.com', 0, 1, '2018-09-02 21:18:52');
 
@@ -286,7 +286,13 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (23, 'kingWeb', '0010_auto_20180830_1123', '2018-08-30 11:23:23'),
 (24, 'kingWeb', '0011_sysuserprofile_personname', '2018-08-31 23:36:41'),
 (25, 'kingWeb', '0012_auto_20180901_1651', '2018-09-01 16:51:17'),
-(26, 'kingWeb', '0013_auto_20180901_1652', '2018-09-01 16:52:53');
+(26, 'kingWeb', '0013_auto_20180901_1652', '2018-09-01 16:52:53'),
+(27, 'kingWeb', '0014_auto_20180921_2214', '2018-09-21 22:14:28'),
+(28, 'kingWeb', '0015_auto_20180921_2214', '2018-09-21 22:14:49'),
+(29, 'kingWeb', '0016_auto_20180921_2216', '2018-09-21 22:17:05'),
+(30, 'kingWeb', '0017_auto_20180921_2218', '2018-09-21 22:18:06'),
+(31, 'kingWeb', '0018_systablelist_allowdetail', '2018-10-01 22:25:13'),
+(32, 'kingWeb', '0019_auto_20181004_0943', '2018-10-04 09:43:31');
 
 -- --------------------------------------------------------
 
@@ -313,7 +319,11 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('4mzha02upwsyh6xbu65a3iny14jpju62', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-09-14 23:58:42'),
 ('x0s6fw865se9prsp0nn7lmiere1jje2b', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-09-15 10:37:50'),
 ('g0kvop0srmxi7mvn7f6zo5coxixpdlg0', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-09-15 13:30:41'),
-('2w2gtv0xue71nkb9nab4w0ubzwozmfud', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-09-16 21:26:18');
+('2w2gtv0xue71nkb9nab4w0ubzwozmfud', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-09-16 21:26:18'),
+('8lhnqy17cptd4nhw0dngqmkxianwtf1c', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-10-05 22:19:15'),
+('kjlw49uqwhjaprez1rvkommv30eww6wp', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-10-15 22:25:37'),
+('v739r2u53w8fnopphr1ferdxzglf7htg', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-10-16 19:51:34'),
+('6mjlhv7r02r8x734tktshnlvm7yiuzrl', 'YTUxODc1ZDkxY2JiOTUzOTBiNGFmOTNlNGM0NTIzN2VjYjU3YTg0NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4YTU1NDI3MGQwNzQwNTcyYWVlNmM0NTkxYjE3ZDdjMmZiOGI3OTg5In0=', '2018-10-18 09:20:18');
 
 -- --------------------------------------------------------
 
@@ -359,7 +369,7 @@ CREATE TABLE `Sys_LoginLog` (
   `ClientIP` varchar(15) DEFAULT NULL,
   `UserName` varchar(20) NOT NULL,
   `Description` varchar(40) DEFAULT NULL,
-  `ClientInfo` varchar(200) DEFAULT NULL
+  `ClientInfo` varchar(400) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
@@ -393,7 +403,11 @@ INSERT INTO `Sys_LoginLog` (`Id`, `CreateDateTime`, `ModifyDateTime`, `Creator`,
 (31, '2018-09-01 13:30:41', '2018-09-01 13:30:41', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
 (32, '2018-09-02 16:59:39', '2018-09-02 16:59:39', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
 (33, '2018-09-02 21:25:54', '2018-09-02 21:25:54', NULL, NULL, '127.0.0.1', 'employee', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
-(34, '2018-09-02 21:26:18', '2018-09-02 21:26:18', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36');
+(34, '2018-09-02 21:26:18', '2018-09-02 21:26:18', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(35, '2018-09-21 22:19:15', '2018-09-21 22:19:15', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(36, '2018-10-01 22:25:37', '2018-10-01 22:25:37', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(37, '2018-10-02 19:51:34', '2018-10-02 19:51:34', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(38, '2018-10-04 09:20:18', '2018-10-04 09:20:18', NULL, NULL, '127.0.0.1', 'sa', '登陆成功', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36');
 
 -- --------------------------------------------------------
 
@@ -1012,7 +1026,195 @@ INSERT INTO `Sys_OperationLog` (`Id`, `CreateDateTime`, `ModifyDateTime`, `Creat
 (1158, '2018-09-02 21:26:04', '2018-09-02 21:26:04', NULL, NULL, '127.0.0.1', '访问', '/adm/log/chart/', 'employee', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
 (1159, '2018-09-02 21:26:13', '2018-09-02 21:26:13', NULL, NULL, '127.0.0.1', '访问', '/adm/user/logout/', 'employee', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
 (1160, '2018-09-02 21:26:20', '2018-09-02 21:26:20', NULL, NULL, '127.0.0.1', '访问', '/adm/control/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
-(1161, '2018-09-02 21:26:24', '2018-09-02 21:26:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36');
+(1161, '2018-09-02 21:26:24', '2018-09-02 21:26:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1162, '2018-09-21 22:18:59', '2018-09-21 22:18:59', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1163, '2018-09-21 22:19:00', '2018-09-21 22:19:00', NULL, NULL, '127.0.0.1', '访问', '/adm/user/login/?next=/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1164, '2018-09-21 22:19:17', '2018-09-21 22:19:17', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1165, '2018-09-21 22:19:22', '2018-09-21 22:19:22', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1166, '2018-09-21 22:19:27', '2018-09-21 22:19:27', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1167, '2018-09-21 22:19:37', '2018-09-21 22:19:37', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/add/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1168, '2018-09-21 22:19:45', '2018-09-21 22:19:45', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/add/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1169, '2018-10-01 22:25:31', '2018-10-01 22:25:31', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1170, '2018-10-01 22:25:31', '2018-10-01 22:25:31', NULL, NULL, '127.0.0.1', '访问', '/adm/user/login/?next=/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1171, '2018-10-01 22:25:39', '2018-10-01 22:25:39', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1172, '2018-10-01 22:25:42', '2018-10-01 22:25:42', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1173, '2018-10-01 22:25:45', '2018-10-01 22:25:45', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1174, '2018-10-02 19:51:24', '2018-10-02 19:51:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1175, '2018-10-02 19:51:24', '2018-10-02 19:51:24', NULL, NULL, '127.0.0.1', '访问', '/adm/user/login/?next=/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1176, '2018-10-02 19:51:36', '2018-10-02 19:51:36', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1177, '2018-10-02 19:51:39', '2018-10-02 19:51:39', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1178, '2018-10-02 20:05:21', '2018-10-02 20:05:21', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1179, '2018-10-02 20:05:24', '2018-10-02 20:05:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1180, '2018-10-02 21:54:59', '2018-10-02 21:54:59', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1181, '2018-10-02 21:55:03', '2018-10-02 21:55:03', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1182, '2018-10-02 21:57:30', '2018-10-02 21:57:30', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1183, '2018-10-02 21:57:33', '2018-10-02 21:57:33', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1184, '2018-10-02 21:59:26', '2018-10-02 21:59:26', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1185, '2018-10-02 21:59:29', '2018-10-02 21:59:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1186, '2018-10-02 22:00:21', '2018-10-02 22:00:21', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1187, '2018-10-02 22:00:24', '2018-10-02 22:00:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1188, '2018-10-02 22:01:13', '2018-10-02 22:01:13', NULL, NULL, '127.0.0.1', '访问', '/adm/menu/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1189, '2018-10-02 22:09:25', '2018-10-02 22:09:25', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1190, '2018-10-02 22:09:28', '2018-10-02 22:09:28', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1191, '2018-10-03 21:08:19', '2018-10-03 21:08:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1192, '2018-10-03 21:08:21', '2018-10-03 21:08:21', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1193, '2018-10-03 21:09:11', '2018-10-03 21:09:11', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1194, '2018-10-03 21:09:14', '2018-10-03 21:09:14', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1195, '2018-10-03 21:09:22', '2018-10-03 21:09:22', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1196, '2018-10-03 21:09:25', '2018-10-03 21:09:25', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1197, '2018-10-03 21:09:39', '2018-10-03 21:09:39', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1198, '2018-10-03 21:09:42', '2018-10-03 21:09:42', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1199, '2018-10-03 21:12:13', '2018-10-03 21:12:13', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1200, '2018-10-03 21:12:15', '2018-10-03 21:12:15', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1201, '2018-10-03 21:12:30', '2018-10-03 21:12:30', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1202, '2018-10-03 21:12:34', '2018-10-03 21:12:34', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1203, '2018-10-03 21:12:55', '2018-10-03 21:12:55', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1204, '2018-10-03 21:15:29', '2018-10-03 21:15:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1205, '2018-10-03 21:15:32', '2018-10-03 21:15:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1206, '2018-10-03 21:20:02', '2018-10-03 21:20:02', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1207, '2018-10-03 21:20:05', '2018-10-03 21:20:05', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1208, '2018-10-03 21:20:21', '2018-10-03 21:20:21', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1209, '2018-10-03 21:20:23', '2018-10-03 21:20:23', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1210, '2018-10-03 21:20:42', '2018-10-03 21:20:42', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1211, '2018-10-03 21:20:45', '2018-10-03 21:20:45', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1212, '2018-10-03 21:21:42', '2018-10-03 21:21:42', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1213, '2018-10-03 21:21:45', '2018-10-03 21:21:45', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1214, '2018-10-03 21:22:43', '2018-10-03 21:22:43', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1215, '2018-10-03 21:22:45', '2018-10-03 21:22:45', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1216, '2018-10-03 21:24:02', '2018-10-03 21:24:02', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1217, '2018-10-03 21:24:06', '2018-10-03 21:24:06', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1218, '2018-10-03 21:29:37', '2018-10-03 21:29:37', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1219, '2018-10-03 21:29:41', '2018-10-03 21:29:41', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1220, '2018-10-03 21:30:54', '2018-10-03 21:30:54', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1221, '2018-10-03 21:30:57', '2018-10-03 21:30:57', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1222, '2018-10-03 21:36:32', '2018-10-03 21:36:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1223, '2018-10-03 21:36:35', '2018-10-03 21:36:35', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1224, '2018-10-03 21:36:46', '2018-10-03 21:36:46', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1225, '2018-10-03 21:36:49', '2018-10-03 21:36:49', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1226, '2018-10-03 21:38:17', '2018-10-03 21:38:17', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1227, '2018-10-03 21:38:20', '2018-10-03 21:38:20', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1228, '2018-10-03 21:42:41', '2018-10-03 21:42:41', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1229, '2018-10-03 21:42:44', '2018-10-03 21:42:44', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1230, '2018-10-03 21:44:11', '2018-10-03 21:44:11', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1231, '2018-10-03 21:44:13', '2018-10-03 21:44:13', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1232, '2018-10-03 21:44:18', '2018-10-03 21:44:18', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1233, '2018-10-03 21:44:21', '2018-10-03 21:44:21', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1234, '2018-10-03 21:44:58', '2018-10-03 21:44:58', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1235, '2018-10-03 21:45:01', '2018-10-03 21:45:01', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1236, '2018-10-03 21:45:16', '2018-10-03 21:45:16', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1237, '2018-10-03 21:45:19', '2018-10-03 21:45:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1238, '2018-10-03 22:04:33', '2018-10-03 22:04:33', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1239, '2018-10-03 22:04:36', '2018-10-03 22:04:36', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1240, '2018-10-03 22:04:50', '2018-10-03 22:04:50', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1241, '2018-10-03 22:04:53', '2018-10-03 22:04:53', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1242, '2018-10-03 22:04:58', '2018-10-03 22:04:58', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1243, '2018-10-03 22:05:01', '2018-10-03 22:05:01', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1244, '2018-10-03 22:05:08', '2018-10-03 22:05:08', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1245, '2018-10-03 22:05:11', '2018-10-03 22:05:11', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1246, '2018-10-03 22:05:44', '2018-10-03 22:05:44', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1247, '2018-10-03 22:05:47', '2018-10-03 22:05:47', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1248, '2018-10-03 22:05:55', '2018-10-03 22:05:55', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1249, '2018-10-03 22:05:57', '2018-10-03 22:05:57', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1250, '2018-10-03 22:06:38', '2018-10-03 22:06:38', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1251, '2018-10-03 22:06:41', '2018-10-03 22:06:41', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1252, '2018-10-03 22:07:29', '2018-10-03 22:07:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1253, '2018-10-03 22:07:32', '2018-10-03 22:07:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1254, '2018-10-03 22:08:27', '2018-10-03 22:08:27', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1255, '2018-10-03 22:08:30', '2018-10-03 22:08:30', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1256, '2018-10-03 22:09:37', '2018-10-03 22:09:37', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1257, '2018-10-03 22:09:40', '2018-10-03 22:09:40', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1258, '2018-10-03 22:22:29', '2018-10-03 22:22:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1259, '2018-10-03 22:22:32', '2018-10-03 22:22:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1260, '2018-10-03 22:23:22', '2018-10-03 22:23:22', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1261, '2018-10-03 22:23:25', '2018-10-03 22:23:25', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1262, '2018-10-03 22:24:26', '2018-10-03 22:24:26', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1263, '2018-10-03 22:24:29', '2018-10-03 22:24:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1264, '2018-10-03 22:24:46', '2018-10-03 22:24:46', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1265, '2018-10-03 22:25:13', '2018-10-03 22:25:13', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1266, '2018-10-03 22:25:29', '2018-10-03 22:25:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1267, '2018-10-03 22:25:33', '2018-10-03 22:25:33', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1268, '2018-10-03 22:25:36', '2018-10-03 22:25:36', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1269, '2018-10-03 22:26:19', '2018-10-03 22:26:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1270, '2018-10-03 22:26:27', '2018-10-03 22:26:27', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1271, '2018-10-03 22:26:27', '2018-10-03 22:26:27', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1272, '2018-10-03 22:26:30', '2018-10-03 22:26:30', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1273, '2018-10-03 22:28:44', '2018-10-03 22:28:44', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1274, '2018-10-03 22:28:47', '2018-10-03 22:28:47', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1275, '2018-10-03 22:29:12', '2018-10-03 22:29:12', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1276, '2018-10-03 22:29:14', '2018-10-03 22:29:14', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1277, '2018-10-03 22:30:14', '2018-10-03 22:30:14', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1278, '2018-10-03 22:30:17', '2018-10-03 22:30:17', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1279, '2018-10-03 22:30:51', '2018-10-03 22:30:51', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1280, '2018-10-03 22:30:54', '2018-10-03 22:30:54', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1281, '2018-10-03 22:30:54', '2018-10-03 22:30:54', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1282, '2018-10-03 22:30:56', '2018-10-03 22:30:56', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1283, '2018-10-03 22:31:39', '2018-10-03 22:31:39', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1284, '2018-10-03 22:31:42', '2018-10-03 22:31:42', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1285, '2018-10-03 22:32:30', '2018-10-03 22:32:30', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1286, '2018-10-03 22:32:33', '2018-10-03 22:32:33', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1287, '2018-10-03 22:35:16', '2018-10-03 22:35:16', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1288, '2018-10-03 22:35:19', '2018-10-03 22:35:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1289, '2018-10-03 22:35:44', '2018-10-03 22:35:44', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1290, '2018-10-03 22:35:47', '2018-10-03 22:35:47', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1291, '2018-10-03 22:36:11', '2018-10-03 22:36:11', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1292, '2018-10-03 22:36:14', '2018-10-03 22:36:14', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1293, '2018-10-03 22:45:01', '2018-10-03 22:45:01', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1294, '2018-10-03 22:45:04', '2018-10-03 22:45:04', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1295, '2018-10-03 22:46:17', '2018-10-03 22:46:17', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1296, '2018-10-03 22:46:19', '2018-10-03 22:46:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1297, '2018-10-03 22:46:29', '2018-10-03 22:46:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1298, '2018-10-03 22:46:32', '2018-10-03 22:46:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1299, '2018-10-03 22:47:20', '2018-10-03 22:47:20', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1300, '2018-10-03 22:47:23', '2018-10-03 22:47:23', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1301, '2018-10-03 22:47:59', '2018-10-03 22:47:59', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1302, '2018-10-03 22:48:02', '2018-10-03 22:48:02', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1303, '2018-10-03 22:48:26', '2018-10-03 22:48:26', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1304, '2018-10-03 22:48:29', '2018-10-03 22:48:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1305, '2018-10-03 22:49:00', '2018-10-03 22:49:00', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1306, '2018-10-03 22:49:03', '2018-10-03 22:49:03', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1307, '2018-10-03 22:49:24', '2018-10-03 22:49:24', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1308, '2018-10-03 22:49:27', '2018-10-03 22:49:27', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1309, '2018-10-03 22:50:29', '2018-10-03 22:50:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1310, '2018-10-03 22:50:32', '2018-10-03 22:50:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1311, '2018-10-03 22:51:26', '2018-10-03 22:51:26', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1312, '2018-10-03 22:51:29', '2018-10-03 22:51:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1313, '2018-10-03 22:52:01', '2018-10-03 22:52:01', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1314, '2018-10-03 22:52:03', '2018-10-03 22:52:03', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1315, '2018-10-03 22:52:29', '2018-10-03 22:52:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1316, '2018-10-03 22:52:32', '2018-10-03 22:52:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1');
+INSERT INTO `Sys_OperationLog` (`Id`, `CreateDateTime`, `ModifyDateTime`, `Creator`, `Modifier`, `ClientIP`, `OperationDescription`, `OperationUrl`, `UserName`, `ClientInfo`) VALUES
+(1317, '2018-10-03 22:52:43', '2018-10-03 22:52:43', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1318, '2018-10-03 22:52:46', '2018-10-03 22:52:46', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1319, '2018-10-03 22:53:23', '2018-10-03 22:53:23', NULL, NULL, '127.0.0.1', '访问', '/adm/log/login/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1320, '2018-10-03 22:54:43', '2018-10-03 22:54:43', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1321, '2018-10-03 22:54:46', '2018-10-03 22:54:46', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1322, '2018-10-03 22:56:04', '2018-10-03 22:56:04', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1323, '2018-10-03 22:56:07', '2018-10-03 22:56:07', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1324, '2018-10-03 22:56:35', '2018-10-03 22:56:35', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1325, '2018-10-03 22:56:38', '2018-10-03 22:56:38', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1326, '2018-10-03 23:00:26', '2018-10-03 23:00:26', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1327, '2018-10-03 23:00:29', '2018-10-03 23:00:29', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1328, '2018-10-03 23:00:56', '2018-10-03 23:00:56', NULL, NULL, '127.0.0.1', '访问', '/adm/user/index/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1329, '2018-10-03 23:02:03', '2018-10-03 23:02:03', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'),
+(1330, '2018-10-04 09:19:51', '2018-10-04 09:19:51', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1331, '2018-10-04 09:19:51', '2018-10-04 09:19:51', NULL, NULL, '127.0.0.1', '访问', '/adm/user/login/?next=/adm/control/', '', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1332, '2018-10-04 09:20:19', '2018-10-04 09:20:19', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1333, '2018-10-04 09:20:23', '2018-10-04 09:20:23', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1334, '2018-10-04 09:20:37', '2018-10-04 09:20:37', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1335, '2018-10-04 09:34:41', '2018-10-04 09:34:41', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/add/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1336, '2018-10-04 09:36:51', '2018-10-04 09:36:51', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/add/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1337, '2018-10-04 09:37:39', '2018-10-04 09:37:39', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/add/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1338, '2018-10-04 09:43:51', '2018-10-04 09:43:51', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1339, '2018-10-04 09:43:57', '2018-10-04 09:43:57', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/edit/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1340, '2018-10-04 09:44:12', '2018-10-04 09:44:12', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1341, '2018-10-04 09:44:32', '2018-10-04 09:44:32', NULL, NULL, '127.0.0.1', '访问', '/adm/control/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1342, '2018-10-04 09:44:35', '2018-10-04 09:44:35', NULL, NULL, '127.0.0.1', '访问', '/adm/control/welcome/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1343, '2018-10-04 09:45:41', '2018-10-04 09:45:41', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1344, '2018-10-04 09:45:47', '2018-10-04 09:45:47', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/index/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1345, '2018-10-04 09:45:54', '2018-10-04 09:45:54', NULL, NULL, '127.0.0.1', '访问', '/adm/tablelist/edit/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1346, '2018-10-04 09:46:04', '2018-10-04 09:46:04', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1347, '2018-10-04 09:46:16', '2018-10-04 09:46:16', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'),
+(1348, '2018-10-04 09:50:44', '2018-10-04 09:50:44', NULL, NULL, '127.0.0.1', '访问', '/adm/viewlist/index/1/', 'sa', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36');
 
 -- --------------------------------------------------------
 
@@ -1238,15 +1440,17 @@ CREATE TABLE `Sys_TableList` (
   `AllowExport` int(11) NOT NULL,
   `AllowImport` int(11) NOT NULL,
   `AllowView` int(11) NOT NULL,
-  `AllowAdd` int(11) NOT NULL
+  `AllowAdd` int(11) NOT NULL,
+  `AllowDetail` int(11) NOT NULL,
+  `TopExtendFunction` longtext
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `Sys_TableList`
 --
 
-INSERT INTO `Sys_TableList` (`Id`, `CreateDateTime`, `ModifyDateTime`, `Creator`, `Modifier`, `DefaultFilter`, `DefaultSort`, `DeleteTableName`, `Description`, `ExtendFunction`, `ForbiddenAddFilter`, `ForbiddenDeleteFilter`, `ForbiddenUpdateFilter`, `ImportType`, `IsView`, `Name`, `AllowDelete`, `AllowEdit`, `AllowExport`, `AllowImport`, `AllowView`, `AllowAdd`) VALUES
-(1, '2018-06-27 14:08:39', '2018-06-27 14:08:39', NULL, NULL, '', 'Id', 'Test_Leader', '领导', '<button type=\"button\">测试</button>', '', '', '', 1, 1, 'Test_Leader', 1, 1, 1, 1, 1, 1);
+INSERT INTO `Sys_TableList` (`Id`, `CreateDateTime`, `ModifyDateTime`, `Creator`, `Modifier`, `DefaultFilter`, `DefaultSort`, `DeleteTableName`, `Description`, `ExtendFunction`, `ForbiddenAddFilter`, `ForbiddenDeleteFilter`, `ForbiddenUpdateFilter`, `ImportType`, `IsView`, `Name`, `AllowDelete`, `AllowEdit`, `AllowExport`, `AllowImport`, `AllowView`, `AllowAdd`, `AllowDetail`, `TopExtendFunction`) VALUES
+(1, '2018-06-27 14:08:39', '2018-06-27 14:08:39', NULL, NULL, '', 'Id', 'Test_Leader', '领导', '<button type=\"button\">测试</button>', '', '', '', 1, 1, 'Test_Leader', 1, 1, 1, 1, 1, 1, 0, '<button type=\"button\">测试顶部</button>');
 
 -- --------------------------------------------------------
 
@@ -1569,7 +1773,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `Sys_Department`
 --
@@ -1579,7 +1783,7 @@ ALTER TABLE `Sys_Department`
 -- AUTO_INCREMENT for table `Sys_LoginLog`
 --
 ALTER TABLE `Sys_LoginLog`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `Sys_Menu`
 --
@@ -1594,7 +1798,7 @@ ALTER TABLE `Sys_Module`
 -- AUTO_INCREMENT for table `Sys_OperationLog`
 --
 ALTER TABLE `Sys_OperationLog`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1162;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1349;
 --
 -- AUTO_INCREMENT for table `Sys_Role`
 --
