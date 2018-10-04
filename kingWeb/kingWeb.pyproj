@@ -120,15 +120,11 @@
     <Folder Include="kingWeb\DynamicRouter\" />
     <Folder Include="kingWeb\crontab\" />
     <Folder Include="kingWeb\log\" />
+    <Folder Include="kingWeb\static\css\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />
     <Folder Include="kingWeb\static\" />
-    <Folder Include="kingWeb\static\css\" />
-    <Folder Include="kingWeb\static\css\login\" />
-    <Folder Include="kingWeb\static\css\login\css\" />
-    <Folder Include="kingWeb\static\css\login\images\" />
-    <Folder Include="kingWeb\static\css\login\ui\" />
     <Folder Include="kingWeb\static\fonts\" />
     <Folder Include="kingWeb\static\images\" />
     <Folder Include="kingWeb\static\js\" />
@@ -267,16 +263,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="kingWeb.sql" />
-    <Content Include="kingWeb\static\css\login\css\base.css" />
-    <Content Include="kingWeb\static\css\login\css\login.css" />
-    <Content Include="kingWeb\static\css\login\images\admin_logo.png" />
-    <Content Include="kingWeb\static\css\login\images\login_bg.jpg" />
-    <Content Include="kingWeb\static\css\login\images\login_button.jpg" />
-    <Content Include="kingWeb\static\css\login\images\login_logo.jpg" />
-    <Content Include="kingWeb\static\css\login\images\login_name_bg.jpg" />
-    <Content Include="kingWeb\static\css\login\images\复件 login_logo.jpg" />
-    <Content Include="kingWeb\static\css\login\ui\config.js" />
-    <Content Include="kingWeb\static\css\login\ui\do.js" />
+    <Content Include="kingWeb\static\css\login.css" />
+    <Content Include="kingWeb\static\css\site.css" />
     <Content Include="kingWeb\static\images\head.jpg" />
     <Content Include="kingWeb\static\js\contabs.js" />
     <Content Include="kingWeb\static\js\lkWeb.js" />
@@ -1172,7 +1160,6 @@
     <Content Include="kingWeb\templates\adm\viewlist\index.html" />
     <Content Include="record.txt" />
     <Content Include="requirements.txt" />
-    <Content Include="kingWeb\static\css\site.css" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="kingWeb\static\fonts\glyphicons-halflings-regular.woff" />
