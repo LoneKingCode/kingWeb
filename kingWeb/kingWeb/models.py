@@ -108,7 +108,7 @@ class SysDepartment(BaseModel):
 
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)
-    clientinfo = models.CharField(db_column='ClientInfo', max_length=400, blank=True, null=True)
+    clientinfo = models.TextField(db_column='ClientInfo', blank=True, null=True)
     username = models.CharField(db_column='UserName', max_length=20)
     description = models.CharField(db_column='Description', max_length=40, blank=True, null=True)
     def __str__(self):
