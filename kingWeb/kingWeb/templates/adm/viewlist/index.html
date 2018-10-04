@@ -202,6 +202,11 @@
             <button type="button" class="btn btn-primary" onclick="DownloadTemplate()">下载导入模板</button>
         {% endif %}
 
+        {% if table_top_extendfunction %}
+            {% autoescape off %}
+             {{table_top_extendfunction}}
+            {% endautoescape %}
+        {% endif %}
 </div>
 <div class="hidden">
     <input type="file" name="excelfile" id="excelFile" />

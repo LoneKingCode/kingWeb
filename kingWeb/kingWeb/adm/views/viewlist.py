@@ -24,13 +24,16 @@ def index(request,kwargs):
             return render(request,'/adm/home/error.html')
         table_desc = table.description
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(listvisible=1)).order_by('listorder'))
+
+        table_top_extendfunction = table.topextendfunction.replace('{UserId}',str(request.user.id))
     return render(request,
         'adm/viewlist/index.html',
         {
             'title':table_desc + '管理',
             'tablecolumns':tablecolumns,
             'tableid':tableid,
-            'table':table
+            'table':table,
+            'table_top_extendfunction':table_top_extendfunction
         })
 
 @check_permission
@@ -78,7 +81,7 @@ def detail(request,kwargs):
         return render(request, 'adm/viewlist/index')
     tablecolumns = None
     table = None
-    out_col_data = {} 
+    out_col_data = {}
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowview != 1:

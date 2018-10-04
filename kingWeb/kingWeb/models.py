@@ -185,6 +185,7 @@ class SysTableList(BaseModel):
     deletetablename = models.TextField(db_column='DeleteTableName', blank=True, null=True)
     description = models.TextField(db_column='Description', blank=True, null=True)
     extendfunction = models.TextField(db_column='ExtendFunction', blank=True, null=True)
+    topextendfunction = models.TextField(db_column='TopExtendFunction', blank=True, null=True)
     forbiddenaddfilter = models.TextField(db_column='ForbiddenAddFilter', blank=True, null=True)
     forbiddendeletefilter = models.TextField(db_column='ForbiddenDeleteFilter', blank=True, null=True)
     forbiddenupdatefilter = models.TextField(db_column='ForbiddenUpdateFilter', blank=True, null=True)

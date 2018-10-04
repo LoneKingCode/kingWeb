@@ -62,6 +62,7 @@ def edit(request,kwargs):
             'forbiddenaddfilter':object.forbiddenaddfilter,
             'defaultfilter':object.defaultfilter,
             'extendfunction':object.extendfunction,
+            'topextendfunction':object.topextendfunction,
             'import_type_list':import_type_list,
         })
 
@@ -87,11 +88,11 @@ def post_add(request,kwargs):
     forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
-
+    topextendfunction = request.POST.get('TopExtendFunction','')
     object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,allowdetail=allowdetail)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,allowdetail=allowdetail)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -119,11 +120,11 @@ def post_edit(request,kwargs):
     forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
-
+    topextendfunction = request.POST.get('TopExtendFunction','')
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,allowdetail=allowdetail)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,allowdetail=allowdetail)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
