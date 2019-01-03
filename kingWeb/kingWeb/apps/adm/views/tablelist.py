@@ -7,7 +7,7 @@ import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.util.SqlHelper import SqlHelper
-from kingWeb.adm.permission import check_permission
+from kingWeb.apps.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)

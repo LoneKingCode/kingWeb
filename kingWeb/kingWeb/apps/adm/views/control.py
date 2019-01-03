@@ -8,7 +8,7 @@ from django.template import RequestContext
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from kingWeb.DynamicRouter import urls
-from kingWeb.adm.permission import check_permission
+from kingWeb.apps.adm.permission import check_permission
 from kingWeb.models import *
 from django.db.models import Q
 

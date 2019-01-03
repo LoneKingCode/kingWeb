@@ -7,11 +7,11 @@ from django.db.models.aggregates import Count, Sum
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.adm.permission import check_permission
+from kingWeb.apps.adm.permission import check_permission
 from datetime import datetime,timedelta
 import calendar
 from dateutil.relativedelta import relativedelta
-from kingWeb.adm.permission import check_permission
+from kingWeb.apps.adm.permission import check_permission
 from django.utils import timezone
 import pytz
 def index(request,kwargs):

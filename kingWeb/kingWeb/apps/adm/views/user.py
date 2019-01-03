@@ -15,7 +15,7 @@ from django.core import serializers
 
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
-from kingWeb.adm.permission import check_permission
+from kingWeb.apps.adm.permission import check_permission
 from kingWeb.util.WebHelper import *
 
 def logout(request,kwargs):

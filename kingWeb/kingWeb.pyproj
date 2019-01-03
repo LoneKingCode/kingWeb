@@ -36,19 +36,22 @@
     <Compile Include="kingWeb\admin.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\adm\forms.py" />
-    <Compile Include="kingWeb\adm\permission.py">
+    <Compile Include="kingWeb\apps\adm\forms.py" />
+    <Compile Include="kingWeb\apps\adm\permission.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\adm\views\systemoption.py" />
-    <Compile Include="kingWeb\adm\views\log.py" />
-    <Compile Include="kingWeb\adm\views\tablecolumn.py" />
-    <Compile Include="kingWeb\adm\views\tablelist.py" />
-    <Compile Include="kingWeb\adm\views\viewlist.py" />
-    <Compile Include="kingWeb\adm\views\module.py" />
-    <Compile Include="kingWeb\adm\views\role.py" />
-    <Compile Include="kingWeb\adm\views\menu.py" />
-    <Compile Include="kingWeb\adm\views\department.py" />
+    <Compile Include="kingWeb\apps\adm\views\systemoption.py" />
+    <Compile Include="kingWeb\apps\adm\views\log.py" />
+    <Compile Include="kingWeb\apps\adm\views\tablecolumn.py" />
+    <Compile Include="kingWeb\apps\adm\views\tablelist.py" />
+    <Compile Include="kingWeb\apps\adm\views\viewlist.py" />
+    <Compile Include="kingWeb\apps\adm\views\module.py" />
+    <Compile Include="kingWeb\apps\adm\views\role.py" />
+    <Compile Include="kingWeb\apps\adm\views\menu.py" />
+    <Compile Include="kingWeb\apps\adm\views\department.py" />
+    <Compile Include="kingWeb\apps\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="kingWeb\crontab\cron.py" />
     <Compile Include="kingWeb\util\LogHelper.py">
       <SubType>Code</SubType>
@@ -67,18 +70,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\models.py" />
-    <Compile Include="kingWeb\adm\models\__init__.py">
+    <Compile Include="kingWeb\apps\adm\tests.py" />
+    <Compile Include="kingWeb\apps\adm\urls.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="kingWeb\adm\tests.py" />
-    <Compile Include="kingWeb\adm\urls.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="kingWeb\adm\views\home.py" />
-    <Compile Include="kingWeb\adm\views\user.py" />
-    <Compile Include="kingWeb\adm\views\control.py" />
-    <Compile Include="kingWeb\adm\views\__init__.py" />
-    <Compile Include="kingWeb\adm\__init__.py" />
+    <Compile Include="kingWeb\apps\adm\views\home.py" />
+    <Compile Include="kingWeb\apps\adm\views\user.py" />
+    <Compile Include="kingWeb\apps\adm\views\control.py" />
+    <Compile Include="kingWeb\apps\adm\views\__init__.py" />
+    <Compile Include="kingWeb\apps\adm\__init__.py" />
     <Compile Include="kingWeb\util\WebHelper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -111,15 +111,22 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\" />
     <Folder Include="kingWeb\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\migrations\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\models\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\views\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\util\" />
     <Folder Include="kingWeb\adm\" />
     <Folder Include="kingWeb\adm\migrations\" />
-    <Folder Include="kingWeb\adm\models\" />
-    <Folder Include="kingWeb\adm\views\" />
-    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\util\" />
+    <Folder Include="kingWeb\apps\adm\" />
+    <Folder Include="kingWeb\apps\adm\migrations\" />
+    <Folder Include="kingWeb\apps\adm\models\" />
+    <Folder Include="kingWeb\apps\adm\views\" />
     <Folder Include="kingWeb\migrations\" />
     <Folder Include="kingWeb\DynamicRouter\" />
     <Folder Include="kingWeb\crontab\" />
     <Folder Include="kingWeb\log\" />
+    <Folder Include="kingWeb\apps\" />
     <Folder Include="kingWeb\static\css\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />

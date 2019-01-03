@@ -402,7 +402,7 @@ function IsEmpty(value) {
 }
 
 function IsNotEmpty(value) {
-    return value != "" && value != null && value != undefined;
+    return value != "" && value != null && value != undefined && value != 'undefined' && value != 'null';
 }
 function IsFunction(func) {
     return typeof func == "function";

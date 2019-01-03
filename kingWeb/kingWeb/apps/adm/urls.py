@@ -1,11 +1,7 @@
 from datetime import datetime
 from django.conf.urls import url
 import django.contrib.auth.views
-import kingWeb.adm.forms as king_form
 
-from kingWeb.adm.views import home
-from kingWeb.adm.views import control
-from kingWeb.adm.views import user
 
 urlpatterns = [
     #url(r'^$',home.index, name='home'),

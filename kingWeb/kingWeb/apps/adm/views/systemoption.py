@@ -6,23 +6,22 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-from kingWeb.adm.permission import check_permission
-
+from kingWeb.apps.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
-        'adm/module/index.html',
+        'adm/system_option/index.html',
         {
-            'title':'模块管理',
+            'title':'参数管理',
         })
 @check_permission
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,
-        'adm/module/add.html',
+        'adm/system_option/add.html',
         {
-            'title':'添加模块',
+            'title':'添加参数',
         })
 
 @check_permission
@@ -30,24 +29,25 @@ def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     if id == '':
-        return render(request, 'adm/module/index')
-    object = SysModule.objects.get(id=id)
+        return render(request, 'adm/system_option/index')
+    object = SysSystemOption.objects.get(id=id)
     return render(request,
-        'adm/module/edit.html',
+        'adm/system_option/edit.html',
         {
-            'title':'编辑模块',
+            'title':'编辑参数',
             'id':object.id,
-            'name':object.name,
-            'description':object.description,
+            'code':object.code,
+            'value':object.value,
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.create(name=name,description=description)
+    value = request.POST.get('Value','')
+    code = request.POST.get('Code','')
+
+    object = SysSystemOption.objects.create(value=value,code=code)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -56,10 +56,10 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
+    value = request.POST.get('Value','')
+    code = request.POST.get('Code','')
     id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.filter(id=id).update(name=name,description=description)
+    object = SysSystemOption.objects.filter(id=id).update(value=value,code=code)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -73,7 +73,8 @@ def delete(request,kwargs):
     if ids == '':
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
-    object = SysModule.objects.filter(id__in=ids).delete()
+
+    object = SysSystemOption.objects.filter(id__in=ids).delete()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -99,11 +100,11 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysModule.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
-        values('name','description','id')
+        alldata = SysSystemOption.objects.filter(description__icontains=searchkey).order_by(_orderby).\
+        values('code','value','id')
     else:
-        alldata = SysModule.objects.order_by(_orderby).\
-        values('name','description','id')
+        alldata = SysSystemOption.objects.order_by(_orderby).\
+        values('code','value','id')
     pagedata = list(alldata[int(start):int(length) + int(start)])
 
     rownum = int(start)

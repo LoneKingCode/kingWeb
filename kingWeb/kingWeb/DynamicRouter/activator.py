@@ -21,7 +21,7 @@ def process(request,**kwargs):
             operationurl = url)
     SysHelper.userid = user.id
     try:
-        viewObj = __import__("%s.%s.views" % ('kingWeb',app),fromlist=(controller,))
+        viewObj = __import__("kingWeb.apps.%s.views" % (app,),fromlist=(controller,))
         ctrlObj = getattr(viewObj, controller)
         actionObj = getattr(ctrlObj, action)
         #执行view.py中的函数，并获取其返回值

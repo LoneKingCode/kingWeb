@@ -3,7 +3,7 @@ import django.contrib.auth.views
 from kingWeb.DynamicRouter.activator import process
 from django.contrib import admin
 urlpatterns = [
-    # url(r'^adm/', include('kingWeb.adm.urls'))
+    # url(r'^adm/', include('kingWeb.apps.adm.urls'))
     url(r'^admin/', include(admin.site.urls)),
        url('^(?P<app>(\w+))/(?P<controller>(\w+))/(?P<action>(\w+))/(?P<id>(\d+))/$',process),
               url('^(?P<app>(\w+))/(?P<controller>(\w+))/(?P<action>(\w+))/(?P<id>(\d+))/(?P<value>(\d+))/$',process),
