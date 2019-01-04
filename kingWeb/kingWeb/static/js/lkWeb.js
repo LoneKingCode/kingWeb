@@ -60,9 +60,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
         parent.layer.alert("请选择要删除的数据");
         return;
     }
-    parent.layer.confirm("确认删除" + ids.length + "条数据？", {
-        btn: ["确认", "取消"]
-    }, function () {
+    parent.lkWeb.Confirm("确认删除" + ids.length + "条数据？", function () {
         var postUrl = '/' + area + '/' + ctrl + '/delete/';
         var _value = "";
         if (IsNotEmpty(value))
@@ -105,9 +103,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
 
 //删除单个
 lkWeb.Delete = function (area, id, ctrl, table, value) {
-    parent.layer.confirm("确认删除？", {
-        btn: ["确认", "取消"]
-    },
+    parent.lkWeb.Confirm("确认删除？",
         function () {
             var postUrl = '/' + area + '/' + ctrl + '/delete';
             var _value = "";
@@ -254,7 +250,8 @@ lkWeb.CloseLoad = function () {
 }
 
 lkWeb.Confirm = function (msg, successCallBack, cancelCallBack) {
-    parent.layer.confirm(msg, {
+    var _layer = IsNotEmpty(parent.layer) ? parent.layer : layer
+    _layer.confirm(msg, {
         btn: ["确认", "取消"]
     },
         function () {
