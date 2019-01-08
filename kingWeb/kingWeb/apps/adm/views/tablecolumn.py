@@ -61,6 +61,7 @@ def edit(request,kwargs):
             'listvisible':object.listvisible,
             'outsql':object.outsql,
             'enumrange':object.enumrange,
+            'selectrange':object.selectrange,
             'primarkey':object.primarkey,
             'tablelist':tablelist,
         })
@@ -87,12 +88,13 @@ def post_add(request,kwargs):
     listvisible = request.POST.get('ListVisible','')
     outsql = request.POST.get('OutSql','')
     enumrange = request.POST.get('EnumRange','')
+    selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
 
     object = SysTableColumn.objects.create(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -120,12 +122,13 @@ def post_edit(request,kwargs):
     listvisible = request.POST.get('ListVisible','')
     outsql = request.POST.get('OutSql','')
     enumrange = request.POST.get('EnumRange','')
+    selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
 
     object = SysTableColumn.objects.filter(id=id).update(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -195,7 +198,7 @@ def post_copy(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = request.POST.get('id','')
     object = SysTableColumn.objects.get(id=id)
-    object.pk=None
+    object.pk = None
     object.save()
     result.msg = '操作成功'
     result.flag = True

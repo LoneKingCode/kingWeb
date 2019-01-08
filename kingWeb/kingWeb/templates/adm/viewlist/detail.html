@@ -21,11 +21,9 @@
                 <div class="form-group">
                         <label class="col-md-2 control-label">{{col.description}}</label>
                         <div class="col-md-9">
-                                    {% for key,value in out_col_data.items %}
+                                    {% for key,value in col_data.items %}
                                         {% if key == col.name%}
-                                            {% for item in value%}
-                                                  <input type="text" class="form-control" name="{{col.name}}"   value="{{item.text}}" readonly/>
-                                            {% endfor %}
+                                                  <input type="text" class="form-control" name="{{col.name}}"   value="{{value}}" readonly/>
                                         {% endif %}
                                     {% endfor %}
                         </div>

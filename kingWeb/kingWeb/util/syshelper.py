@@ -31,31 +31,31 @@ class SysHelper(object):
                 format(primarkey,textkey,tablename,condition))
             return outdatalist
 
-        #获取外键值对应的值
+        #获取外键id值对应的值
         @staticmethod
-        def get_out_value(tableid,colname,colvalue):
-            if colvalue == '0' or colvalue == 0:
+        def get_out_value(tableid,outcolname,outvalueid):
+            if outvalueid == '0' or outvalueid == 0:
                 return '无'
             sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-            outdata = SqlHelper.single(sql.format(tableid,colname))
+            outdata = SqlHelper.single(sql.format(tableid,outcolname))
             outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
             condition = outdata_arr[2]
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,colvalue))
+            value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,outvalueid))
             if value == '':
                 return '无'
             return value
 
-        #获取值对应的外键id
+        #获取外键值对应的外键id
         @staticmethod
-        def get_out_value_id(tableid,colname,colvalue):
+        def get_out_value_id(tableid,outcolname,colvalue):
             if colvalue == '' or colvalue == 0:
                 return '无'
             sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
-            outdata = SqlHelper.single(sql.format(tableid,colname))
+            outdata = SqlHelper.single(sql.format(tableid,outcolname))
             outdata_arr = outdata.split('|') #Example: Id,Name|Sys_Department|ParentId=0
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
@@ -66,7 +66,21 @@ class SysHelper(object):
             if value == '':
                 return '无'
             return value
-
+        #获取checkbox/radio选中列表中 这个值value对应的text
+        #valueids 为逗号隔开的多个值
+        @staticmethod
+        def get_select_value(tableid,colname,valueids):
+            if valueids == '' or valueids == 0:
+                return '无'
+            column = SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(name=colname)).first()
+            option_data = column.selectrange.split('|') #value,text|value,text
+            values = valueids.split(',')
+            result = ''
+            for option in option_data:
+                val = option.split(',')[0]
+                if val in values:
+                    result+=option.split(',')[1] + ','
+            return result.strip(',')
         @staticmethod
         def import_excel(tableid, file):
             result = ResultModel()

@@ -41,9 +41,11 @@
     }
 
     function Clear() {
-        lkWeb.AjaxPost("/adm/log/clear_operation/", {}, function () {
-            parent.layer.alert("清除成功");
-            lkTable.draw(false);
+        lkWeb.Confirm('确认清除？', function () {
+            lkWeb.AjaxPost("/adm/log/clear_operation/", {}, function () {
+                parent.layer.alert("清除成功");
+                lkTable.draw(false);
+            })
         })
     }
 </script>

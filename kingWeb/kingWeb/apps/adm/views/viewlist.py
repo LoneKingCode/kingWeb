@@ -27,6 +27,17 @@ def index(request,kwargs):
         table_top_extendfunction = ''
         if table.topextendfunction and table.topextendfunction != 'None':
             table_top_extendfunction = table.topextendfunction.replace('{UserId}',str(request.user.id))
+        #example: width,height|width,height
+        view_edit_width_height = '90%,90%|90%,90%'.split('|') if not table.vieweditwidthheight or len(table.vieweditwidthheight.split('|')) < 2 \
+        else table.vieweditwidthheight.split('|')
+        view_width = view_edit_width_height[0].split(',')[0]
+        view_height = view_edit_width_height[0].split(',')[1]
+        addedit_width = view_edit_width_height[1].split(',')[0]
+        addedit_height = view_edit_width_height[1].split(',')[1]
+        view_width = view_width if 'px' in view_width or '%' in view_height else '90%'
+        view_height = view_height if 'px' in view_height or '%' in view_height else '90%'
+        addedit_width = addedit_width if 'px' in addedit_width or '%' in addedit_width else '90%'
+        addedit_height = addedit_height if 'px' in addedit_height or '%' in addedit_height else '90%'
     return render(request,
         'adm/viewlist/index.html',
         {
@@ -34,7 +45,11 @@ def index(request,kwargs):
             'tablecolumns':tablecolumns,
             'tableid':tableid,
             'table':table,
-            'table_top_extendfunction':table_top_extendfunction
+            'table_top_extendfunction':table_top_extendfunction,
+            'view_width':view_width,
+            'view_height':view_height,
+            'addedit_width':addedit_width,
+            'addedit_height':addedit_height,
         })
 
 @check_permission
@@ -43,8 +58,7 @@ def add(request,kwargs):
     tableid = kwargs.get('id','')
     columns = None
     table = None
-    enum_col_data = {}
-    out_col_data = {}
+    col_data = {}
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowadd != 1:
@@ -53,15 +67,22 @@ def add(request,kwargs):
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)).order_by('listorder'))
     for col in tablecolumns:
         if col.datatype == 'out':
-            out_col_data[col.name] = SysHelper.get_out_list(col.outsql)
+            col_data[col.name] = SysHelper.get_out_list(col.outsql)
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
             enumlist = []
             for e in enumdata:
-               enumlist.append(e)
-            enum_col_data[col.name] = enumlist
+               enumlist.append({'text':e,'value':e})
+            col_data[col.name] = enumlist
+        elif col.datatype == 'radio' or col.datatype == 'checkbox':
+            option_data = col.selectrange.split('|')
+            options = []
+            for o in option_data:
+                val = o.split(',') #value,text
+                options.append({'value':val[0],'text':val[1]})
+            col_data[col.name] = options
 
-
+    colperrow = 1 if table.columnperrow < 1 else table.columnperrow
     return render(request,
         'adm/viewlist/add.html',
         {
@@ -69,8 +90,8 @@ def add(request,kwargs):
             'tablecolumns':tablecolumns,
             'tableid':tableid,
             'table':table,
-            'enum_col_data':enum_col_data,
-            'out_col_data':out_col_data,
+            'col_data':col_data,
+            'colperrow':colperrow,
         })
 
 @check_permission
@@ -93,15 +114,8 @@ def detail(request,kwargs):
         .format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
-            outdata_arr = col.outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
-            colnames = outdata_arr[0].split(',') # value,text
-            tablename = outdata_arr[1]
-            condition = outdata_arr[2]
-            primarkey = colnames[0] #作为下拉菜单value的列
-            textkey = colnames[1] #作为下拉菜单的text的列
-            outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
-                format(primarkey,textkey,tablename,'Id=' + str(data[col.name])))
-            out_col_data[col.name] = outdatalist
+            col_data[col.name] = SysHelper.get_out_value(tableid,col.name,str(data[col.name]))
+    colperrow = 1 if table.columnperrow < 1 else table.columnperrow
 
     return render(request,
         'adm/viewlist/detail.html',
@@ -113,6 +127,7 @@ def detail(request,kwargs):
             'table':table,
             'out_col_data':out_col_data,
             'data':data,
+            'colperrow':colperrow,
         })
 @check_permission
 def edit(request,kwargs):
@@ -123,25 +138,35 @@ def edit(request,kwargs):
         return render(request, 'adm/viewlist/index')
     tablecolumns = None
     table = None
-    enum_col_data = {}
-    out_col_data = {}
+    col_data = {}
     if tableid != '':
         table = SysTableList.objects.get(id=int(tableid))
         if table.allowedit != 1:
               return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)).order_by('listorder'))
     columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
-    data = SqlHelper.query('select {0} from {1} where {2}'\
-        .format(columnnames,table.name,'Id=' + str(id)))[0]
+    data = SqlHelper.query('select {0} from {1} where {2}'.format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
-            out_col_data[col.name] = SysHelper.get_out_list(col.outsql)
+            col_data[col.name] = SysHelper.get_out_list(col.outsql)
+            for c in col_data[col.name]:
+                c['selected'] = '1' if c['value'] == data[col.name] else '0'
         elif col.datatype == 'enum':
             enumdata = col.enumrange.split(',')
             enumlist = []
             for e in enumdata:
-               enumlist.append(e)
-            enum_col_data[col.name] = enumlist
+               selected = '1' if e == data[col.name] else '0'
+               enumlist.append({'text':e,'value':e,'selected':selected})
+            col_data[col.name] = enumlist
+        elif col.datatype == 'radio' or col.datatype == 'checkbox':
+            option_data = col.selectrange.split('|')
+            options = []
+            for o in option_data:
+                val = o.split(',') #value,text
+                selected = '1' if val[0] in data[col.name].split(',') else '0'
+                options.append({'value':val[0],'text':val[1],'selected':selected})
+            col_data[col.name] = options
+    colperrow = 1 if table.columnperrow < 1 else table.columnperrow
 
     return render(request,
         'adm/viewlist/edit.html',
@@ -151,9 +176,9 @@ def edit(request,kwargs):
             'tablecolumns':tablecolumns,
             'tableid':tableid,
             'table':table,
-            'enum_col_data':enum_col_data,
-            'out_col_data':out_col_data,
+            'col_data':col_data,
             'data':data,
+            'colperrow': colperrow,
         })
 
 @csrf_exempt
@@ -172,15 +197,21 @@ def post_add(request,kwargs):
     addmodel = {}
     for col in tablecolumns:
         if col.name in formdata.keys():
-            addmodel[col.name] = formdata.get(col.name,'')
+            #这个情况下可能选多个值
+            if col.datatype == 'checkbox':
+                addmodel[col.name] = ','.join(request.POST.getlist(col.name,''))
+            else:
+                addmodel[col.name] = formdata.get(col.name,'')
     addmodel['CreateDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
     addmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
     addmodel['Creator'] = str(request.user.id)
     addmodel['Modifier'] = str(request.user.id)
     sql = 'insert into {0}({1}) values({2})'
-    sql = sql.format(table.name,\
-        ','.join(addmodel.keys()),\
-        "'" + ','.join(addmodel.values()).replace(',' , "','") + "'")
+    values = ''
+    for v in addmodel.values():
+        values+="'" + v + "',"
+    values = values.strip(',')
+    sql = sql.format(table.name,','.join(addmodel.keys()),values)
     SqlHelper.execute(sql)
     result.msg = '操作成功'
     result.flag = True
@@ -206,7 +237,10 @@ def post_edit(request,kwargs):
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
     for col in tablecolumns:
-        if col.name in formdata.keys():
+        #这个情况下可能选多个值
+        if col.datatype == 'checkbox':
+            editmodel[col.name] = ','.join(request.POST.getlist(col.name,''))
+        else:
             editmodel[col.name] = formdata.get(col.name,'')
 
     editmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -295,7 +329,7 @@ def get_page_data(request,kwargs):
     pagedata = SqlHelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
     data_count = SqlHelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
     out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
-
+    checkbox_or_radio_col_names = SysHelper.get_column_names(tableid, "ListVisible=1 and (DataType='checkbox' or DataType='radio')", "ListOrder").split(',')
     rownum = int(start)
     for dic in pagedata:
         rownum = rownum + 1
@@ -303,6 +337,8 @@ def get_page_data(request,kwargs):
         for key in dic:
             if key in out_type_column_names:
                 dic[key] = SysHelper.get_out_value(tableid,key,dic[key])
+            elif key in checkbox_or_radio_col_names:
+                dic[key] = SysHelper.get_select_value(tableid,key,dic[key])
             else:
                 if key == 'CreateDateTime' or key == 'ModifyDateTime':
                     dic[key] = str(dic[key])

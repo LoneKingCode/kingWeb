@@ -3,6 +3,7 @@ from kingWeb.models import ResultModel,SysOperationLog
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from kingWeb.util.WebHelper import WebHelper
 from kingWeb.util.SysHelper import SysHelper
+from kingWeb.util.LogHelper import LogHelper
 import json
 def process(request,**kwargs):
     '''接收所有匹配url的请求，根据请求url中的参数，通过反射动态指定view中的方法'''
@@ -28,14 +29,16 @@ def process(request,**kwargs):
         result = actionObj(request,kwargs)
         return result
     except(ImportError,AttributeError) as e:
+        LogHelper.error(str(e))
         if request.method == 'POST':
             result = ResultModel()
             result.flag = False
             result.msg = '操作失败:' + str(e)
             return JsonResponse(result.tojson())
         else:
-           return redirect('/adm/home/notfound')
+           return redirect('/adm/home/error')
     except Exception as e:
+        LogHelper.error(str(e))
         if request.method == 'POST':
             result = ResultModel()
             result.flag = False

@@ -64,6 +64,9 @@ def edit(request,kwargs):
             'extendfunction':object.extendfunction,
             'topextendfunction':object.topextendfunction,
             'import_type_list':import_type_list,
+            'vieweditwidthheight':object.vieweditwidthheight,
+            'columnperrow':object.columnperrow,
+
         })
 
 @csrf_exempt
@@ -89,10 +92,13 @@ def post_add(request,kwargs):
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
     topextendfunction = request.POST.get('TopExtendFunction','')
+    vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
+    columnperrow = request.POST.get('ColumnPerRow','')
     object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,allowdetail=allowdetail)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
+   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -121,10 +127,13 @@ def post_edit(request,kwargs):
     defaultfilter = request.POST.get('DefaultFilter','')
     extendfunction = request.POST.get('ExtendFunction','')
     topextendfunction = request.POST.get('TopExtendFunction','')
+    vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
+    columnperrow = request.POST.get('ColumnPerRow','')
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,allowdetail=allowdetail)
+   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
+   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

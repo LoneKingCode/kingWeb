@@ -61,21 +61,21 @@
         });
 
         function AddModel() {
-            lkWeb.GoAction("adm","viewlist", "add",tableid,true,'添加','90%','90%');
+            lkWeb.GoAction("adm","viewlist", "add",tableid,true,'添加','{{addedit_width}}','{{addedit_height}}');
         }
         function EditModel() {
             var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","viewlist", "edit", id+"/" + tableid,true,'编辑','90%','90%');
+                lkWeb.GoAction("adm","viewlist", "edit", id+"/" + tableid,true,'编辑','{{addedit_width}}','{{addedit_height}}');
         }
         function Detail() {
                   var id = lkWeb.GetCheckValue($(".checkChild"));
             if (id == "")
                 parent.layer.alert("请选择");
             else
-                lkWeb.GoAction("adm","viewlist", "detail", id+"/" + tableid,true,"查看详情","95%","95%");
+                lkWeb.GoAction("adm","viewlist", "detail", id+"/" + tableid,true,"查看详情","{{view_width}}","{{view_height}}");
         }
         function DelModel() {
             var ids = lkWeb.GetCheckValueList($(".checkChild"));

@@ -1,5 +1,9 @@
+安全性，过滤提交数据
+优化代码 那么多字段 都暴漏在代码里。。。。难看
+
 自动清除 temp ，设置时间在 系统参数里 定时任务 django
 自动清除访问记录
 
 
 
+manage.py makemigrations && manage.py migrate

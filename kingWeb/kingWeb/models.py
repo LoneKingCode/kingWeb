@@ -164,8 +164,8 @@ class SysRole(BaseModel):
 class SysRoleMenu(BaseModel):
     id = models.AutoField(db_column='Id', primary_key=True)
     createdatetime = models.DateTimeField(db_column='CreateDateTime', blank=True, null=True)
-    menu =  models.ForeignKey(SysMenu,on_delete=models.CASCADE)
-    role =  models.ForeignKey(SysRole,on_delete=models.CASCADE)
+    menu = models.ForeignKey(SysMenu,on_delete=models.CASCADE)
+    role = models.ForeignKey(SysRole,on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Sys_RoleMenu'
@@ -199,6 +199,8 @@ class SysTableList(BaseModel):
     allowimport = models.IntegerField(db_column='AllowImport', default=0)
     allowview = models.IntegerField(db_column='AllowView', default=0)
     allowdetail = models.IntegerField(db_column='AllowDetail', default=0)
+    vieweditwidthheight = models.TextField(db_column='ViewEditWidthHeight', blank=True, null=True)
+    columnperrow = models.IntegerField(db_column='ColumnPerRow', default=0)
     def __str__(self):
         return self.name + ' ' + self.description
     class Meta:
@@ -211,6 +213,7 @@ class SysTableColumn(BaseModel):
     editorder = models.IntegerField(db_column='EditOrder',default=0)
     editvisible = models.IntegerField(db_column='EditVisible',default=0)
     enumrange = models.TextField(db_column='EnumRange', blank=True, null=True)
+    selectrange = models.TextField(db_column='SelectRange', blank=True, null=True)
     exportvisible = models.IntegerField(db_column='ExportVisible',default=0)
     importvisible = models.IntegerField(db_column='ImportVisible',default=0)
     listorder = models.IntegerField(db_column='ListOrder',default=0)
@@ -259,6 +262,9 @@ class SysUserProfile(BaseModel):
 
 class TestLeader(BaseModel):
     name = models.CharField(db_column='Name', max_length=30)
+    test1 = models.CharField(db_column='Test1', max_length=300,default='')
+    test2 = models.CharField(db_column='Test2', max_length=300,default='')
+    test3 = models.CharField(db_column='Test3', max_length=300,default='')
     parentid = models.IntegerField(db_column='ParentId')
     type = models.CharField(db_column='Type', max_length=30)
     def __str__(self):

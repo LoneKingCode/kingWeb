@@ -1,6 +1,15 @@
 ﻿{% extends "adm/shared/layout_content.html" %}
 {%block title%}{{title}}{% endblock%}
 
+{% block styles %}
+ <style type="text/css">
+    .table > tbody > tr > td {
+        border: none;
+    }
+
+    </style>
+ {% endblock %}
+
 {% block scripts %}
     <script type="text/javascript">
         $(function () {
@@ -8,6 +17,39 @@
                 //lkWeb.GoAction("adm","viewlist", "index","{{tableid}}")
                 lkWeb.RefreshAndClose()
             }, "操作成功")
+
+            //下拉单选
+            $('.chosen-radio').chosen({
+                ltl: true,
+                width: "100%",
+            });
+
+            //下拉多选
+            $('.chosen-checkbox').attr('data-placeholder', '请选择')
+            $('.chosen-checkbox').chosen({
+                allow_single_deselect: true,
+                width: "100%",
+            });
+
+            //选择日期
+            $('.datepicker-date').datePicker({
+                hasShortcut: true,
+                format: 'YYYY-MM-DD',
+                shortcutOptions: [{
+                    name: '今天',
+                    day: '0'
+                }, {
+                    name: '昨天',
+                    day: '-1'
+                }, {
+                    name: '一周前',
+                    day: '-7'
+                }]
+            });
+            //选择日期时间
+            $('.datepicker-datetime').datePicker({
+                format: 'YYYY-MM-DD HH:mm'
+            });
         })
 
     </script>
@@ -17,15 +59,17 @@
 {% block content %}
 <form class="form-horizontal" action="/adm/viewlist/post_add/{{tableid}}/" method="post" id="lkForm">
     {%csrf_token%}
-    {% load set_val %}
+      <table class="table">
+        <tbody>
+        <tr>
        {% for col in tablecolumns%}
-            {% if col.datatype == 'out' %}
+            <td style="width:{%widthratio 100 colperrow 1%}%;">
+            {% if col.datatype == 'out' or col.datatype == 'enum' %}
                 <div class="form-group">
-
                         <label class="col-md-2 control-label">{{col.description}}</label>
                         <div class="col-md-9">
-                            <select name="{{col.name}}" class="form-control">
-                                    {% for key,value in out_col_data.items %}
+                            <select name="{{col.name}}" class="form-control chosen-radio">
+                                    {% for key,value in col_data.items %}
                                         {% if key == col.name%}
                                             {% for item in value%}
                                                   <option value="{{item.value}}">{{item.text}}</option>
@@ -36,22 +80,33 @@
                         </div>
 
                 </div>
-           {% elif col.datatype == 'enum' %}
+           {% elif col.datatype == 'radio' or col.datatype == 'checkbox' %}
                    <div class="form-group">
-
                             <label class="col-md-2 control-label">{{col.description}}</label>
                             <div class="col-md-9">
-                              <select name="{{col.name}}" class="form-control">
-                                  {% for key,value in enum_col_data.items %}
+                              <select name="{{col.name}}" class="form-control chosen-{{col.datatype}}" id="chosen-{{col.datatype}}"  {% ifequal col.datatype 'checkbox'%} multiple{% endifequal %}>
+                                  {% for key,value in col_data.items %}
                                         {% if key == col.name%}
                                             {% for item in value%}
-                                                  <option value="{{item}}">{{item}}</option>
+                                                  <option value="{{item.value}}">{{item.text}}</option>
                                             {% endfor %}
                                         {% endif %}
                                     {% endfor %}
                                </select>
                             </div>
 
+                    </div>
+           {% elif col.datatype == 'date' or col.datatype == 'datetime' %}
+                 <div class="form-group">
+                        <label class="col-md-2 control-label">{{col.description}}</label>
+                        <div class="col-md-9">
+                            <div class="c-datepicker-date-editor c-datepicker-single-editor datepicker-{{col.datatype}}">
+                                <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+                                <input type="text" autocomplete="off" name="{{col.name}}" placeholder="选择日期" data-val="true"
+                                          {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
+                                       class="c-datepicker-data-input only-date" value="" style="width:100%;">
+                            </div><span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
+                        </div>
                     </div>
            {% else %}
                 <div class="form-group">
@@ -66,13 +121,26 @@
                         </div>
                 </div>
             {% endif %}
+                </td>
+            {% if forloop.counter|divisibleby:colperrow%}
+                </tr>
+                    <tr>
+            {%endif%}
        {% endfor %}
-
+        </tr>
+      </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="99">
     <div class="form-group">
-        <div class="col-md-3 col-md-offset-3">
+        <div class="col-md-3 col-md-offset-5">
             <button type="submit" class="btn btn-success">确定</button>
             <button type="button" class="btn btn-default" onclick="lkWeb.RefreshAndClose()">返回</button>
         </div>
     </div>
+                             </td>
+            </tr>
+        </tfoot>
+    </table>
 </form>
 {% endblock %}
