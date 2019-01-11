@@ -3,130 +3,130 @@
 
 {% block scripts %}
     <script>
-        $(function () {
-            $(".checkAll").click(function () {
-                var check = $(this).prop("checked");
-                $(".checkChild").prop("checked", check);
-            });
+    $(function () {
+        $(".checkAll").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkChild").prop("checked", check);
+        });
 
-            InitDepartmentTree();
+        InitDepartmentTree();
+    })
+
+    var departmentId = "";
+    var lkTable;
+
+    var zNodes_department = [];
+    var setting_department = {
+        check: {
+            enable: false, //不开启
+            chkboxType: { "Y": "", "N": "" }
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeClick: onNodeClick
+        }
+    };
+
+    function onNodeClick(treeId, treeNode, clickFlag) {
+        departmentId = treeNode.id;
+        LoadDataTable();
+        lkTable.draw();
+    }
+
+    function InitDepartmentTree() {
+        LoadData();
+
+        $.fn.zTree.init($("#departmentTree"), setting_department, zNodes_department);
+
+
+    }
+    function LoadData() {
+        $.ajax({
+            type: "post",
+            url: "/adm/department/get_list/",
+            dataType: "json",
+            data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken() },
+            async: false,
+            success: function (data) {
+                zNodes_department = data;
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
         })
 
-        var departmentId = "";
-        var lkTable;
-
-        var zNodes_department = [];
-        var setting_department= {
-            check: {
-                enable: false, //不开启
-                chkboxType: { "Y": "", "N": "" }
-              },
-            data: {
-                simpleData: {
-                    enable: true
-                }
+    }
+    function LoadDataTable() {
+        var dataUrl = '/adm/user/get_department_user/';
+        var columns = [
+            {
+                "sClass": "text-center",
+                "mData": "user__id",
+                "mRender": function (data, type, row) {
+                    return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
+                },
+                "bSortable": false
             },
-            callback: {
-                beforeClick: onNodeClick
-            }
-        };
+            { "mData": "rownum", "sClass": "text-center" },
+            { "mData": "user__username", "sClass": "text-center" },
+            { "mData": "personname", "sClass": "text-center" },
+            { "mData": "user__email", "sClass": "text-center", "bSortable": false },
+            { "mData": "status", "sClass": "text-center" }
+        ];
+        lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl, departmentId)
+    }
 
-        function onNodeClick( treeId, treeNode, clickFlag) {
-            departmentId = treeNode.id;
-            LoadDataTable();
-            lkTable.draw();
+    function DelUser() {
+        var ids = lkWeb.GetCheckValueList($(".checkChild"));
+        if (ids.length < 1) {
+            parent.layer.alert("请选择");
+            return;
         }
-
-        function InitDepartmentTree() {
-            LoadData();
-
-            $.fn.zTree.init($("#departmentTree"), setting_department, zNodes_department);
-
-
-        }
-      function LoadData() {
-            $.ajax({
-                type: "post",
-                url:"/adm/department/get_list/",
-                dataType: "json",
-                data: { csrfmiddlewaretoken: lkWeb.GetCsrfToken()},
-                async: false,
-                success: function (data) {
-                    zNodes_department = data;
-
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            })
-
-        }
-        function LoadDataTable() {
-            var dataUrl = '/adm/user/get_department_user/';
-            var columns = [
+        parent.layer.confirm("确认删除" + ids.length + "条数据？", {
+            btn: ["确认", "取消"]
+        }, function () {
+            $.ajax(
                 {
-                    "sClass": "text-center",
-                    "mData": "user__id",
-                    "mRender": function (data, type, row) {
-                        return '<input type="checkbox" class="checkChild"  value="' + data + '" />';
+                    type: 'post',
+                    url: '/adm/user/remove_department_user/',
+                    data: {
+                        UserIDs: ids,
+                        DepartmentId: departmentId,
+                        csrfmiddlewaretoken: lkWeb.GetCsrfToken()
                     },
-                    "bSortable": false
-                },
-                { "mData": "rownum", "sClass": "text-center" },
-                { "mData": "user__username","sClass": "text-center" },
-                { "mData": "personname",  "sClass": "text-center" },
-                { "mData": "user__email", "sClass": "text-center", "bSortable": false },
-                { "mData": "status",  "sClass": "text-center" }
-            ];
-            lkTable = lkWeb.LoadTable("lkTable", columns, dataUrl, departmentId)
-         }
-
-        function DelUser() {
-            var ids = lkWeb.GetCheckValueList($(".checkChild"));
-            if (ids.length < 1) {
-                parent.layer.alert("请选择");
-                return;
-            }
-            parent.layer.confirm("确认删除" + ids.length + "条数据？", {
-                btn: ["确认", "取消"]
-            }, function () {
-                 $.ajax(
-                    {
-                        type: 'post',
-                        url: '/adm/user/remove_department_user/',
-                        data: {
-                            UserIDs: ids,
-                           DepartmentId: departmentId,
-                            csrfmiddlewaretoken: lkWeb.GetCsrfToken()
-                        },
-                        success: function (result) {
-                            if (result.flag == true) {
-                                parent.layer.alert("删除成功")
-                                lkTable.draw(false);
-                            }
-                            else {
-                                parent.layer.alert("删除失败");
-                            }
-                        },
-                        error: function (err) {
-                            console.log(err);
+                    success: function (result) {
+                        if (result.flag == true) {
+                            parent.layer.alert("删除成功")
+                            lkTable.draw(false);
+                        }
+                        else {
                             parent.layer.alert("删除失败");
                         }
-                    })
-            }, function () {
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        parent.layer.alert("删除失败");
+                    }
+                })
+        }, function () {
 
-            }
-            )
         }
+        )
+    }
 
-        function AddUser() {
-            lkWeb.GoAction("adm","user", "select_user", departmentId, true, "选择用户", "90%", "90%");
+    function AddUser() {
+        if (IsEmpty(departmentId)) {
+            layer.alert('请选择部门')
+            return;
         }
-        //这个函数给 SelectUser子页面回调用
-        function SelectUser() {
-            lkWeb.CloseLayert();
-            lkTable.draw();
-        }
+        lkWeb.GoAction("adm", "user", "select_user", departmentId, true, "选择用户", "90%", "90%");
+    }
+
 
     </script>
 {% endblock %}

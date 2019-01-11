@@ -50,14 +50,14 @@
                   async: false,
                   success: function (result) {
                       if (result.flag == true) {
-                          parent.layer.alert("操作成功");
+                          layer.alert("操作成功");
                           lkWeb.RefreshAndClose()
                       }
                       else {
-                          if (result.msg.IsNotEmpty())
-                              parent.layer.alert(result.msg);
+                          if (IsNotEmpty(result.msg))
+                              layer.alert(result.msg);
                           else
-                              parent.layer.alert("删除失败");
+                              layer.alert("删除失败");
                       }
                   },
                   error: function () {
@@ -74,7 +74,7 @@
 <div class="row">
     <div class="form-group">
         <button type="button" class="btn btn-success" onclick="Submit()">确定</button>
-        <button type="button" class="btn btn-danger" onclick="parent.SelectUser()">返回</button>
+        <button type="button" class="btn btn-danger" onclick="lkWeb.RefreshAndClose()">返回</button>
     </div>
     {%csrf_token%}
     <table class="table table-striped table-hover" id="table_user">

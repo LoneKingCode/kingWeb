@@ -15,4 +15,3 @@ class WebHelper(object):
         agent = request.META.get('HTTP_USER_AGENT',None)
         return agent
 
-

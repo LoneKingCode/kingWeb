@@ -6,21 +6,25 @@ class SqlHelper(object):
         cursor = connection.cursor()
         sid = transaction.savepoint()
         try:
-            cursor.execute(sql)
+            return cursor.execute(sql)
             transaction.savepoint_commit(sid)
         except IntegrityError as e:
             transaction.savepoint_rollback(sid)
+            return -1
 
     @staticmethod
     def bulk_execute(sqllist):
         cursor = connection.cursor()
         sid = transaction.savepoint()
         try:
+            count = 0
             for sql in sqllist:
-               cursor.execute(sql)
+               count+=cursor.execute(sql)
+            return count
             transaction.savepoint_commit(sid)
         except IntegrityError:
             transaction.savepoint_rollback(sid)
+            return -1
 
     @staticmethod
     def query(sql):
@@ -45,6 +49,6 @@ class SqlHelper(object):
         query_result = SqlHelper.query(sql)
         if len(query_result) > 0:
             firstrow = query_result[0]
-            return firstrow[list(firstrow.keys())[0]]
+            return str(firstrow[list(firstrow.keys())[0]])
         else:
             return ''

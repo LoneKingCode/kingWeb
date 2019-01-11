@@ -185,6 +185,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
+    result.msg = ''
     formdata = request.POST.dict()
     tableid = kwargs.get('id','')
     tablecolumns = None
@@ -195,13 +196,25 @@ def post_add(request,kwargs):
               return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
     addmodel = {}
+    primarykey_cols = SysHelper.get_column_names(tableid,'PrimarKey=1','ListOrder')
     for col in tablecolumns:
+        #如果这个列属于主键，判断是否已经有值存在
         if col.name in formdata.keys():
+            colvalue = ''
             #这个情况下可能选多个值
             if col.datatype == 'checkbox':
-                addmodel[col.name] = ','.join(request.POST.getlist(col.name,''))
+                colvalue = ','.join(request.POST.getlist(col.name,''))
             else:
-                addmodel[col.name] = formdata.get(col.name,'')
+                colvalue = formdata.get(col.name,'')
+            exist = '0'
+            if col.name in primarykey_cols:
+                exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,col.name,colvalue))
+            if exist != '0':
+                result.msg += col.description + '字段为主键，值"' + colvalue + '"已存在,'
+            else:
+                addmodel[col.name] = colvalue
+    if result.msg != '':
+        return JsonResponse(result.tojson())
     addmodel['CreateDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
     addmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
     addmodel['Creator'] = str(request.user.id)
@@ -233,16 +246,26 @@ def post_edit(request,kwargs):
         update_filter = SysTableList.objects.get(id=int(tableid)).forbiddenupdatefilter
         condition = '1=1'
         if update_filter != '':
-            condition = update_filter
+            condition = update_filter.replace('{UserId}',str(request.user.id))
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
+    primarykey_cols = SysHelper.get_column_names(tableid,'PrimarKey=1','ListOrder')
     for col in tablecolumns:
+        colvalue = ''
         #这个情况下可能选多个值
         if col.datatype == 'checkbox':
-            editmodel[col.name] = ','.join(request.POST.getlist(col.name,''))
+            colvalue = ','.join(request.POST.getlist(col.name,''))
         else:
-            editmodel[col.name] = formdata.get(col.name,'')
-
+            colvalue = formdata.get(col.name,'')
+        exist = '0'
+        if col.name in primarykey_cols:
+            exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\' and Id != {3}'.format(table.name,col.name,colvalue,id))
+        if exist != '0':
+            result.msg += col.description + '字段为主键，值"' + colvalue + '"已存在,'
+        else:
+            editmodel[col.name] = colvalue
+    if result.msg != '':
+        return JsonResponse(result.tojson())
     editmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
     editmodel['Modifier'] = str(request.user.id)
     sql = 'update {0} set {1} where {2}'
@@ -251,9 +274,9 @@ def post_edit(request,kwargs):
         newvalues += "{0}='{1}',".format(key,value)
     newvalues = newvalues.rstrip(',')
     sql = sql.format(table.name,newvalues,'Id=' + str(id) + ' and ' + condition)
-    SqlHelper.execute(sql)
-    result.msg = '操作成功'
-    result.flag = True
+    affect_rows = SqlHelper.execute(sql)
+    result.msg = '影响数据条数' + str(affect_rows)
+    result.flag = affect_rows == 1
     return JsonResponse(result.tojson())
 
 @csrf_exempt
@@ -266,7 +289,7 @@ def delete(request,kwargs):
     forbidden_delete_filter = SysTableList.objects.get(id=int(tableid)).forbiddendeletefilter
     condition = '1=1'
     if forbidden_delete_filter != '':
-        condition = forbidden_delete_filter
+        condition = forbidden_delete_filter.replace('{UserId}',str(request.user.id))
     if len(ids) <= 0:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
@@ -279,9 +302,9 @@ def delete(request,kwargs):
     sqllist = []
     for id in ids:
         sqllist.append('delete from {0} where {1}'.format(table.name,'Id=' + str(id) + ' and ' + condition))
-    SqlHelper.bulk_execute(sqllist)
-    result.msg = '操作成功'
-    result.flag = True
+    affect_rows = SqlHelper.bulk_execute(sqllist)
+    result.msg = '影响数据条数' + str(affect_rows)
+    result.flag = affect_rows == len(ids)
     return JsonResponse(result.tojson())
 
 

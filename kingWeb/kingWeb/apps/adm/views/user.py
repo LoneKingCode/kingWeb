@@ -457,7 +457,7 @@ def set_user_department(request,kwargs):
     departmentid = request.POST.get('DepartmentId','')
     userids = request.POST.getlist('UserIDs[]','')
     newobjects = []
-    users = User.objects.get(id__in=userids)
+    users = User.objects.filter(id__in=userids)
     department = SysDepartment.objects.get(id=departmentid)
     for user in users:
         newobjects.append(SysUserDepartment(user=user,department=department))
