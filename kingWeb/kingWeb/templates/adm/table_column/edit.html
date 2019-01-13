@@ -48,10 +48,11 @@
         </div>
         <label class="col-md-2 control-label">数据类型</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="DataType" value="{{datatype}}"
-                   data-val="true" data-val-maxlength="数据类型长度不能超过50个字符" data-val-maxlength-max="12"
-                   data-val-required="数据类型不能为空"  data-toggle="tooltip" title="out/enum/radio/checkbox/date/datetime/file" />
-            <span class="field-validation-valid" data-valmsg-for="DataType" data-valmsg-replace="true"></span>
+             <select name="DataType" class="form-control" >
+             {% for item in datatypes%}
+                <option value="{{item}}" {%ifequal item datatype %} selected {%endifequal%}>{{item}}</option>
+             {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">
@@ -129,9 +130,9 @@
         <div class="col-md-4">
             <input type="text" class="form-control" name="EnumRange"  value="{{enumrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮" />
         </div>
-        <label class="col-md-2 control-label">单选/多选值范围</label>
+        <label class="col-md-2 control-label">多选值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="SelectRange"  value="{{selectrange}}" data-toggle="tooltip" title="例如 1,模块|2,菜单|3,按钮"/>
+            <input type="text" class="form-control" name="SelectRange"  value="{{selectrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮"/>
         </div>
     </div>
     <div class="form-group">

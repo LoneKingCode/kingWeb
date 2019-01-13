@@ -221,6 +221,16 @@ def post_build_column(request,kwargs):
     for row in query_result:
         field = row['Field']
         type = row['Type']
+        if 'char' in type:
+            type = 'string'
+        elif 'int' in type or 'bit' in type:
+            type = 'int'
+        elif 'float' in type or 'decimal' in type:
+            type = 'Decimal'
+        elif 'datetime' in type:
+            type = 'datetime'
+        elif 'date' in type:
+            type = 'date'
         newmodels.append(SysTableColumn(tableid=tableid,name=field,datatype=type))
     deleted_objects = SysTableColumn.objects.filter(tableid=tableid).delete()
     objects = SysTableColumn.objects.bulk_create(newmodels)

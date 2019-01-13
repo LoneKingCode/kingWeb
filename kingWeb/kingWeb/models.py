@@ -21,6 +21,7 @@ class TableImportType(IntEnum):
     insert = 0,
     update = 1,
 
+DataType = ['out','enum','checkbox','date','datetime','file','string','int','decimal']
 
 ############################################################################
 #视图model

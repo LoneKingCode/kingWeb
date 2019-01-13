@@ -344,7 +344,7 @@ def get_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
-    if usernot id:
+    if not userid:
         return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.filter(id__in = user_role_data).values('id','name')
@@ -358,7 +358,7 @@ def get_not_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
-    if usernot id:
+    if not userid:
         return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.exclude(id__in = user_role_data).values('id','name')
@@ -384,7 +384,7 @@ def get_not_department_user(request,kwargs):
     else:
         _orderby +='id'
 
-    if departmentnot id:
+    if not departmentid:
         return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(department__id=departmentid).values('user__id')
     users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
@@ -419,7 +419,7 @@ def get_department_user(request,kwargs):
     else:
         _orderby +='id'
 
-    if departmentnot id:
+    if not departmentid:
         return JsonResponse({'msg':'请求参数错误'})
 
     user_department = SysUserDepartment.objects.filter(department__id=int(departmentid)).values('user__id')

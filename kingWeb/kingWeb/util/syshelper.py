@@ -73,21 +73,7 @@ class SysHelper(object):
             if not value:
                 return '无'
             return value
-        #获取checkbox/radio选中列表中 这个值value对应的text
-        #valueids 为逗号隔开的多个值
-        @staticmethod
-        def get_select_value(tableid,colname,valueids):
-            if valueids == 0 or not valueids:
-                return '无'
-            column = SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(name=colname)).first()
-            option_data = column.selectrange.split('|') #value,text|value,text
-            values = valueids.split(',')
-            result = ''
-            for option in option_data:
-                val = option.split(',')[0]
-                if val in values:
-                    result+=option.split(',')[1] + ','
-            return result.strip(',')
+
         @staticmethod
         def import_excel(tableid, file):
             result = ResultModel()
@@ -147,7 +133,7 @@ class SysHelper(object):
                     for c in row:
                         cn_colname = c.value
                         table_head.append(cn_colname)
-                        if  not cn_colname or cn_colname == 'None' or cn_colname not in columnsdict.keys():
+                        if  not cn_colname or cn_colname not in columnsdict.keys():
                             result.msg +=' 不存在 "' + str(cn_colname) + '" 列 </br>'
                             continue
                     differ = list(set(colrequire).difference(set(table_head)))
@@ -174,16 +160,15 @@ class SysHelper(object):
                             else:
                                 value[english_colname] = outvalue
                         elif colprimarykey[english_colname] == 1:
+                            value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,english_colname,col.value))
                             #当为插入模式时，要检测为主键的值不能已存在
                             if table.importtype == TableImportType.insert.value:
-                                value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,english_colname,col.value))
                                 if value_exist != '0':
-                                       result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值已存在,'
+                                    result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值已存在,'
                             #当为更新模式时，要检测为主键的值必须已存在 因为要当条件
                             elif table.importtype == TableImportType.update.value:
-                                value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,english_colname,col.value))
                                 if value_exist == '0':
-                                       result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值不存在,'
+                                    result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值不存在,'
                             value[english_colname] = col.value
                         else:
                             value[english_colname] = col.value
@@ -213,7 +198,9 @@ class SysHelper(object):
                     insert_values = insert_values.strip(',')
                     sql = sql.format(table.name,','.join(addmodel.keys()),insert_values)
                     sqllist.append(sql)
-                result.flag = SqlHelper.bulk_execute(sqllist) == len(sqllist)
+                exec_count = SqlHelper.bulk_execute(sqllist)
+                result.flag = exec_count == len(sqllist)
+                result.msg = '执行成功，影响数据' + str(exec_count) + "条"
             elif table.importtype == TableImportType.update.value:
                 sql = 'update {0} set {1} where {2}'
                 primarykeys = SysHelper.get_column_names(tableid, "PrimarKey=1", "ListOrder")
@@ -226,13 +213,17 @@ class SysHelper(object):
                     condition = ''
                     for key,value in row.items():
                         if key in primarykeys:
-                            condition = key + "= '" + str(value) + "' and "
+                            condition += key + "= '" + str(value) + "' and "
+                            continue
                         newvalues += key + "='" + str(value) + "',"
                     newvalues +="ModifyDateTime='" + time.strftime("%Y-%m-%d %H:%M:%S") + "',"
                     newvalues +="Modifier='" + SysHelper.userid + "'"
-                    condition+=" 1=1 "
+                    condition = condition.strip()
+                    condition = condition.rstrip('and')
                     sqllist.append(sql.format(table.name,newvalues,condition))
-                result.flag = SqlHelper.bulk_execute(sqllist) >= len(sqllist)
+                exec_count = SqlHelper.bulk_execute(sqllist)
+                result.flag = exec_count >= len(sqllist)
+                result.msg = '执行成功，影响数据' + str(exec_count) + "条"
             else:
                 result.msg = '请设置表管理中导入类型'
             return result

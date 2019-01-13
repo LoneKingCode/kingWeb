@@ -27,6 +27,7 @@ def add(request,kwargs):
         {
             'title':'添加表结构',
             'tablelist':tablelist,
+            'datatypes':DataType,
          })
 
 @check_permission
@@ -65,6 +66,7 @@ def edit(request,kwargs):
             'primarkey':object.primarkey,
             'forbiddenfileextension':object.forbiddenfileextension,
             'tablelist':tablelist,
+            'datatypes':DataType,
         })
 
 @csrf_exempt

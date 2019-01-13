@@ -77,11 +77,10 @@ def add(request,kwargs):
                enumlist.append({'text':e,'value':e})
             col_data[col.name] = enumlist
         elif col.datatype == 'radio' or col.datatype == 'checkbox':
-            option_data = col.selectrange.split('|')
+            option_data = col.selectrange.split(',')
             options = []
-            for o in option_data:
-                val = o.split(',') #value,text
-                options.append({'value':val[0],'text':val[1]})
+            for text in option_data:
+                options.append({'value':text,'text':text})
             col_data[col.name] = options
 
     colperrow = 1 if table.columnperrow < 1 else table.columnperrow
@@ -161,12 +160,11 @@ def edit(request,kwargs):
                enumlist.append({'text':e,'value':e,'selected':selected})
             col_data[col.name] = enumlist
         elif col.datatype == 'radio' or col.datatype == 'checkbox':
-            option_data = col.selectrange.split('|')
+            option_data = col.selectrange.split(',')
             options = []
-            for o in option_data:
-                val = o.split(',') #value,text
-                selected = '1' if val[0] in data[col.name].split(',') else '0'
-                options.append({'value':val[0],'text':val[1],'selected':selected})
+            for text in option_data:
+                selected = '1' if text in data[col.name].split(',') else '0'
+                options.append({'value':text,'text':text,'selected':selected})
             col_data[col.name] = options
     colperrow = 1 if table.columnperrow < 1 else table.columnperrow
 
@@ -364,8 +362,6 @@ def get_page_data(request,kwargs):
         for key in dic:
             if key in out_type_column_names:
                 dic[key] = SysHelper.get_out_value(tableid,key,dic[key])
-            elif key in checkbox_or_radio_col_names:
-                dic[key] = SysHelper.get_select_value(tableid,key,dic[key])
             elif key in file_column_names:
                 url = text = style = ''
                 if not dic[key] == '':

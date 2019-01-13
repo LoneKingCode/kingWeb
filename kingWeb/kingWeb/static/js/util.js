@@ -102,7 +102,7 @@ function getUrlFileName(url) {
 }
 
 function IsEmpty(value) {
-    return !isNotEmpty(value);
+    return !IsNotEmpty(value);
 }
 
 function IsNotEmpty(value) {
