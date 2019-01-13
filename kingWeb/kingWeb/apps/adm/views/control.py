@@ -21,7 +21,7 @@ def index(request,kwargs):
              {
                     'username':request.user.username,
               })
-    if userid == None and userid == '':
+    if not userid:
          return result
 
     userroles = SysUserRole.objects.filter(user__id=userid)

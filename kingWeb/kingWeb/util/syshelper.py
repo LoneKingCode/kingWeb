@@ -6,25 +6,32 @@ from openpyxl.reader.excel import load_workbook
 from kingWeb.util.SqlHelper import *
 from kingWeb.models import *
 from django.db.models import Q
+from kingWeb.settings import ROOT_PATH
 
 class SysHelper(object):
         userid = '' #记录当前登陆用户id
+
+
         @staticmethod
-        def get_column_names(tableid,condition,orderby):
+        def get_column_names(tableid,condition,orderby,returnlist = True):
+            """     returnlist  是否返回数组，为false返回逗号隔开的字符串
+            """
             sql = 'select * from Sys_TableColumn where TableId={0} and {1} order By {2}'
             column_data = SqlHelper.query(sql.format(tableid,condition,orderby))
-            column_names = ''
+            column_names = []
             for row in column_data:
-                column_names+= row['Name'] + ','
-            column_names = column_names.rstrip(',')
-            return column_names
+                column_names.append(row['Name'])
+            if returnlist:
+                return column_names
+            else:
+                return ','.join(column_names)
 
         @staticmethod
         def get_out_list(outsql):
             outdata_arr = outsql.split('|') #Example: Id,Name|Sys_Department|ParentId=0
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
-            condition = outdata_arr[2].replace('{UserId}',str(SysHelper.userid))
+            condition = outdata_arr[2].replace('{UserId}',SysHelper.userid)
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
             outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
@@ -45,14 +52,14 @@ class SysHelper(object):
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
             value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,outvalueid))
-            if value == '':
+            if not value:
                 return '无'
             return value
 
         #获取外键值对应的外键id
         @staticmethod
         def get_out_value_id(tableid,outcolname,colvalue):
-            if colvalue == '' or colvalue == 0:
+            if not colvalue or colvalue == 0:
                 return '无'
             sql = "select OutSql from Sys_TableColumn where TableId={0} and Name='{1}'"
             outdata = SqlHelper.single(sql.format(tableid,outcolname))
@@ -63,14 +70,14 @@ class SysHelper(object):
             primarkey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
             value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
-            if value == '':
+            if not value:
                 return '无'
             return value
         #获取checkbox/radio选中列表中 这个值value对应的text
         #valueids 为逗号隔开的多个值
         @staticmethod
         def get_select_value(tableid,colname,valueids):
-            if valueids == '' or valueids == 0:
+            if valueids == 0 or not valueids:
                 return '无'
             column = SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(name=colname)).first()
             option_data = column.selectrange.split('|') #value,text|value,text
@@ -84,6 +91,7 @@ class SysHelper(object):
         @staticmethod
         def import_excel(tableid, file):
             result = ResultModel()
+            result.msg = ''
             table = SysTableList.objects.get(id=tableid)
             if table == None:
                 result.msg = '未找到指定表'
@@ -97,11 +105,16 @@ class SysHelper(object):
                 return result
             columnsdict = {}
             coldatatype = {}
+            colprimarykey = {}
+            colrequire = []
             for col in columns:
                 columnsdict[col.description] = col.name
                 coldatatype[col.name] = col.datatype
+                colprimarykey[col.name] = col.primarkey
+                if col.required:
+                    colrequire.append(col.name)
 
-            rootpath = sys.path[0] + "\\kingWeb"
+            rootpath = ROOT_PATH
             dirname = time.strftime('%Y%m%d')
             datepath = 'upload\\temp\\' + dirname
             upload_dir = rootpath + '\\' + datepath
@@ -125,40 +138,53 @@ class SysHelper(object):
             table_rows = ws.rows
             table_columns = ws.columns
             values = []
-            rowcount = 0
+            rowcount = 1
             table_head = []
             colcount = 0
-            err = False
             for row in table_rows:
-                if err:
-                    break
                 #第一行表头
-                if rowcount == 0:
-                    for col in row:
-                        table_head.append(col.value)
+                if rowcount == 1:
+                    for c in row:
+                        cn_colname = c.value
+                        table_head.append(cn_colname)
+                        if  not cn_colname or cn_colname == 'None' or cn_colname not in columnsdict.keys():
+                            result.msg +=' 不存在 "' + str(cn_colname) + '" 列 </br>'
+                            continue
+                    differ = list(set(colrequire).difference(set(table_head)))
+
+                    if len(differ) > 0:
+                        result.msg +=' excel中必须包含 "' + ','.join(differ) + '" 列且有值 </br>'
+                    if result.msg != '':
+                        return result
                 else:
                     value = {}
                     colcount = 0
                     for col in row:
                         cn_colname = table_head[colcount]
-                        if not cn_colname in columnsdict.keys():
-                            result.msg +=' 不存在 "' + cn_colname + '" 列 </br>'
-                            err = True
-                            break
-                        if col.value == '':
-                            result.msg +=  cn_colname + '" 列值不允许为空 </br>'
-                            err = True
-                            break
+                        if not col.value :
+                            result.msg += ' 第' + str(rowcount) + '行,' + cn_colname + '" 列值不允许为空 </br>'
+                            continue
 
                         english_colname = columnsdict[cn_colname]
 
                         if coldatatype[english_colname] == 'out':
                             outvalue = SysHelper.get_out_value_id(tableid,english_colname,col.value)
-                            if outvalue == '':
-                                err = True
-                                result.msg+=' ' + cn_colname + ' 值获取失败 '
+                            if outvalue == '无':
+                                result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,未查询到值,'
                             else:
                                 value[english_colname] = outvalue
+                        elif colprimarykey[english_colname] == 1:
+                            #当为插入模式时，要检测为主键的值不能已存在
+                            if table.importtype == TableImportType.insert.value:
+                                value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,english_colname,col.value))
+                                if value_exist != '0':
+                                       result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值已存在,'
+                            #当为更新模式时，要检测为主键的值必须已存在 因为要当条件
+                            elif table.importtype == TableImportType.update.value:
+                                value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,english_colname,col.value))
+                                if value_exist == '0':
+                                       result.msg+=' 第' + str(rowcount) + '行,' + cn_colname + ':' + col.value + ' 错误,该字段为主键，值不存在,'
+                            value[english_colname] = col.value
                         else:
                             value[english_colname] = col.value
                         colcount = colcount + 1
@@ -179,32 +205,34 @@ class SysHelper(object):
 
                     addmodel['CreateDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
                     addmodel['ModifyDateTime'] = time.strftime("%Y-%m-%d %H:%M:%S")
-                    addmodel['Creator'] = '0'
-                    addmodel['Modifier'] = '0'
-                    sqllist.append(sql.format(table.name,','.join(addmodel.keys()),\
-        "'" + ','.join(addmodel.values()).replace(',' , "','") + "'"))
-                SqlHelper.bulk_execute(sqllist)
-                result.flag = True
+                    addmodel['Creator'] = SysHelper.userid
+                    addmodel['Modifier'] = SysHelper.userid
+                    insert_values = ''
+                    for v in addmodel.values():
+                        insert_values+="'" + v + "',"
+                    insert_values = insert_values.strip(',')
+                    sql = sql.format(table.name,','.join(addmodel.keys()),insert_values)
+                    sqllist.append(sql)
+                result.flag = SqlHelper.bulk_execute(sqllist) == len(sqllist)
             elif table.importtype == TableImportType.update.value:
                 sql = 'update {0} set {1} where {2}'
-                primarkey = SqlHelper.single('select Name from Sys_TableColumn where PrimarKey=1 and TableId=' + tableid)
-                if primarkey == '':
+                primarykeys = SysHelper.get_column_names(tableid, "PrimarKey=1", "ListOrder")
+                if len(primarykeys) <= 0:
                     result.msg = '请设置主键，因为导入类型为更新'
                     return result
                 #更新条件
-                condition = ''
                 for row in values:
                     newvalues = ''
+                    condition = ''
                     for key,value in row.items():
-                        if key == primarkey:
-                            condition = key + "= '" + str(value) + "'"
+                        if key in primarykeys:
+                            condition = key + "= '" + str(value) + "' and "
                         newvalues += key + "='" + str(value) + "',"
                     newvalues +="ModifyDateTime='" + time.strftime("%Y-%m-%d %H:%M:%S") + "',"
-                    newvalues +="Modifier='" + str(0) + "'"
+                    newvalues +="Modifier='" + SysHelper.userid + "'"
+                    condition+=" 1=1 "
                     sqllist.append(sql.format(table.name,newvalues,condition))
-                SqlHelper.bulk_execute(sqllist)
-                result.flag = True
-                SqlHelper.bulk_execute(sqllist)
+                result.flag = SqlHelper.bulk_execute(sqllist) >= len(sqllist)
             else:
                 result.msg = '请设置表管理中导入类型'
             return result
@@ -265,7 +293,7 @@ class SysHelper(object):
             if table.allowimport != 1:
                 result.msg = '不允许导入'
                 return result
-            rootpath = sys.path[0] + "\\kingWeb"
+            rootpath = ROOT_PATH
             dirname = time.strftime('%Y%m%d')
             datepath = 'upload\\temp\\' + dirname
             upload_dir = rootpath + '\\' + datepath

@@ -20,7 +20,7 @@ def process(request,**kwargs):
     if request.method != 'POST':
         SysOperationLog.objects.create(clientip=ip,clientinfo = agent,username=user.username,operationdescription='访问',\
             operationurl = url)
-    SysHelper.userid = user.id
+    SysHelper.userid = str(user.id)
     try:
         viewObj = __import__("kingWeb.apps.%s.views" % (app,),fromlist=(controller,))
         ctrlObj = getattr(viewObj, controller)

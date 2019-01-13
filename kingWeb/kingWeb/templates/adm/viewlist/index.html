@@ -17,45 +17,9 @@
             })
 
             $("#excelFile").change(function () {
-                var fileObj = document.getElementById("excelFile").files[0]; // js 获取文件对象
-                filename = fileObj.name
-                var ext=filename.substring(filename.lastIndexOf(".")+1, filename.length);//后缀名
-                if (typeof (fileObj) == "undefined" || fileObj.size <= 0 || ext!='xlsx') {
-                    alert("请选择excel(.xlsx)文件");
-                    return;
-                }
-                var formFile = new FormData();
-                formFile.append("excelFile", fileObj); //加入文件对象
-                formFile.append("tableid", tableid);
-                var token = lkWeb.GetCsrfToken();
-                formFile.append("csrfmiddlewaretoken", token);
-                var data = formFile;
-                $.ajax({
-                    url: "/adm/viewlist/post_import/",
-                    data: data,
-                    type: "Post",
-                    dataType: "json",
-                    async: false,
-                    cache: false,//上传文件无需缓存
-                    processData: false,//用于对data参数进行序列化处理 这里必须false
-                    contentType: false, //必须
-                    success: function (result) {
-                         if (result.flag == true) {
-                            parent.layer.alert("操作成功");
-                            lkTable.draw(false);//刷新datatable
-                         }
-                        else {
-                            if (IsNotEmpty(result.msg))
-                                parent.layer.alert(result.msg);
-                            else
-                                parent.layer.alert("操作失败")
-                        }
-                    },
-                    error: function (err) {
-                        parent.layer.alert("请求失败");
-                        console.log(err);
-
-                    }
+                lkWeb.Upload('excelFile', '/adm/viewlist/post_import/', { 'tableid': tableid }, function (result) {
+                    parent.layer.alert("操作成功");
+                    lkTable.draw(false);//刷新datatable
                 })
             })
         });

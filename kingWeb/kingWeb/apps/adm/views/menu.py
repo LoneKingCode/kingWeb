@@ -43,7 +43,7 @@ def add(request,kwargs):
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
-    if id == '':
+    if not id:
         return render(request, 'adm/menu/index')
     object = SysMenu.objects.get(id=id)
     modules = SysModule.objects.values('id','name')
@@ -72,7 +72,7 @@ def post_add(request,kwargs):
     name = request.POST.get('Name','')
     listorder = request.POST.get('ListOrder','')
     url = request.POST.get('Url','')
-    if parentid == '':
+    if not parentid:
         parentid = '0'
     type = get_menu_type(parentid) #根据父菜单设置此子菜单的类型
     object = SysMenu.objects.create(parentid = parentid,name = name,moduleid = moduleid,\
@@ -93,7 +93,7 @@ def post_edit(request,kwargs):
     name = request.POST.get('Name','')
     listorder = request.POST.get('ListOrder','')
     url = request.POST.get('Url','')
-    if parentid == '':
+    if not parentid:
         parentid = '0'
     type = get_menu_type(parentid) #根据父菜单设置此子菜单的类型
     object = SysMenu.objects.filter(id=id).update(parentid = parentid,name = name,moduleid = moduleid,\
@@ -108,7 +108,7 @@ def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    if not ids:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     object = SysMenu.objects.filter(id__in=ids).delete()
@@ -200,7 +200,7 @@ def get_list(request,kwargs):
     return JsonResponse(result,safe=False)
 
 def get_menu_type(parentid):
-    if parentid == '0' or parentid == '':
+    if parentid == '0' or not parentid:
         return MenuType.module.value
 
     parentmenu = SysMenu.objects.get(id=parentid)

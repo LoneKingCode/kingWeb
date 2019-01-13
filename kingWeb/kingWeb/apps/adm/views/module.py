@@ -29,7 +29,7 @@ def add(request,kwargs):
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
-    if id == '':
+    if not id:
         return render(request, 'adm/module/index')
     object = SysModule.objects.get(id=id)
     return render(request,
@@ -70,7 +70,7 @@ def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    if not ids:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     object = SysModule.objects.filter(id__in=ids).delete()

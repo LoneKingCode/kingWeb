@@ -285,6 +285,7 @@
     <Content Include="kingWeb\static\images\head.jpg" />
     <Content Include="kingWeb\static\js\contabs.js" />
     <Content Include="kingWeb\static\js\lkWeb.js" />
+    <Content Include="kingWeb\static\js\util.js" />
     <Content Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\data.json" />
     <Content Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\demo.js" />
     <Content Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\index-sep.html" />

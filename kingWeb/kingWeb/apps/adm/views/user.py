@@ -84,7 +84,7 @@ def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     allow_modify_status = 1
-    if id == '':
+    if not id:
        id = request.user.id
        allow_modify_status = 0 #如果是从后台 访问的修改信息，是修改自身信息，不允许修改账户状态
     object = SysUserProfile.objects.filter(user__id=id)\
@@ -264,7 +264,7 @@ def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    if not ids:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     object = User.objects.filter(id__in=ids).delete()
@@ -344,7 +344,7 @@ def get_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
-    if userid == '':
+    if usernot id:
         return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.filter(id__in = user_role_data).values('id','name')
@@ -358,7 +358,7 @@ def get_not_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
     draw = request.POST.get('draw','')
-    if userid == '':
+    if usernot id:
         return JsonResponse({'msg':'请求参数错误'})
     user_role_data = SysUserRole.objects.filter(user__id=userid).values('role__id')
     role_data = SysRole.objects.exclude(id__in = user_role_data).values('id','name')
@@ -384,7 +384,7 @@ def get_not_department_user(request,kwargs):
     else:
         _orderby +='id'
 
-    if departmentid == '':
+    if departmentnot id:
         return JsonResponse({'msg':'请求参数错误'})
     user_department = SysUserDepartment.objects.filter(department__id=departmentid).values('user__id')
     users = SysUserProfile.objects.exclude(user__id__in=user_department).order_by(_orderby)\
@@ -419,7 +419,7 @@ def get_department_user(request,kwargs):
     else:
         _orderby +='id'
 
-    if departmentid == '':
+    if departmentnot id:
         return JsonResponse({'msg':'请求参数错误'})
 
     user_department = SysUserDepartment.objects.filter(department__id=int(departmentid)).values('user__id')

@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import posixpath
 import environ
+import sys
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__)-1
+ROOT_PATH = str(ROOT_DIR)
 APPS_DIR = ROOT_DIR.path('kingWeb')
 
 MEDIA_URL = '/upload/'

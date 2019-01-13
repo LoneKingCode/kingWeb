@@ -48,7 +48,7 @@
         <div class="col-md-4">
             <input type="text" class="form-control" name="DataType"
                    data-val="true" data-val-maxlength="数据类型长度不能超过50个字符" data-val-maxlength-max="12"
-                   data-val-required="数据类型不能为空" data-toggle="tooltip" title="out/enum/radio/checkbox/date/datetime"/>
+                   data-val-required="数据类型不能为空" data-toggle="tooltip" title="out/enum/radio/checkbox/date/datetime/file"/>
             <span class="field-validation-valid" data-valmsg-for="DataType" data-valmsg-replace="true"></span>
         </div>
     </div>
@@ -132,6 +132,10 @@
         </div>
     </div>
     <div class="form-group">
+          <label class="col-md-2 control-label">禁止上传文件类型</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="ForbiddenFileExtension" data-toggle="tooltip" title="例如 aspx|rar|jpg" />
+        </div>
         <label class="col-md-2 control-label">是否主键</label>
         <div class="col-md-4">
             <input type="text" class="form-control" name="PrimarKey" />

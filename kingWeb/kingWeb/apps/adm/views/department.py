@@ -31,7 +31,7 @@ def add(request,kwargs):
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
-    if id == '':
+    if not id:
         return render(request, 'adm/department/index')
     object = SysDepartment.objects.get(id=id)
     departments = SysDepartment.objects.values('id','name').filter(~Q(id=id))
@@ -80,7 +80,7 @@ def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    if not ids:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     hassub = False

@@ -214,6 +214,7 @@ class SysTableColumn(BaseModel):
     editvisible = models.IntegerField(db_column='EditVisible',default=0)
     enumrange = models.TextField(db_column='EnumRange', blank=True, null=True)
     selectrange = models.TextField(db_column='SelectRange', blank=True, null=True)
+    forbiddenfileextension = models.TextField(db_column='ForbiddenFileExtension', blank=True, null=True)
     exportvisible = models.IntegerField(db_column='ExportVisible',default=0)
     importvisible = models.IntegerField(db_column='ImportVisible',default=0)
     listorder = models.IntegerField(db_column='ListOrder',default=0)
@@ -262,9 +263,9 @@ class SysUserProfile(BaseModel):
 
 class TestLeader(BaseModel):
     name = models.CharField(db_column='Name', max_length=30)
-    test1 = models.CharField(db_column='Test1', max_length=300,default='')
-    test2 = models.CharField(db_column='Test2', max_length=300,default='')
-    test3 = models.CharField(db_column='Test3', max_length=300,default='')
+    test1 = models.CharField(db_column='Test1', max_length=300,default='',null=True)
+    test2 = models.CharField(db_column='Test2', max_length=300,default='',null=True)
+    test3 = models.CharField(db_column='Test3', max_length=300,default='',null=True)
     parentid = models.IntegerField(db_column='ParentId')
     type = models.CharField(db_column='Type', max_length=30)
     def __str__(self):

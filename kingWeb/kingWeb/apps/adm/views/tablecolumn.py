@@ -33,7 +33,7 @@ def add(request,kwargs):
 def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
-    if id == '':
+    if not id:
         return render(request, 'adm/table_column/index')
     object = SysTableColumn.objects.get(id=id)
     tablelist = SysTableList.objects.values('id','name')
@@ -63,6 +63,7 @@ def edit(request,kwargs):
             'enumrange':object.enumrange,
             'selectrange':object.selectrange,
             'primarkey':object.primarkey,
+            'forbiddenfileextension':object.forbiddenfileextension,
             'tablelist':tablelist,
         })
 
@@ -90,11 +91,12 @@ def post_add(request,kwargs):
     enumrange = request.POST.get('EnumRange','')
     selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
+    forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
 
     object = SysTableColumn.objects.create(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -124,11 +126,12 @@ def post_edit(request,kwargs):
     enumrange = request.POST.get('EnumRange','')
     selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
+    forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
 
     object = SysTableColumn.objects.filter(id=id).update(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -139,7 +142,7 @@ def delete(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
     ids = request.POST.getlist('ids[]')
-    if ids == '':
+    if not ids:
         result.msg = '操作失败'
         return JsonResponse(result.tojson())
     object = SysTableColumn.objects.filter(id__in=ids).delete()

@@ -3,6 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
+import os
+import sys
 import json
 import time
 from kingWeb.DynamicRouter import urls
@@ -10,7 +12,7 @@ from kingWeb.models import *
 from kingWeb.util.SqlHelper import SqlHelper
 from kingWeb.util.SysHelper import SysHelper
 from kingWeb.apps.adm.permission import check_permission
-
+from kingWeb.settings import ROOT_PATH
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -99,7 +101,7 @@ def detail(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     tableid = kwargs.get('value','')
-    if tableid == '' or id == '':
+    if not tableid or not id:
         return render(request, 'adm/viewlist/index')
     tablecolumns = None
     table = None
@@ -109,7 +111,7 @@ def detail(request,kwargs):
         if table.allowview != 1:
               return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(viewvisible=1)).order_by('listorder'))
-    columnnames = SysHelper.get_column_names(tableid, "viewvisible=1", "ListOrder")
+    columnnames = SysHelper.get_column_names(tableid, "viewvisible=1", "ListOrder",False)
     data = SqlHelper.query('select {0} from {1} where {2}'\
         .format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
@@ -134,7 +136,7 @@ def edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     id = kwargs.get('id','')
     tableid = kwargs.get('value','')
-    if tableid == '' or id == '':
+    if not tableid or not id:
         return render(request, 'adm/viewlist/index')
     tablecolumns = None
     table = None
@@ -144,7 +146,7 @@ def edit(request,kwargs):
         if table.allowedit != 1:
               return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)).order_by('listorder'))
-    columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder")
+    columnnames = SysHelper.get_column_names(tableid, "EditVisible=1", "ListOrder",False)
     data = SqlHelper.query('select {0} from {1} where {2}'.format(columnnames,table.name,'Id=' + str(id)))[0]
     for col in tablecolumns:
         if col.datatype == 'out':
@@ -250,6 +252,7 @@ def post_edit(request,kwargs):
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
     primarykey_cols = SysHelper.get_column_names(tableid,'PrimarKey=1','ListOrder')
+
     for col in tablecolumns:
         colvalue = ''
         #这个情况下可能选多个值
@@ -259,8 +262,8 @@ def post_edit(request,kwargs):
             colvalue = formdata.get(col.name,'')
         exist = '0'
         if col.name in primarykey_cols:
-            exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\' and Id != {3}'.format(table.name,col.name,colvalue,id))
-        if exist != '0':
+            value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\' and Id != {3}'.format(table.name,col.name,colvalue,id))
+        if value_exist != '0':
             result.msg += col.description + '字段为主键，值"' + colvalue + '"已存在,'
         else:
             editmodel[col.name] = colvalue
@@ -337,7 +340,7 @@ def get_page_data(request,kwargs):
     condition = '1=1'
     alldata = None
     if searchkey != '':
-       search_columns = SysHelper.get_column_names(tableid, "SearchVisible=1", "ListOrder").split(',')
+       search_columns = SysHelper.get_column_names(tableid, "SearchVisible=1", "ListOrder")
        condition = ''
        for sc in search_columns:
            condition+=" {0} like '%{1}%' or".format(sc,searchkey)
@@ -348,11 +351,12 @@ def get_page_data(request,kwargs):
         condition += ' and ' + table.defaultfilter
 
     sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'
-    list_columns = SysHelper.get_column_names(tableid, "ListVisible=1", "ListOrder")
+    list_columns = SysHelper.get_column_names(tableid, "ListVisible=1", "ListOrder",False)
     pagedata = SqlHelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
     data_count = SqlHelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
-    out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder").split(',')
-    checkbox_or_radio_col_names = SysHelper.get_column_names(tableid, "ListVisible=1 and (DataType='checkbox' or DataType='radio')", "ListOrder").split(',')
+    out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder")
+    checkbox_or_radio_col_names = SysHelper.get_column_names(tableid, "ListVisible=1 and (DataType='checkbox' or DataType='radio')", "ListOrder")
+    file_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='file'", "ListOrder")
     rownum = int(start)
     for dic in pagedata:
         rownum = rownum + 1
@@ -362,6 +366,23 @@ def get_page_data(request,kwargs):
                 dic[key] = SysHelper.get_out_value(tableid,key,dic[key])
             elif key in checkbox_or_radio_col_names:
                 dic[key] = SysHelper.get_select_value(tableid,key,dic[key])
+            elif key in file_column_names:
+                url = text = style = ''
+                if not dic[key] == '':
+                    url = 'javascript:alert("无效文件")'
+                    text = '无效'
+                    style = "class='btn btn-danger'"
+                else:
+                    filepath = os.path.join(sys.path[0] + "\\kingWeb",dic[key].lstrip('/').replace('/','\\'))
+                    if os.path.exists(filepath) and dic[key] != '':
+                        url = '/adm/home/download?fileurl=' + dic[key]
+                        text = '下载'
+                        style = "class='btn btn-info' download"
+                    else:
+                        url = 'javascript:alert("无效文件")'
+                        text = '无效'
+                        style = "class='btn btn-danger'"
+                dic[key] = "<a href='{0}' target='_blank' {1}>{2}</a>".format(url,style,text)
             else:
                 if key == 'CreateDateTime' or key == 'ModifyDateTime':
                     dic[key] = str(dic[key])
@@ -376,7 +397,7 @@ def get_page_data(request,kwargs):
 def post_import(request,kwargs):
     assert isinstance(request, HttpRequest)
     tableid = request.POST.get('tableid','')
-    file = request.FILES['excelFile']
+    file = request.FILES['file']
     result = SysHelper.import_excel(tableid,file)
     return JsonResponse(result.tojson())
 
@@ -386,6 +407,36 @@ def post_export(request,kwargs):
     tableid = request.POST.get('tableid','')
     result = SysHelper.export_excel(tableid)
 
+    return JsonResponse(result.tojson())
+
+@check_permission
+def post_upload(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    result = ResultModel()
+    columnid = request.POST.get('columnId','')
+    file = request.FILES.get('file')
+    dirname = time.strftime('%Y%m%d')
+    datepath = 'upload\\' + dirname
+    upload_dir = ROOT_PATH + '\\' + datepath
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    basename = os.path.basename(file.name)
+    file_name = os.path.splitext(basename)[0]
+    file_ext = os.path.splitext(basename)[1]
+    file_name = file_name + '_' + time.strftime('%Y%m%d%H%M%S') + file_ext
+    fileurl = '/upload/' + dirname + '/' + file_name
+    filepath = upload_dir + '\\' + file_name
+    forbidden_file_ext = SysTableColumn.objects.get(id=columnid).forbiddenfileextension
+    if forbidden_file_ext != '' and forbidden_file_ext and file_ext.lstrip('.') in forbidden_file_ext.split('|') :
+        result.msg = '不允许的文件类型'
+        return JsonResponse(result.tojson())
+    #保存上传的文件
+    f = open(filepath, 'wb')
+    for chunk in file.chunks():
+        f.write(chunk)
+    f.close()
+    result.flag = True
+    result.data = fileurl
     return JsonResponse(result.tojson())
 
 def download_import_template(request,kwargs):

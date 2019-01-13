@@ -28,7 +28,7 @@ class SqlHelper(object):
 
     @staticmethod
     def query(sql):
-        cursor = connection.cursor()
+        cursor = connection.cursor()                                        
         cursor.execute(sql)
         col_names = [desc[0] for desc in cursor.description]
         rawData = cursor.fetchall()

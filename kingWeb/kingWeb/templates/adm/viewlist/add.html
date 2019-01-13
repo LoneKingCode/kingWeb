@@ -51,7 +51,11 @@
                 format: 'YYYY-MM-DD HH:mm'
             });
         })
-
+        function uploadFile(fileInputId, inputId, columnId) {
+            lkWeb.Upload(fileInputId, '/adm/viewlist/post_upload/', { 'columnId': columnId }, function (result) {
+                $("#" + inputId).val(result.data)
+              })
+        }
     </script>
 {% endblock %}
 
@@ -108,11 +112,22 @@
                             </div><span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
                         </div>
                     </div>
+            {% elif col.datatype == 'file' %}
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{col.description}}</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="{{col.name}}" data-val="true" readonly="" placeholder="请选择文件"
+                            id="{{col.name}}" data-val-required="{{col.description}}不能为空" onclick="$('#file{{col.name}}').click()"
+                            data-val-maxlength="{{col.description}}长度不能超过{{col.maxlength}}个字符" data-val-maxlength-max="{{col.maxlength}}">
+                        <span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
+                     <input type="file" id="file{{col.name}}" onchange="uploadFile('file{{col.name}}','{{col.name}}','{{col.id}}')" style="display:none;">
+                    </div>
+                 </div>
            {% else %}
                 <div class="form-group">
                         <label class="col-md-2 control-label">{{col.description}}</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" name="{{col.name}}"  data-val="true"
+                            <input type="text" class="form-control" name="{{col.name}}"  data-val="true" placeholder="请输入{{col.description}}"
                                    {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
                              {% ifnotequal col.required 0%}
                                data-val-maxlength="{{col.description}}长度不能超过{{col.maxlength}}个字符"
