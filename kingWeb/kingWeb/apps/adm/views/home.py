@@ -11,8 +11,9 @@ import os
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
+from django.views.decorators.csrf import csrf_exempt
 
- 
+
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
     return render(request,

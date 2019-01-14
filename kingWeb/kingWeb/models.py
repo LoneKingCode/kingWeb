@@ -201,6 +201,7 @@ class SysTableList(BaseModel):
     allowview = models.IntegerField(db_column='AllowView', default=0)
     allowdetail = models.IntegerField(db_column='AllowDetail', default=0)
     vieweditwidthheight = models.TextField(db_column='ViewEditWidthHeight', blank=True, null=True)
+    javascript = models.TextField(db_column='JavaScript', blank=True, null=True)
     columnperrow = models.IntegerField(db_column='ColumnPerRow', default=0)
     def __str__(self):
         return self.name + ' ' + self.description

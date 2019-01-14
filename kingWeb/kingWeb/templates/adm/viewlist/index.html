@@ -22,8 +22,13 @@
                     lkTable.draw(false);//刷新datatable
                 })
             })
+            customScript()
         });
-
+        function customScript() {
+    {% autoescape off %}
+           {{table.javascript}}
+    {% endautoescape %}
+        }
         function AddModel() {
             lkWeb.GoAction("adm","viewlist", "add",tableid,true,'添加','{{addedit_width}}','{{addedit_height}}');
         }

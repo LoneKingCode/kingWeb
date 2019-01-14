@@ -65,6 +65,7 @@ def edit(request,kwargs):
             'topextendfunction':object.topextendfunction,
             'import_type_list':import_type_list,
             'vieweditwidthheight':object.vieweditwidthheight,
+            'javascript':object.javascript,
             'columnperrow':object.columnperrow,
 
         })
@@ -94,11 +95,13 @@ def post_add(request,kwargs):
     topextendfunction = request.POST.get('TopExtendFunction','')
     vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
     columnperrow = request.POST.get('ColumnPerRow','')
+    javascript = request.POST.get('JavaScript','')
+
     object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
-   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow)
+   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow,javascript=javascript)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -129,11 +132,13 @@ def post_edit(request,kwargs):
     topextendfunction = request.POST.get('TopExtendFunction','')
     vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
     columnperrow = request.POST.get('ColumnPerRow','')
+    javascript = request.POST.get('JavaScript','')
+
     object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
        allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
    isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
    forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
-   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow)
+   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow,javascript=javascript)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

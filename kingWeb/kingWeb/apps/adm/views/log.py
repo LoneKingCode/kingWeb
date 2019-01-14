@@ -11,7 +11,6 @@ from kingWeb.apps.adm.permission import check_permission
 from datetime import datetime,timedelta
 import calendar
 from dateutil.relativedelta import relativedelta
-from kingWeb.apps.adm.permission import check_permission
 from django.utils import timezone
 import pytz
 def index(request,kwargs):
