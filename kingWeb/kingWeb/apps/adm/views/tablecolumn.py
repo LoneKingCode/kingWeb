@@ -65,6 +65,7 @@ def edit(request,kwargs):
             'selectrange':object.selectrange,
             'primarkey':object.primarkey,
             'forbiddenfileextension':object.forbiddenfileextension,
+            'validationrule':object.validationrule,
             'tablelist':tablelist,
             'datatypes':DataType,
         })
@@ -94,11 +95,12 @@ def post_add(request,kwargs):
     selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
     forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
+    validationrule = request.POST.get('ValidationRule','')
 
     object = SysTableColumn.objects.create(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension,validationrule=validationrule)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -129,11 +131,12 @@ def post_edit(request,kwargs):
     selectrange = request.POST.get('SelectRange','')
     primarkey = request.POST.get('PrimarKey','')
     forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
+    validationrule = request.POST.get('ValidationRule','')
 
     object = SysTableColumn.objects.filter(id=id).update(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
         maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
         viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension)
+        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension,validationrule=validationrule)
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

@@ -148,10 +148,10 @@
                         <label class="col-md-2 control-label">{{col.description}}</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control" name="{{col.name}}"  data-val="true" value="{{data|get_value:col.name}}" placeholder="请输入{{col.description}}"
-                                   {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
+                               {{col.validationrule}}       {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
                              {% ifnotequal col.required 0%}
                                data-val-maxlength="{{col.description}}长度不能超过{{col.maxlength}}个字符"
-                                   data-val-maxlength-max="{{col.maxlength}}"/>{% endifnotequal %}
+                                   data-val-maxlength-max="{{col.maxlength}}"{% endifnotequal %}  />
                             <span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
                         </div>
                     </div>

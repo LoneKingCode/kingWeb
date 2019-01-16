@@ -251,6 +251,9 @@ class SysHelper(object):
             ws = wb.active
             ws.title = table.description
             columns = SysTableColumn.objects.filter(Q(tableid=tableid) & Q(exportvisible = 1))
+            if len(columns) < 1:
+                result.msg+='无可导出的列,'
+                return result
             columnstr = ''
             table_head = []   #表头
             coldatatype = {}
@@ -298,6 +301,9 @@ class SysHelper(object):
             ws = wb.active
             ws.title = table.description
             columns = SysTableColumn.objects.filter(Q(tableid=tableid) & Q(importvisible = 1))
+            if len(columns) < 1:
+                result.msg+='无可导入的列,'
+                return result
             columnstr = ''
             table_head = []   #表头
             for col in columns:

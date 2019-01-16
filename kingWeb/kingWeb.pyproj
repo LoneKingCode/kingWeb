@@ -284,6 +284,7 @@
     <Content Include="kingWeb\static\css\site.css" />
     <Content Include="kingWeb\static\images\head.jpg" />
     <Content Include="kingWeb\static\js\contabs.js" />
+    <Content Include="kingWeb\static\js\jquery.validation.rule.js" />
     <Content Include="kingWeb\static\js\lkWeb.js" />
     <Content Include="kingWeb\static\js\util.js" />
     <Content Include="kingWeb\static\lib\bootstrap-suggest-plugin\demo\data.json" />

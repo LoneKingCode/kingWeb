@@ -206,10 +206,10 @@ def post_add(request,kwargs):
                 colvalue = ','.join(request.POST.getlist(col.name,''))
             else:
                 colvalue = formdata.get(col.name,'')
-            exist = '0'
+            value_exist = '0'
             if col.name in primarykey_cols:
-                exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,col.name,colvalue))
-            if exist != '0':
+                value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\''.format(table.name,col.name,colvalue))
+            if value_exist != '0':
                 result.msg += col.description + '字段为主键，值"' + colvalue + '"已存在,'
             else:
                 addmodel[col.name] = colvalue
@@ -226,8 +226,9 @@ def post_add(request,kwargs):
     values = values.strip(',')
     sql = sql.format(table.name,','.join(addmodel.keys()),values)
     SqlHelper.execute(sql)
-    result.msg = '操作成功'
-    result.flag = True
+    affect_rows = SqlHelper.execute(sql)
+    result.msg = '影响数据条数' + str(affect_rows)
+    result.flag = affect_rows == 1
     return JsonResponse(result.tojson())
 
 @csrf_exempt
@@ -258,7 +259,7 @@ def post_edit(request,kwargs):
             colvalue = ','.join(request.POST.getlist(col.name,''))
         else:
             colvalue = formdata.get(col.name,'')
-        exist = '0'
+        value_exist = '0'
         if col.name in primarykey_cols:
             value_exist = SqlHelper.single('select count(*) from {0} where {1}=\'{2}\' and Id != {3}'.format(table.name,col.name,colvalue,id))
         if value_exist != '0':
