@@ -19,12 +19,14 @@ def index(request,kwargs):
 @check_permission
 def add(request,kwargs):
     assert isinstance(request, HttpRequest)
+    parentid = kwargs.get('id','0')
     departments = SysDepartment.objects.values('id','name')
     return render(request,
         'adm/department/add.html',
         {
             'title':'添加部门',
-            'departments':departments
+            'departments':departments,
+            'parentid':int(parentid),
         })
 
 @check_permission

@@ -21,7 +21,7 @@
         <div class="col-md-7">
              <select name="ParentId" class="form-control" >
              {% for item in departments%}
-                <option value="{{item.id}}">{{item.name}}</option>
+                <option value="{{item.id}}" {%ifequal item.id parentid %} selected {%endifequal%}>{{item.name}}</option>
              {% endfor %}
             </select>
         </div>

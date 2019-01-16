@@ -77,7 +77,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                 success: function (result) {
                     if (result.flag == true) {
                         if (IsNotEmpty(result.msg))
-                            parent.layer.alert('操作成功,' + result.msg)
+                            parent.layer.alert(result.msg)
                         else
                             parent.layer.alert("删除成功")
                         if (IsNotEmpty(table))
@@ -88,7 +88,7 @@ lkWeb.DeleteMulti = function (area, ids, ctrl, table, value) {
                     }
                     else {
                         if (IsNotEmpty(result.msg))
-                            parent.layer.alert('操作失败,' + result.msg);
+                            parent.layer.alert(result.msg);
                         else
                             parent.layer.alert("删除失败");
                     }
@@ -126,7 +126,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
                             if (IsNotEmpty(result.msg))
                                 parent.layer.alert(result.msg)
                             else
-                                parent.layer.alert('操作成功,' + "删除成功")
+                                parent.layer.alert("删除成功")
                             if (IsNotEmpty(table))
                                 table.draw(false);//刷新datatable
                             else {
@@ -135,7 +135,7 @@ lkWeb.Delete = function (area, id, ctrl, table, value) {
                         }
                         else {
                             if (IsNotEmpty(result.msg))
-                                parent.layer.alert('操作失败,' + result.msg);
+                                parent.layer.alert(result.msg);
                             else
                                 parent.layer.alert("删除失败");
                         }

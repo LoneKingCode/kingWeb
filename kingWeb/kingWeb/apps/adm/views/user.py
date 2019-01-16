@@ -159,7 +159,6 @@ def post_login(request,kwargs):
                 result.msg = '登陆成功'
           else:
                 result.data = user.username
-                result.flag = False
                 result.msg = '登陆失败:用户状态为' + UserStatus(userprofile.status).name
     else:
         result.msg = '登陆失败'

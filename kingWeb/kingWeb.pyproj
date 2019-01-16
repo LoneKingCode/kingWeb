@@ -271,7 +271,7 @@
     <Folder Include="kingWeb\templates\adm\system_option\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_column\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_column\" />
-    <Folder Include="kingWeb\templates\adm\table_list\" />
+    <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\table_list\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\templates\adm\user\" />
     <Folder Include="kingWeb\templates\adm\user\" />

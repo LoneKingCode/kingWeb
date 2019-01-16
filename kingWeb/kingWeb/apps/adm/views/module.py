@@ -7,7 +7,7 @@ import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
-
+from kingWeb.apps.adm.forms import ModuleForm
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -45,9 +45,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.create(name=name,description=description)
+    ModuleForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

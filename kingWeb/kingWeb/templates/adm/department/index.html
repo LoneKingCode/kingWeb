@@ -19,7 +19,8 @@
     });
 
     function AddModel() {
-        lkWeb.GoAction("adm", "department", "add", 0, true, '添加', '90%', '90%');;
+        var id = lkWeb.GetCheckValue($(".checkChild"));
+        lkWeb.GoAction("adm", "department", "add", id, true, '添加', '90%', '90%');;
     }
     function EditModel() {
         var id = lkWeb.GetCheckValue($(".checkChild"));
