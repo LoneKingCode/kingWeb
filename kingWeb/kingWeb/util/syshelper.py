@@ -32,10 +32,10 @@ class SysHelper(object):
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
             condition = outdata_arr[2].replace('{UserId}',SysHelper.userid)
-            primarkey = colnames[0] #作为下拉菜单value的列
+            primarykey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
             outdatalist = SqlHelper.query('select {0} as value,{1} as text from {2} where {3}'.\
-                format(primarkey,textkey,tablename,condition))
+                format(primarykey,textkey,tablename,condition))
             return outdatalist
 
         #获取外键id值对应的值
@@ -49,9 +49,9 @@ class SysHelper(object):
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
             condition = outdata_arr[2]
-            primarkey = colnames[0] #作为下拉菜单value的列
+            primarykey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarkey,outvalueid))
+            value = SqlHelper.single('select {0} from {1} where {2}={3}'.format(textkey,tablename,primarykey,outvalueid))
             if not value:
                 return '无'
             return value
@@ -67,9 +67,9 @@ class SysHelper(object):
             colnames = outdata_arr[0].split(',') # value,text
             tablename = outdata_arr[1]
             condition = outdata_arr[2]
-            primarkey = colnames[0] #作为下拉菜单value的列
+            primarykey = colnames[0] #作为下拉菜单value的列
             textkey = colnames[1] #作为下拉菜单的text的列
-            value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarkey,tablename,textkey,colvalue))
+            value = SqlHelper.single("select {0} from {1} where {2}='{3}'".format(primarykey,tablename,textkey,colvalue))
             if not value:
                 return '无'
             return value
@@ -96,7 +96,7 @@ class SysHelper(object):
             for col in columns:
                 columnsdict[col.description] = col.name
                 coldatatype[col.name] = col.datatype
-                colprimarykey[col.name] = col.primarkey
+                colprimarykey[col.name] = col.primarykey
                 if col.required:
                     colrequire.append(col.name)
 
@@ -203,7 +203,7 @@ class SysHelper(object):
                 result.msg = '执行成功，影响数据' + str(exec_count) + "条"
             elif table.importtype == TableImportType.update.value:
                 sql = 'update {0} set {1} where {2}'
-                primarykeys = SysHelper.get_column_names(tableid, "PrimarKey=1", "ListOrder")
+                primarykeys = SysHelper.get_column_names(tableid, "PrimaryKey=1", "ListOrder")
                 if len(primarykeys) <= 0:
                     result.msg = '请设置主键，因为导入类型为更新'
                     return result

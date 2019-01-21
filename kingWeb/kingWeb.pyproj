@@ -139,6 +139,7 @@
     <Folder Include="kingWeb\static\lib\datepicker\js\plugins\" />
     <Folder Include="kingWeb\static\lib\datepicker\scss\" />
     <Folder Include="kingWeb\templates\adm\table_column\" />
+    <Folder Include="kingWeb\templates\adm\table_list\" />
     <Folder Include="kingWeb\templates\adm\viewlist\" />
     <Folder Include="kingWeb\templatetags\" />
     <Folder Include="kingWeb\static\" />

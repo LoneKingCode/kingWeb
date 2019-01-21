@@ -6,8 +6,9 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
-
+from kingWeb.apps.adm.forms import *
 from kingWeb.apps.adm.permission import check_permission
+
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -53,11 +54,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
-    name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
-    description = request.POST.get('Description','')
-    object = SysDepartment.objects.create(parentid=parentid,name=name,leader=leader,description=description)
+    modelform = SysDepartmentForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -66,12 +63,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    parentid = request.POST.get('ParentId','')
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    leader = request.POST.get('Leader','')
-    description = request.POST.get('Description','')
-    object = SysDepartment.objects.filter(id=id).update(parentid=parentid,name=name,leader=leader,description=description)
+    id = request.POST.get('id','')
+    obj = SysDepartment.objects.get(id=id)
+    modelform = SysDepartmentForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

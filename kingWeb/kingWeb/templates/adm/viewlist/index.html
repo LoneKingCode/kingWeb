@@ -95,7 +95,7 @@
                                   window.open('/adm/home/download?fileurl=' + data.data)
                               }
                               else {
-                                  parent.layer.alert("操作失败");
+                                  parent.layer.alert("操作失败 " + data.msg);
                               }
                           },
                           err: function (err) {
@@ -123,11 +123,14 @@
                {% set str = "{{'mData': '{0}', 'sClass': 'text-center'}}," %}
                {% set hiddenstr = "{{'mData': '{0}','visible': false, 'sClass': 'text-center'}},"%}
                   {% for col in tablecolumns%}
-                        {% ifequal 'Id' col.name  %}
+                        {% if col.name == 'Id'  %}
                           {'mData': '{{col.name}}','name':'{{col.name}}','visible': false, 'sClass': 'text-center'},
+                        {% elif col.datatype == 'custom'%}
+                           {'mData': '{{col.name}}','name':'{{col.name}}', 'sClass': 'text-center','bSortable': false},
                         {% else %}
                            {'mData': '{{col.name}}','name':'{{col.name}}', 'sClass': 'text-center','bSortable': true},
-                        {% endifequal %}
+
+                        {% endif %}
                     {% endfor %}
                {% ifnotequal table.extendfunction '' %}
                       {"mData":"ExtendFunction", "sClass": "text-center" },

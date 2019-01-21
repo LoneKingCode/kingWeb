@@ -22,7 +22,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">所属表</label>
         <div class="col-md-4">
-           <select name="TableId" class="form-control" >
+           <select name="tableid" class="form-control" >
              {% for item in tablelist%}
                 <option value="{{item.id}}">{{item.name}}</option>
              {% endfor %}
@@ -30,23 +30,23 @@
         </div>
         <label class="col-md-2 control-label">列名称</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Name"
+            <input type="text" class="form-control" name="name"
                    data-val="true" data-val-maxlength="列名称长度不能超过12个字符" data-val-maxlength-max="50"
                    data-val-minlength="列名称长度不能少于2个字符" data-val-minlength-min="2" data-val-required="列名称不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+            <span class="field-validation-valid" data-valmsg-for="name" data-valmsg-replace="true"></span>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">列说明</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Description"
+            <input type="text" class="form-control" name="description"
                    data-val="true" data-val-maxlength="列说明长度不能超过50个字符" data-val-maxlength-max="50"
                    data-val-required="列说明不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+            <span class="field-validation-valid" data-valmsg-for="description" data-valmsg-replace="true"></span>
         </div>
         <label class="col-md-2 control-label">数据类型</label>
         <div class="col-md-4">
-               <select name="DataType" class="form-control" >
+               <select name="datatype" class="form-control" >
              {% for item in datatypes%}
                 <option value="{{item}}">{{item}}</option>
              {% endfor %}
@@ -56,31 +56,31 @@
     <div class="form-group">
         <label class="col-md-2 control-label">是否必填</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Required" />
+            <input type="text" class="form-control" name="required" />
         </div>
         <label class="col-md-2 control-label">输入控制</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="MaxLength" data-toggle="tooltip" title="最大长度" />
+            <input type="text" class="form-control" name="maxlength" data-toggle="tooltip" title="最大长度" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ViewOrder" />
+            <input type="text" class="form-control" name="vieworder" />
         </div>
         <label class="col-md-2 control-label">列表显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ListOrder" />
+            <input type="text" class="form-control" name="listorder" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">添加编辑显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EditOrder" />
+            <input type="text" class="form-control" name="editorder" />
         </div>
     <label class="col-md-2 control-label">验证规则</label>
         <div class="col-md-4">
-            <select class="form-control" name="ValidationRule">
+            <select class="form-control" name="validationrule">
                 <option value="" selected="selected">无</option>
                 <option value="letterNumber='true'">字母数字</option>
                 <option value="cnLetterNumber='true'">汉字字母数字</option>
@@ -98,63 +98,69 @@
     <div class="form-group">
         <label class="col-md-2 control-label">导入是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ImportVisible" />
+            <input type="text" class="form-control" name="importvisible" />
         </div>
         <label class="col-md-2 control-label">导出是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ExportVisible" />
+            <input type="text" class="form-control" name="exportvisible" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ViewVisible" />
+            <input type="text" class="form-control" name="viewvisible" />
         </div>
         <label class="col-md-2 control-label">添加是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="AddVisible" />
+            <input type="text" class="form-control" name="addvisible" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">查询是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="SearchVisible" />
+            <input type="text" class="form-control" name="searchvisible" />
         </div>
         <label class="col-md-2 control-label">编辑是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EditVisible" />
+            <input type="text" class="form-control" name="editvisible" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">列表是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ListVisible" />
+            <input type="text" class="form-control" name="listvisible" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">外部SQL</label>
         <div class="col-md-7">
-            <textarea class="form-control" name="OutSql" rows="3" data-toggle="tooltip" title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件) 可选参数{UserId}"></textarea>
+            <textarea class="form-control" name="outsql" rows="3" data-toggle="tooltip" title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件) 可选参数{UserId}"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">自定义内容</label>
+        <div class="col-md-7">
+            <textarea class="form-control" name="customcontent" rows="3" data-toggle="tooltip" title="可选参数{UserId} {Id}"></textarea>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">枚举值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EnumRange" data-toggle="tooltip"  title="例如 模块,菜单,按钮" />
+            <input type="text" class="form-control" name="enumrange" data-toggle="tooltip"  title="例如 模块,菜单,按钮" />
         </div>
         <label class="col-md-2 control-label">多选值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="SelectRange" data-toggle="tooltip" title="例如 模块,菜单,按钮"/>
+            <input type="text" class="form-control" name="selectrange" data-toggle="tooltip" title="例如 模块,菜单,按钮"/>
         </div>
     </div>
     <div class="form-group">
           <label class="col-md-2 control-label">禁止上传文件类型</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ForbiddenFileExtension" data-toggle="tooltip" title="例如 aspx|rar|jpg" />
+            <input type="text" class="form-control" name="forbiddenfileextension" data-toggle="tooltip" title="例如 aspx|rar|jpg" />
         </div>
         <label class="col-md-2 control-label">是否主键</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="PrimarKey" />
+            <input type="text" class="form-control" name="primarykey" />
         </div>
     </div>
     <div class="form-group">

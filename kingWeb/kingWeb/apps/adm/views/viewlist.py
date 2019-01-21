@@ -196,7 +196,7 @@ def post_add(request,kwargs):
               return JsonResponse(result.tojson())
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(addvisible=1)))
     addmodel = {}
-    primarykey_cols = SysHelper.get_column_names(tableid,'PrimarKey=1','ListOrder')
+    primarykey_cols = SysHelper.get_column_names(tableid,'PrimaryKey=1','ListOrder')
     for col in tablecolumns:
         #如果这个列属于主键，判断是否已经有值存在
         if col.name in formdata.keys():
@@ -250,7 +250,7 @@ def post_edit(request,kwargs):
             condition = update_filter.replace('{UserId}',str(request.user.id))
         tablecolumns = list(SysTableColumn.objects.filter(Q(tableid=int(tableid)) & Q(editvisible=1)))
     editmodel = {}
-    primarykey_cols = SysHelper.get_column_names(tableid,'PrimarKey=1','ListOrder')
+    primarykey_cols = SysHelper.get_column_names(tableid,'PrimaryKey=1','ListOrder')
 
     for col in tablecolumns:
         colvalue = ''
@@ -356,6 +356,7 @@ def get_page_data(request,kwargs):
     out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder")
     checkbox_or_radio_col_names = SysHelper.get_column_names(tableid, "ListVisible=1 and (DataType='checkbox' or DataType='radio')", "ListOrder")
     file_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='file'", "ListOrder")
+    custom_columns_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='custom'", "ListOrder")
     rownum = int(start)
     for dic in pagedata:
         rownum = rownum + 1
@@ -363,6 +364,12 @@ def get_page_data(request,kwargs):
         for key in dic:
             if key in out_type_column_names:
                 dic[key] = SysHelper.get_out_value(tableid,key,dic[key])
+            elif key in custom_columns_names:
+                column = SysTableColumn.objects.get(Q(name=key) & Q(tableid = int(tableid)))
+                if not column:
+                    dic[key] = '获取列对象出错'
+                else:
+                    dic[key] = column.customcontent.replace('{Id}',str(dic['Id'])).replace('{UserId}',str(request.user.id))
             elif key in file_column_names:
                 url = text = style = ''
                 if not dic[key] == '':
@@ -370,7 +377,7 @@ def get_page_data(request,kwargs):
                     text = '无效'
                     style = "class='btn btn-danger'"
                 else:
-                    filepath = os.path.join(sys.path[0] + "\\kingWeb",dic[key].lstrip('/').replace('/','\\'))
+                    filepath = os.path.join(ROOT_PATH,dic[key].lstrip('/').replace('/','\\'))
                     if os.path.exists(filepath) and dic[key] != '':
                         url = '/adm/home/download?fileurl=' + dic[key]
                         text = '下载'

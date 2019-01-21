@@ -21,7 +21,8 @@ class TableImportType(IntEnum):
     insert = 0,
     update = 1,
 
-DataType = ['out','enum','checkbox','date','datetime','file','string','int','decimal']
+#表结构中列类型
+DataType = ['out','enum','checkbox','date','datetime','file','string','int','decimal','custom']
 
 ############################################################################
 #视图model
@@ -218,6 +219,7 @@ class SysTableColumn(BaseModel):
     selectrange = models.TextField(db_column='SelectRange', blank=True, default='')
     forbiddenfileextension = models.TextField(db_column='ForbiddenFileExtension', blank=True,default='')
     validationrule = models.TextField(db_column='ValidationRule', blank=True,default='')
+    customcontent = models.TextField(db_column='CustomContent', blank=True,default='')
     exportvisible = models.IntegerField(db_column='ExportVisible',default=0)
     importvisible = models.IntegerField(db_column='ImportVisible',default=0)
     listorder = models.IntegerField(db_column='ListOrder',default=0)
@@ -225,7 +227,7 @@ class SysTableColumn(BaseModel):
     maxlength = models.IntegerField(db_column='MaxLength',default=0)
     name = models.TextField(db_column='Name', blank=True, default='')
     outsql = models.TextField(db_column='OutSql', blank=True, default='')
-    primarkey = models.IntegerField(db_column='PrimarKey',default=0)
+    primarykey = models.IntegerField(db_column='PrimaryKey',default=0)
     required = models.IntegerField(db_column='Required',default=0)
     searchvisible = models.IntegerField(db_column='SearchVisible',default=0)
     vieworder = models.IntegerField(db_column='ViewOrder',default=0)

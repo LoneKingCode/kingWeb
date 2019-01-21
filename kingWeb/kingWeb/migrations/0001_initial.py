@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
                 ('maxlength', models.IntegerField(db_column='MaxLength')),
                 ('name', models.TextField(blank=True, db_column='Name', null=True)),
                 ('outsql', models.TextField(blank=True, db_column='OutSql', null=True)),
-                ('primarkey', models.IntegerField(db_column='PrimarKey')),
+                ('primarykey', models.IntegerField(db_column='PrimaryKey')),
                 ('required', models.IntegerField(db_column='Required')),
                 ('searchvisible', models.IntegerField(db_column='SearchVisible')),
                 ('tableid', models.IntegerField(db_column='TableId')),

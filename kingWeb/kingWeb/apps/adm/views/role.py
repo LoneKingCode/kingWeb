@@ -6,6 +6,8 @@ from django.db.models import Q
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
+from kingWeb.apps.adm.forms import *
+
 from kingWeb.apps.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
@@ -52,9 +54,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysRole.objects.create(name=name,description=description)
+    modelform = SysRoleForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -63,10 +63,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysRole.objects.filter(id=id).update(name=name,description=description)
+    id = request.POST.get('id','')
+    obj = SysRole.objects.get(id=id)
+    modelform = SysRoleForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -177,5 +176,5 @@ def auth_menus(request,kwargs):
         result.msg = '操作成功'
         result.flag = True
     else:
-        result.msg='操作失败'
+        result.msg = '操作失败'
     return JsonResponse(result.tojson())

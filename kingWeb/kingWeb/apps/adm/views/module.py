@@ -7,7 +7,7 @@ import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
-from kingWeb.apps.adm.forms import ModuleForm
+from kingWeb.apps.adm.forms import *
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -45,7 +45,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    ModuleForm(request.POST).save()
+    modelform = SysModuleForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -54,10 +54,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    object = SysModule.objects.filter(id=id).update(name=name,description=description)
+    id = request.POST.get('id','')
+    obj = SysModule.objects.get(id=id)
+    modelform = SysModuleForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -97,7 +96,7 @@ def get_page_data(request,kwargs):
 
     alldata = None
     if searchkey != '':
-        alldata = SysModule.objects.filter(Q(description__icontains=searchkey)|Q(name__icontains=searchkey)).order_by(_orderby).\
+        alldata = SysModule.objects.filter(Q(description__icontains=searchkey) | Q(name__icontains=searchkey)).order_by(_orderby).\
         values('name','description','id')
     else:
         alldata = SysModule.objects.order_by(_orderby).\

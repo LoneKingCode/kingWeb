@@ -1,4 +1,4 @@
-﻿{% extends "adm/shared/layout_content.html" %}
+﻿ {% extends "adm/shared/layout_content.html" %}
 {%block title%}{{title}}{% endblock%}
 
 {% block scripts %}
@@ -22,12 +22,12 @@
 {% block content %}
 
 <form class="form-horizontal" action="/adm/tablecolumn/post_edit/" method="post" id="lkForm">
-    <input type="hidden" name="Id" value="{{id}}" />
+    <input type="hidden" name="id" value="{{object.id}}" />
     {%csrf_token%}
     <div class="form-group">
         <label class="col-md-2 control-label">所属表</label>
         <div class="col-md-4">
-               <select name="TableId" class="form-control" >
+               <select name="tableid" class="form-control" >
              {% for item in tablelist%}
                 <option value="{{item.id}}" {%ifequal item.id tableid %} selected {%endifequal%}>{{item.name}}</option>
              {% endfor %}
@@ -35,23 +35,23 @@
         </div>
         <label class="col-md-2 control-label">列名称</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Name" value="{{name}}"
+            <input type="text" class="form-control" name="name" value="{{object.name}}"
                    data-val="true" data-val-maxlength="列名称长度不能超过12个字符" data-val-maxlength-max="50"
                    data-val-minlength="列名称长度不能少于2个字符" data-val-minlength-min="2" data-val-required="列名称不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+            <span class="field-validation-valid" data-valmsg-for="name" data-valmsg-replace="true"></span>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">列说明</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Description" value="{{description}}"
+            <input type="text" class="form-control" name="description" value="{{object.description}}"
                    data-val="true" data-val-maxlength="列说明长度不能超过50个字符" data-val-maxlength-max="50"
                    data-val-required="列说明不能为空" />
-            <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+            <span class="field-validation-valid" data-valmsg-for="description" data-valmsg-replace="true"></span>
         </div>
         <label class="col-md-2 control-label">数据类型</label>
         <div class="col-md-4">
-             <select name="DataType" class="form-control" >
+             <select name="datatype" class="form-control" >
              {% for item in datatypes%}
                 <option value="{{item}}" {%ifequal item datatype %} selected {%endifequal%}>{{item}}</option>
              {% endfor %}
@@ -61,31 +61,31 @@
     <div class="form-group">
         <label class="col-md-2 control-label">是否必填</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="Required" value="{{required}}"/>
+            <input type="text" class="form-control" name="required" value="{{object.required}}"/>
         </div>
         <label class="col-md-2 control-label">输入控制</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="MaxLength" data-toggle="tooltip" title="最大长度" value="{{maxlength}}"/>
+            <input type="text" class="form-control" name="maxlength" data-toggle="tooltip" title="最大长度" value="{{object.maxlength}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ViewOrder"  value="{{vieworder}}"/>
+            <input type="text" class="form-control" name="vieworder"  value="{{object.vieworder}}"/>
         </div>
         <label class="col-md-2 control-label">列表显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ListOrder" value="{{listorder}}"/>
+            <input type="text" class="form-control" name="listorder" value="{{object.listorder}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">添加编辑显示顺序</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EditOrder"  value="{{editorder}}"/>
+            <input type="text" class="form-control" name="editorder"  value="{{object.editorder}}"/>
         </div>
         <label class="col-md-2 control-label">验证规则</label>
     <div class="col-md-4">
-            <select class="form-control" name="ValidationRule" value="{{validationrole}}" id="ValidationRule">
+            <select class="form-control" name="validationrule" value="{{object.validationrole}}" id="ValidationRule">
                 <option value="" >无</option>
                 <option value="letterNumber='true'">字母数字</option>
                 <option value="cnLetterNumber='true'">汉字字母数字</option>
@@ -104,64 +104,70 @@
     <div class="form-group">
         <label class="col-md-2 control-label">导入是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ImportVisible" value="{{importvisible}}"/>
+            <input type="text" class="form-control" name="importvisible" value="{{object.importvisible}}"/>
         </div>
         <label class="col-md-2 control-label">导出是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ExportVisible" value="{{exportvisible}}" />
+            <input type="text" class="form-control" name="exportvisible" value="{{object.exportvisible}}" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">详情是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ViewVisible" value="{{viewvisible}}" />
+            <input type="text" class="form-control" name="viewvisible" value="{{object.viewvisible}}" />
         </div>
         <label class="col-md-2 control-label">添加是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="AddVisible" value="{{addvisible}}"/>
+            <input type="text" class="form-control" name="addvisible" value="{{object.addvisible}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">查询是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="SearchVisible" value="{{searchvisible}}" />
+            <input type="text" class="form-control" name="searchvisible" value="{{object.searchvisible}}" />
         </div>
         <label class="col-md-2 control-label">编辑是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EditVisible" value="{{editvisible}}" />
+            <input type="text" class="form-control" name="editvisible" value="{{object.editvisible}}" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">列表是否可见</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ListVisible" value="{{listvisible}}"/>
+            <input type="text" class="form-control" name="listvisible" value="{{object.listvisible}}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">外部SQL</label>
         <div class="col-md-7">
-            <textarea class="form-control" name="OutSql" rows="3" data-toggle="tooltip"
-                      title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件) 可选参数{UserId}">{{outsql}}</textarea>
+            <textarea class="form-control" name="outsql" rows="3" data-toggle="tooltip"
+                      title="例如Id,Name|Sys_Department|ParentId=0 (主键,列名|表名|条件) 可选参数{UserId}">{{object.outsql}}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">自定义内容</label>
+        <div class="col-md-7">
+            <textarea class="form-control" name="customcontent" rows="3" data-toggle="tooltip" title="可选参数{UserId} {Id}">{{object.customcontent}}</textarea>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">枚举值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="EnumRange"  value="{{enumrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮" />
+            <input type="text" class="form-control" name="enumrange"  value="{{object.enumrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮" />
         </div>
         <label class="col-md-2 control-label">多选值范围</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="SelectRange"  value="{{selectrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮"/>
+            <input type="text" class="form-control" name="selectrange"  value="{{object.selectrange}}" data-toggle="tooltip" title="例如 模块,菜单,按钮"/>
         </div>
     </div>
     <div class="form-group">
           <label class="col-md-2 control-label">禁止上传文件类型</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="ForbiddenFileExtension"  value="{{forbiddenfileextension}}" data-toggle="tooltip" title="例如 aspx|rar|jpg" />
+            <input type="text" class="form-control" name="forbiddenfileextension"  value="{{object.forbiddenfileextension}}" data-toggle="tooltip" title="例如 aspx|rar|jpg" />
         </div>
         <label class="col-md-2 control-label">是否主键</label>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="PrimarKey"  value="{{primarkey}}"/>
+            <input type="text" class="form-control" name="primarykey"  value="{{object.primarykey}}"/>
         </div>
     </div>
     <div class="form-group">

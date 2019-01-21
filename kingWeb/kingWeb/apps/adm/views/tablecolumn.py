@@ -8,6 +8,8 @@ from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.util.SqlHelper import *
 from kingWeb.apps.adm.permission import check_permission
+from kingWeb.apps.adm.forms import *
+
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -42,30 +44,7 @@ def edit(request,kwargs):
         'adm/table_column/edit.html',
         {
             'title':'编辑表结构',
-            'id':object.id,
-            'name':object.name,
-            'description':object.description,
-            'tableid':object.tableid,
-            'name':object.name,
-            'datatype':object.datatype,
-            'required':object.required,
-            'maxlength':object.maxlength,
-            'vieworder':object.vieworder,
-            'listorder':object.listorder,
-            'editorder':object.editorder,
-            'importvisible':object.importvisible,
-            'exportvisible':object.exportvisible,
-            'viewvisible':object.viewvisible,
-            'addvisible':object.addvisible,
-            'searchvisible':object.searchvisible,
-            'editvisible':object.editvisible,
-            'listvisible':object.listvisible,
-            'outsql':object.outsql,
-            'enumrange':object.enumrange,
-            'selectrange':object.selectrange,
-            'primarkey':object.primarkey,
-            'forbiddenfileextension':object.forbiddenfileextension,
-            'validationrule':object.validationrule,
+            'object':object,
             'tablelist':tablelist,
             'datatypes':DataType,
         })
@@ -74,33 +53,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    tableid = request.POST.get('TableId','')
-    datatype = request.POST.get('DataType','')
-    required = request.POST.get('Required','')
-    maxlength = request.POST.get('MaxLength','')
-    vieworder = request.POST.get('ViewOrder','')
-    listorder = request.POST.get('ListOrder','')
-    editorder = request.POST.get('EditOrder','')
-    importvisible = request.POST.get('ImportVisible','')
-    exportvisible = request.POST.get('ExportVisible','')
-    viewvisible = request.POST.get('ViewVisible','')
-    addvisible = request.POST.get('AddVisible','')
-    searchvisible = request.POST.get('SearchVisible','')
-    editvisible = request.POST.get('EditVisible','')
-    listvisible = request.POST.get('ListVisible','')
-    outsql = request.POST.get('OutSql','')
-    enumrange = request.POST.get('EnumRange','')
-    selectrange = request.POST.get('SelectRange','')
-    primarkey = request.POST.get('PrimarKey','')
-    forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
-    validationrule = request.POST.get('ValidationRule','')
-
-    object = SysTableColumn.objects.create(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
-        maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
-        viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension,validationrule=validationrule)
+    modelform = SysTableColumnForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -109,34 +62,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    tableid = request.POST.get('TableId','')
-    datatype = request.POST.get('DataType','')
-    required = request.POST.get('Required','')
-    maxlength = request.POST.get('MaxLength','')
-    vieworder = request.POST.get('ViewOrder','')
-    listorder = request.POST.get('ListOrder','')
-    editorder = request.POST.get('EditOrder','')
-    importvisible = request.POST.get('ImportVisible','')
-    exportvisible = request.POST.get('ExportVisible','')
-    viewvisible = request.POST.get('ViewVisible','')
-    addvisible = request.POST.get('AddVisible','')
-    searchvisible = request.POST.get('SearchVisible','')
-    editvisible = request.POST.get('EditVisible','')
-    listvisible = request.POST.get('ListVisible','')
-    outsql = request.POST.get('OutSql','')
-    enumrange = request.POST.get('EnumRange','')
-    selectrange = request.POST.get('SelectRange','')
-    primarkey = request.POST.get('PrimarKey','')
-    forbiddenfileextension = request.POST.get('ForbiddenFileExtension','')
-    validationrule = request.POST.get('ValidationRule','')
-
-    object = SysTableColumn.objects.filter(id=id).update(name=name,description=description, tableid=tableid,datatype=datatype,required=required,\
-        maxlength=maxlength,vieworder=vieworder,listorder=listorder,editorder=editorder,importvisible=importvisible,exportvisible=exportvisible,\
-        viewvisible=viewvisible,addvisible=addvisible,searchvisible=searchvisible,editvisible=editvisible,listvisible=listvisible,\
-        outsql=outsql,enumrange=enumrange,primarkey=primarkey,selectrange=selectrange,forbiddenfileextension=forbiddenfileextension,validationrule=validationrule)
+    id = request.POST.get('id','')
+    obj = SysTableColumn.objects.get(id=id)
+    modelform = SysTableColumnForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

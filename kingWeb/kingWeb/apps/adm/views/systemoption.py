@@ -7,6 +7,8 @@ import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
+from kingWeb.apps.adm.forms import *
+
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -44,10 +46,7 @@ def edit(request,kwargs):
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    value = request.POST.get('Value','')
-    code = request.POST.get('Code','')
-
-    object = SysSystemOption.objects.create(value=value,code=code)
+    modelform = SysSystemOptionForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -56,10 +55,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    value = request.POST.get('Value','')
-    code = request.POST.get('Code','')
-    id = request.POST.get('Id','')
-    object = SysSystemOption.objects.filter(id=id).update(value=value,code=code)
+    id = request.POST.get('id','')
+    obj = SysSystemOption.objects.get(id=id)
+    modelform = SysSystemOptionForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())

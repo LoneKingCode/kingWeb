@@ -8,6 +8,8 @@ from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.util.SqlHelper import SqlHelper
 from kingWeb.apps.adm.permission import check_permission
+from kingWeb.apps.adm.forms import *
+
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -43,65 +45,15 @@ def edit(request,kwargs):
         'adm/table_list/edit.html',
         {
             'title':'编辑表',
-            'id':object.id,
-            'name':object.name,
-            'description':object.description,
-            'deletetablename':object.deletetablename,
-            'allowdetail':object.allowdetail,
-            'allowview':object.allowview,
-            'allowedit':object.allowedit,
-            'allowdelete':object.allowdelete,
-            'allowimport':object.allowimport,
-            'allowexport':object.allowexport,
-            'allowadd':object.allowadd,
-            'importtype':object.importtype,
-            'isview':object.isview,
-            'defaultsort':object.defaultsort,
-            'forbiddendeletefilter':object.forbiddendeletefilter,
-            'forbiddenupdatefilter':object.forbiddenupdatefilter,
-            'forbiddenaddfilter':object.forbiddenaddfilter,
-            'defaultfilter':object.defaultfilter,
-            'extendfunction':object.extendfunction,
-            'topextendfunction':object.topextendfunction,
+            'object':object,
             'import_type_list':import_type_list,
-            'vieweditwidthheight':object.vieweditwidthheight,
-            'javascript':object.javascript,
-            'columnperrow':object.columnperrow,
-
         })
 
 @csrf_exempt
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    deletetablename = request.POST.get('DeleteTableName','')
-    allowdetail = request.POST.get('AllowDetail','')
-    allowview = request.POST.get('AllowView','')
-    allowedit = request.POST.get('AllowEdit','')
-    allowadd = request.POST.get('AllowAdd','')
-    allowdelete = request.POST.get('AllowDelete','')
-    allowimport = request.POST.get('AllowImport','')
-    allowexport = request.POST.get('AllowExport','')
-    importtype = request.POST.get('ImportType','')
-    isview = request.POST.get('IsView','')
-    defaultsort = request.POST.get('DefaultSort','')
-    forbiddendeletefilter = request.POST.get('ForbiddenDeleteFilter','')
-    forbiddenupdatefilter = request.POST.get('ForbiddenUpdateFilter','')
-    forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
-    defaultfilter = request.POST.get('DefaultFilter','')
-    extendfunction = request.POST.get('ExtendFunction','')
-    topextendfunction = request.POST.get('TopExtendFunction','')
-    vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
-    columnperrow = request.POST.get('ColumnPerRow','')
-    javascript = request.POST.get('JavaScript','')
-
-    object = SysTableList.objects.create(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
-       allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
-   isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
-   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow,javascript=javascript)
+    modelform = SysTableListForm(request.POST).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
@@ -110,35 +62,9 @@ def post_add(request,kwargs):
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
-    id = request.POST.get('Id','')
-    name = request.POST.get('Name','')
-    description = request.POST.get('Description','')
-    deletetablename = request.POST.get('DeleteTableName','')
-    allowdetail = request.POST.get('AllowDetail','')
-    allowadd = request.POST.get('AllowAdd','')
-    allowview = request.POST.get('AllowView','')
-    allowedit = request.POST.get('AllowEdit','')
-    allowdelete = request.POST.get('AllowDelete','')
-    allowimport = request.POST.get('AllowImport','')
-    allowexport = request.POST.get('AllowExport','')
-    importtype = request.POST.get('ImportType','')
-    isview = request.POST.get('IsView','')
-    defaultsort = request.POST.get('DefaultSort','')
-    forbiddendeletefilter = request.POST.get('ForbiddenDeleteFilter','')
-    forbiddenupdatefilter = request.POST.get('ForbiddenUpdateFilter','')
-    forbiddenaddfilter = request.POST.get('ForbiddenAddFilter','')
-    defaultfilter = request.POST.get('DefaultFilter','')
-    extendfunction = request.POST.get('ExtendFunction','')
-    topextendfunction = request.POST.get('TopExtendFunction','')
-    vieweditwidthheight = request.POST.get('ViewEditWidthHeight','')
-    columnperrow = request.POST.get('ColumnPerRow','')
-    javascript = request.POST.get('JavaScript','')
-
-    object = SysTableList.objects.filter(id=id).update(name=name,description=description,deletetablename=deletetablename,allowview=allowview,\
-       allowadd=allowadd,allowedit=allowedit,allowdelete=allowdelete,allowimport=allowimport,allowexport=allowexport,importtype=importtype,\
-   isview=isview,defaultsort=defaultsort, forbiddendeletefilter=forbiddendeletefilter,forbiddenupdatefilter=forbiddenupdatefilter,\
-   forbiddenaddfilter=forbiddenaddfilter,defaultfilter=defaultfilter,extendfunction=extendfunction,topextendfunction=topextendfunction,\
-   allowdetail=allowdetail,vieweditwidthheight=vieweditwidthheight,columnperrow=columnperrow,javascript=javascript)
+    id = request.POST.get('id','')
+    obj = SysTableList.objects.get(id=id)
+    modelform = SysTableListForm(request.POST,instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
