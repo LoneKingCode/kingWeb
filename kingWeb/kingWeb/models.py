@@ -25,12 +25,20 @@ class TableImportType(IntEnum):
 DataType = ['out','enum','checkbox','date','datetime','file','string','int','decimal','custom']
 
 ############################################################################
-#视图model
+class PageModel:
+    def __init__(self,request_post):
+        self.start = 0
+        self.length = 0
+        self.searchkey = ''
+        self.orderby = ''
+        self.orderdir = ''
+        self.draw = ''
+        self.value = ''
+        for k,v in request_post.items():
+            if k in self.__dict__.keys():
+                setattr(self,k,v)
+
 class DataTableModel:
-    draw = 0
-    recordsTotal = 0
-    recordsFiltered = 0
-    data = None
     def __init__(self,draw,recordsTotal,recordsFiltered,data):
         self.draw = draw
         self.recordsTotal = recordsTotal
@@ -43,11 +51,6 @@ class DataTableModel:
             'recordsFiltered':self.recordsFiltered,
             'data':self.data,
             }
-    def to_dict(self):
-        data = {}
-        for f in self._meta.concrete_fields:
-            data[f.name] = f.value_from_object(self)
-        return data
 
     def toJSON(self):
         fields = []
@@ -69,9 +72,10 @@ class DataTableModel:
 
 
 class ResultModel:
-    flag = False
-    data = None
-    msg = ''
+    def __init__(self):
+        self.flag = False
+        self.data = None
+        self.msg = ''
     def tojson(self):
         return {
             'flag':self.flag,
@@ -80,11 +84,6 @@ class ResultModel:
             }
     def __str__(self):
        return self.msg
-    def to_dict(self):
-        data = {}
-        for f in self._meta.concrete_fields:
-            data[f.name] = f.value_from_object(self)
-        return data
 
 ############################################################################################################################
 #数据库model
@@ -102,7 +101,7 @@ class SysDepartment(BaseModel):
     description = models.CharField(db_column='Description', max_length=100)
     leader = models.CharField(db_column='Leader', max_length=20)
     name = models.CharField(db_column='Name', max_length=20)
-    parentid = models.IntegerField(db_column='ParentId', blank=True, null=True)
+    parentid = models.IntegerField(db_column='ParentId', blank=True, null=True,default=0)
     def __str__(self):
         return self.name
     class Meta:
@@ -111,7 +110,7 @@ class SysDepartment(BaseModel):
 class SysLoginlog(BaseModel):
     clientip = models.CharField(db_column='ClientIP', max_length=15, blank=True, null=True)
     clientinfo = models.TextField(db_column='ClientInfo', blank=True, null=True)
-    username = models.CharField(db_column='UserName', max_length=20)
+    username = models.CharField(db_column='UserName', max_length=20,default='')
     description = models.CharField(db_column='Description', max_length=40, blank=True, null=True)
     def __str__(self):
         return self.username + ' ' + self.description
@@ -122,7 +121,7 @@ class SysLoginlog(BaseModel):
 class SysMenu(BaseModel):
     name = models.CharField(db_column='Name', max_length=18)
     listorder = models.IntegerField(db_column='ListOrder')
-    parentid = models.IntegerField(db_column='ParentId' ,blank=True, null=True)
+    parentid = models.IntegerField(db_column='ParentId' ,blank=True, null=True,default=0)
     type = models.IntegerField(db_column='Type')
     url = models.CharField(db_column='Url', max_length=300)
     moduleid = models.IntegerField(db_column='ModuleId')
@@ -176,6 +175,7 @@ class SysRoleMenu(BaseModel):
 class SysSystemOption(BaseModel):
     code = models.CharField(db_column='Code', max_length=100, blank=True, null=True)
     value = models.CharField(db_column='Value', max_length=1000)
+    description = models.CharField(db_column='Description', max_length=200, blank=True, null=True)
     def __str__(self):
         return self.code + ':' + value
     class Meta:
@@ -193,7 +193,7 @@ class SysTableList(BaseModel):
     forbiddenupdatefilter = models.TextField(db_column='ForbiddenUpdateFilter', blank=True, default='')
     importtype = models.IntegerField(db_column='ImportType', blank=True)
     isview = models.IntegerField(db_column='IsView', default=0)
-    name = models.TextField(db_column='Name', blank=True, default='')
+    name = models.TextField(db_column='Name')
     allowadd = models.IntegerField(db_column='AllowAdd', default=0)
     allowdelete = models.IntegerField(db_column='AllowDelete', default=0)
     allowedit = models.IntegerField(db_column='AllowEdit', default=0)
@@ -225,7 +225,7 @@ class SysTableColumn(BaseModel):
     listorder = models.IntegerField(db_column='ListOrder',default=0)
     listvisible = models.IntegerField(db_column='ListVisible',default=0)
     maxlength = models.IntegerField(db_column='MaxLength',default=0)
-    name = models.TextField(db_column='Name', blank=True, default='')
+    name = models.TextField(db_column='Name')
     outsql = models.TextField(db_column='OutSql', blank=True, default='')
     primarykey = models.IntegerField(db_column='PrimaryKey',default=0)
     required = models.IntegerField(db_column='Required',default=0)

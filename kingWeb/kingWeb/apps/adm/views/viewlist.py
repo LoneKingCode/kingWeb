@@ -313,24 +313,18 @@ def delete(request,kwargs):
 @csrf_exempt
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
-    start = request.POST.get('start','0')
-    length = request.POST.get('length','0')
-    searchkey = request.POST.get('searchKey','')
-    orderby = request.POST.get('orderBy','')
-    orderdir = request.POST.get('orderDir','')
-    draw = request.POST.get('draw','')
-    tableid = request.POST.get('value','')
+    page = PageModel(request.POST)
+    tableid = page.value
 
     table = SysTableList.objects.get(id=tableid)
     if table.allowview != 1:
         return JsonResponse({'msg':'请求参数错误'})
 
     _orderby = ''
-    if orderdir == 'desc':
+    if page.orderdir == 'desc':
         _orderby = '-'
-
-    if orderby != '':
-        _orderby +=orderby
+    if page.orderby != '':
+        _orderby +=page.orderby
     elif table.defaultsort != '':
         _orderby +=table.defaultsort
     else:
@@ -338,11 +332,11 @@ def get_page_data(request,kwargs):
 
     condition = '1=1'
     alldata = None
-    if searchkey != '':
+    if page.searchkey != '':
        search_columns = SysHelper.get_column_names(tableid, "SearchVisible=1", "ListOrder")
        condition = ''
        for sc in search_columns:
-           condition+=" {0} like '%{1}%' or".format(sc,searchkey)
+           condition+=" {0} like '%{1}%' or".format(sc,page.searchkey)
        condition = '(' + condition.rstrip('or') + ')'
 
     if table.defaultfilter != '':
@@ -351,13 +345,13 @@ def get_page_data(request,kwargs):
 
     sql = 'select {0} from {1} where {2} order by {3} limit {4},{5}'
     list_columns = SysHelper.get_column_names(tableid, "ListVisible=1", "ListOrder",False)
-    pagedata = SqlHelper.query(sql.format(list_columns,table.name,condition,_orderby,start,length))
+    pagedata = SqlHelper.query(sql.format(list_columns,table.name,condition,_orderby,page.start,page.length))
     data_count = SqlHelper.single('select count(*) from {0} where {1}'.format(table.name, condition))
     out_type_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='out'", "ListOrder")
     checkbox_or_radio_col_names = SysHelper.get_column_names(tableid, "ListVisible=1 and (DataType='checkbox' or DataType='radio')", "ListOrder")
     file_column_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='file'", "ListOrder")
     custom_columns_names = SysHelper.get_column_names(tableid, "ListVisible=1 and DataType='custom'", "ListOrder")
-    rownum = int(start)
+    rownum = int(page.start)
     for dic in pagedata:
         rownum = rownum + 1
         dic['rownum'] = rownum
@@ -393,7 +387,7 @@ def get_page_data(request,kwargs):
         if table.extendfunction != '':
             dic['ExtendFunction'] = table.extendfunction.replace('{Id}',str(dic['Id'])).replace('{UserId}',str(request.user.id))
 
-    datatable = DataTableModel(draw,data_count,data_count,pagedata)
+    datatable = DataTableModel(page.draw,data_count,data_count,pagedata)
 
     return JsonResponse(datatable.tojson())
 

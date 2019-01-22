@@ -88,31 +88,26 @@ def delete(request,kwargs):
 @csrf_exempt
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
-    start = request.POST.get('start','0')
-    length = request.POST.get('length','0')
-    searchkey = request.POST.get('searchKey','')
-    orderby = request.POST.get('orderBy','')
-    orderdir = request.POST.get('orderDir','')
-    draw = request.POST.get('draw','')
-    value = request.POST.get('value','')
+    page = PageModel(request.POST)
+
     _orderby = ''
-    if orderdir == 'desc':
+    if page.orderdir == 'desc':
         _orderby = '-'
-    if orderby != '':
-        _orderby +=orderby
+    if page.orderby != '':
+        _orderby += page.orderby
     else:
         _orderby +='id'
 
     alldata = None
-    if searchkey != '':
-        alldata = SysTableList.objects.filter(description__icontains=searchkey).order_by(_orderby).\
+    if page.searchkey != '':
+        alldata = SysTableList.objects.filter(Q(description__icontains=page.searchkey) | Q(name__icontains=page.searchkey)).order_by(_orderby).\
         values('id','name','description','allowview','allowedit','allowadd','allowdelete','isview')
     else:
         alldata = SysTableList.objects.order_by(_orderby).\
         values('id','name','description','allowview','allowedit','allowadd','allowdelete','isview')
-    pagedata = list(alldata[int(start):int(length) + int(start)])
+    pagedata = list(alldata[int(page.start):int(page.length) + int(page.start)])
 
-    rownum = int(start)
+    rownum = int(page.start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
@@ -123,7 +118,7 @@ def get_page_data(request,kwargs):
         row['isview'] = '是' if row['isview'] == 1 else '否'
 
 
-    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
+    datatable = DataTableModel(page.draw,alldata.count(),alldata.count(),pagedata)
 
     return JsonResponse(datatable.tojson())
 

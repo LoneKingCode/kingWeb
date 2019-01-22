@@ -87,35 +87,30 @@ def delete(request,kwargs):
 @csrf_exempt
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
-    start = request.POST.get('start','0')
-    length = request.POST.get('length','0')
-    searchkey = request.POST.get('searchKey','')
-    orderby = request.POST.get('orderBy','')
-    orderdir = request.POST.get('orderDir','')
-    draw = request.POST.get('draw','')
-    value = request.POST.get('value','')
+    page = PageModel(request.POST)
+
     _orderby = ''
-    if orderdir == 'desc':
+    if page.orderdir == 'desc':
         _orderby = '-'
-    if orderby != '':
-        _orderby +=orderby
+    if page.orderby != '':
+        _orderby +=page.orderby
     else:
         _orderby +='id'
 
     alldata = None
-    if 'TableId|' in searchkey:
-        tableid = searchkey.split('|')[1]
+    if 'TableId|' in page.searchkey:
+        tableid = page.searchkey.split('|')[1]
         alldata = SysTableColumn.objects.filter(tableid=tableid).order_by(_orderby).\
         values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
-    elif searchkey != '':
-        alldata = SysTableColumn.objects.filter(description__icontains=searchkey).order_by(_orderby).\
+    elif page.searchkey != '':
+        alldata = SysTableColumn.objects.filter(description__icontains=page.searchkey).order_by(_orderby).\
         values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
     else:
         alldata = SysTableColumn.objects.order_by(_orderby).\
         values('id','name','description','tableid','datatype','addvisible','editvisible','listvisible','searchvisible')
-    pagedata = list(alldata[int(start):int(length) + int(start)])
+    pagedata = list(alldata[int(page.start):int(page.length) + int(page.start)])
 
-    rownum = int(start)
+    rownum = int(page.start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
@@ -124,7 +119,7 @@ def get_page_data(request,kwargs):
         row['editvisible'] = '是' if row['editvisible'] == 1 else '否'
         row['listvisible'] = '是' if row['listvisible'] == 1 else '否'
         row['searchvisible'] = '是' if row['searchvisible'] == 1 else '否'
-    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
+    datatable = DataTableModel(page.draw,alldata.count(),alldata.count(),pagedata)
 
     return JsonResponse(datatable.tojson())
 

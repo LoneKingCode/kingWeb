@@ -344,10 +344,10 @@ lkWeb.LoadTable = function (tableID, colums, dataUrl, value) {
                 if (d.columns && d.order && d.order.length > 0) {
                     var orderBy = d.columns[d.order[0].column].name;
                     var orderDir = d.order[0].dir;
-                    param.orderBy = orderBy;
-                    param.orderDir = orderDir; //asc or desc
+                    param.orderby = orderBy;
+                    param.orderdir = orderDir; //asc or desc
                 }
-                param.searchKey = _searchKey;
+                param.searchkey = _searchKey;
                 param.value = _value;
                 param.csrfmiddlewaretoken = lkWeb.GetCsrfToken()
                 return param;

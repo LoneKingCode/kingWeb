@@ -114,31 +114,26 @@ def delete(request,kwargs):
 @csrf_exempt
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
-    start = request.POST.get('start','0')
-    length = request.POST.get('length','0')
-    searchkey = request.POST.get('searchKey','')
-    orderby = request.POST.get('orderBy','')
-    orderdir = request.POST.get('orderDir','')
-    draw = request.POST.get('draw','')
-    value = request.POST.get('value','')
+    page = PageModel(request.POST)
+
     _orderby = ''
-    if orderdir == 'desc':
+    if page.orderdir == 'desc':
         _orderby = '-'
-    if orderby != '':
-        _orderby +=orderby
+    if page.orderby != '':
+        _orderby +=page.orderby
     else:
         _orderby +='id'
 
     alldata = None
-    if searchkey != '':
-        alldata = SysMenu.objects.filter(Q(url__icontains=searchkey) | Q(name__icontains=searchkey))\
+    if page.searchkey != '':
+        alldata = SysMenu.objects.filter(Q(url__icontains=page.searchkey) | Q(name__icontains=page.searchkey))\
             .order_by(_orderby).values('name','parentid','listorder','type','id','url','moduleid','icon')
     else:
         alldata = SysMenu.objects.order_by(_orderby).\
         values('name','parentid','listorder','type','id','url','moduleid','icon')
-    pagedata = list(alldata[int(start):int(length) + int(start)])
+    pagedata = list(alldata[int(page.start):int(page.length) + int(page.start)])
 
-    rownum = int(start)
+    rownum = int(page.start)
     for row in pagedata:
         rownum = rownum + 1
         row['rownum'] = rownum
@@ -161,7 +156,7 @@ def get_page_data(request,kwargs):
             row['typename'] = '无'
 
 
-    datatable = DataTableModel(draw,alldata.count(),alldata.count(),pagedata)
+    datatable = DataTableModel(page.draw,alldata.count(),alldata.count(),pagedata)
 
     return JsonResponse(datatable.tojson())
 
