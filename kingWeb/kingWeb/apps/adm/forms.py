@@ -1,6 +1,5 @@
 from django.forms import ModelForm,CharField
 from kingWeb.models import *
-from django.contrib.auth.models import User
 
 class BaseForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -43,6 +42,4 @@ class SysTableColumnForm(BaseForm):
     class Meta:
         model = SysTableColumn
         fields = '__all__'
-
-
 

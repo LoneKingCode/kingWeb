@@ -50,9 +50,11 @@ class Logger(object):
         #self.logger.addHandler(sh) #把对象加到logger里
         self.logger.addHandler(th)
 
-if __name__ == '__main__':
-    LogHelper.debug('debug')
-    LogHelper.error('error')
-    LogHelper.warning('warning')
-    LogHelper.info('info')
-    LogHelper.critical('critical')
+#if __name__ == '__main__':
+#    LogHelper.debug('debug')
+#    LogHelper.error('error')
+#    LogHelper.warning('warning')
+#    LogHelper.info('info')
+#    LogHelper.critical('critical')
+
+

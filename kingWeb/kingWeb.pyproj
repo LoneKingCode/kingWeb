@@ -7,6 +7,8 @@
     <WebBrowserPort>8000</WebBrowserPort>
     <PythonRunWebServerCommandType />
     <PythonDebugWebServerCommandType />
+    <Environment>
+    </Environment>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,6 +56,9 @@
     </Compile>
     <Compile Include="kingWeb\crontab\cron.py" />
     <Compile Include="kingWeb\util\LogHelper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="kingWeb\util\ServerInfoHelper.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="kingWeb\util\SqlHelper.py">

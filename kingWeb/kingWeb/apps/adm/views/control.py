@@ -1,16 +1,18 @@
 """
 Definition of views.
 """
-
+import json
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
 from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from kingWeb.DynamicRouter import urls
 from kingWeb.apps.adm.permission import check_permission
 from kingWeb.models import *
 from django.db.models import Q
+from kingWeb.util.ServerInfoHelper import ServerInfoHelper
 
 @login_required
 def index(request,kwargs):
@@ -57,3 +59,12 @@ def welcome(request,kwargs):
         {
             'title':'欢迎欢迎',
          })
+@csrf_exempt
+def getserverinfo(request,kwargs):
+    assert isinstance(request, HttpRequest)
+    result = ResultModel()
+    result.data = json.dumps(ServerInfoHelper.get_info(request),default=lambda \
+    o:o.__dict__,sort_keys=True)
+    result.msg = '操作成功'
+    result.flag = True
+    return JsonResponse(result.tojson())
