@@ -12,68 +12,95 @@
 
 {% block scripts %}
     <script>
+    function getFullNumber(n) {
+        //防止科学记数法 如 9.5367431640625e-7
+        return parseInt(new Number(n).toLocaleString() * 1)
+    }
+    function convertByte(n, saveKB = false, saveB = false) {
+        var a = 1024 * 1024 * 1024
+        var GB = getFullNumber(n / a)
+        var b = 1024 * 1024
+        var MB = getFullNumber((n - GB * a) / b)
+        var c = 1024
+        var KB = getFullNumber((n - GB * a - MB * b) / c)
+        var B = n - GB * a - MB * b - KB * c
 
-        function getInfo() {
-            lkWeb.AjaxPost('/adm/control/getserverinfo/', {}, function (res) {
-                var data = JSON.parse(res.data)
-                $("#baseInfo").html($("#infoTpl").html().format(
-                    {
-                        MachineName: data.machine_name,
-                        OsVersionString: data.os_version_string,
-                        CurrentDirectory: data.current_directory,
-                        ServerIp: data.server_ip,
-                        ServerUrl: data.server_url,
-                        ServerPort: data.server_port,
-                        RuntimeFramework: data.runtime_framework,
-                        LoggedUserName: data.logged_username,
-                        CpuUsed: data.cpu_used,
-                        DiskWrite: data.disk_write,
-                        DiskRead: data.disk_read,
-                        MemoryTotal:data.memory_total,
-                        MemoryUsedN: data.memory_used_n,
-                        MemoryAvailableN: data.memory_avaliable_n,
-                        MemoryUsed: data.memory_used,
-                        MemoryAvailable: data.memory_avaliable,
-                        //Sent: data.sent,
-                        //Received:data.received,
-                    }
-                ))
-                $("#networkInfo").empty()
-                for (var i = 0; i < data.networks.length; i++) {
-                    var item = data.networks[i]
-                    $("#networkInfo").append($("#networkTpl").html().format(
-                        {
-                            Name: item.name,
-                            Sent: item.totalsent,
-                            Received:item.totalreceived,
-
-                        }
-                    ))
-                }
-                $("#diskInfo").empty()
-                for (var i = 0; i < data.disks.length; i++) {
-                    var item = data.disks[i]
-                    $("#diskInfo").append($("#diskTpl").html().format(
-                        {
-                            Name:item.name,
-                            //DiskWrite: item.diskWrite,
-                            //DiskRead: item.diskRead,
-                            TotalSpace: item.total_space,
-                            UsedSpaceN: item.used_space_n,
-                            UsedSpace: item.used_space,
-                            FreeSpaceN: item.free_space_n,
-                            FreeSpace: item.free_space,
-                        }
-                    ))
-                }
-            }, function (res) {
-                //error
-            })
+        if (saveKB) {
+            if (saveB)
+                return '{0}GB {1}MB {2}KB {3}B'.format(GB, MB, KB, B)
+            return '{0}GB {1}MB {2}KB'.format(GB, MB, KB)
+        }
+        else {
+            return '{0}GB {1}MB'.format(GB, MB)
         }
 
-        setInterval(function () {
-            getInfo()
-        }, 3000)
+
+    }
+    function convertByteToMB(n) {
+        return (n / (1024 * 1024)).toFixed(2) + 'MB'
+    }
+    function convertByteToGB(n) {
+        return (n / (1024 * 1024 * 1024)).toFixed(2) + 'GB'
+    }
+    function getInfo() {
+        lkWeb.AjaxPost('/adm/control/getserverinfo/', {}, function (res) {
+            var data = JSON.parse(res.data)
+            $("#baseInfo").html($("#infoTpl").html().format(
+                {
+                    MachineName: data.machine_name,
+                    OsVersionString: data.os_version_string,
+                    CurrentDirectory: data.current_directory,
+                    ServerIp: data.server_ip,
+                    ServerUrl: data.server_url,
+                    ServerPort: data.server_port,
+                    RuntimeFramework: data.runtime_framework,
+                    LoggedUserName: data.logged_username,
+                    CpuUsed: data.cpu_used + '%',
+                    DiskWrite: convertByte(data.disk_write),
+                    DiskRead: convertByte(data.disk_read),
+                    MemoryTotal: convertByteToGB(data.memory_total),
+                    MemoryUsedN: convertByteToGB(data.memory_used_n),
+                    MemoryAvailableN: convertByteToGB(data.memory_avaliable_n),
+                    MemoryUsed: data.memory_used + '%',
+                    MemoryAvailable: data.memory_avaliable + '%',
+                    //Sent: data.sent,
+                    //Received:data.received,
+                }
+            ))
+            $("#networkInfo").empty()
+            for (var i = 0; i < data.networks.length; i++) {
+                var item = data.networks[i]
+                $("#networkInfo").append($("#networkTpl").html().format(
+                    {
+                        Name: item.name,
+                        Sent: convertByte(item.totalsent),
+                        Received: convertByte(item.totalreceived),
+
+                    }
+                ))
+            }
+            $("#diskInfo").empty()
+            for (var i = 0; i < data.disks.length; i++) {
+                var item = data.disks[i]
+                $("#diskInfo").append($("#diskTpl").html().format(
+                    {
+                        Name: item.name,
+                        TotalSpace: convertByteToGB(item.total_space),
+                        UsedSpaceN: convertByteToGB(item.used_space_n),
+                        UsedSpace: item.used_space + '%',
+                        FreeSpaceN: convertByteToGB(item.free_space_n),
+                        FreeSpace: item.free_space + '%',
+                    }
+                ))
+            }
+        }, function (res) {
+            //error
+        })
+    }
+
+    setInterval(function () {
+        getInfo()
+    }, 3000)
     </script>
     <script type="text/template" id="infoTpl">
         <label>服务器名称:{MachineName}</label>
@@ -94,8 +121,8 @@
     <script type="text/template" id="networkTpl">
         <div>
             <label>网卡名称:{Name}</label>
-            <label>上传速度:{Sent}</label>
-            <label>下载速度:{Received}</label>
+            <label>已上传:{Sent}</label>
+            <label>已下载:{Received}</label>
         </div>
     </script>
     <script type="text/template" id="diskTpl">
@@ -103,10 +130,7 @@
             <label>磁盘:{Name}</label>
             <label>总空间:{TotalSpace}</label>
             <label>剩余空间:{FreeSpaceN}({FreeSpace})</label>
-            <label>已使用空间:{UsedSpaceN}({UsedSpace})</label> <br />
-            <label>读取速度:{DiskRead}</label>
-            <label>写入速度:{DiskWrite}</label>
-            <label>传输速度:{DiskReadWrite}</label>
+            <label>已使用空间:{UsedSpaceN}({UsedSpace})</label>
         </div>
     </script>
  {% endblock %}

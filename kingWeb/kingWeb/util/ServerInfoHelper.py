@@ -90,6 +90,7 @@ class ServerInfoHelper(object):
             if 'fixed' in d.opts:
                 info.name = d.device
                 usage = psutil.disk_usage(d.device)
+                info.total_space = usage.total 
                 info.free_space_n = usage.free
                 info.used_space_n = usage.used
                 info.used_space = usage.percent
@@ -109,5 +110,6 @@ class ServerInfoHelper(object):
         return ip
 
 if __name__ == '__main__':
-    print(json.dumps(ServerInfoHelper.get_info(),default=lambda \
-    o:o.__dict__,sort_keys=True,indent=4))
+    print(json.dumps(serverinfohelper.get_info(),default=lambda \
+    o:o.__dict__,sort_keys=true,indent=4))
+     
