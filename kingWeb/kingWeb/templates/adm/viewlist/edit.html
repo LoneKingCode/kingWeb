@@ -127,7 +127,7 @@
                             <div class="c-datepicker-date-editor c-datepicker-single-editor datepicker-{{col.datatype}}">
                                 <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
                                 <input type="text" autocomplete="off" name="{{col.name}}" placeholder="选择日期" data-val="true"
-                                          {% ifequal col.required 1%} data-val-required="{{col.name}}不能为空"{% endifequal %}
+                                          {% ifequal col.required 1%} data-val-required="{{col.description}}不能为空"{% endifequal %}
                                        class="c-datepicker-data-input only-date" value="{{data|get_value:col.name}}" style="width:100%;">
                             </div><span class="field-validation-valid" data-valmsg-for="{{col.name}}" data-valmsg-replace="true"></span>
                         </div>

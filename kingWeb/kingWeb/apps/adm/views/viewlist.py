@@ -366,7 +366,7 @@ def get_page_data(request,kwargs):
                     dic[key] = column.customcontent.replace('{Id}',str(dic['Id'])).replace('{UserId}',str(request.user.id))
             elif key in file_column_names:
                 url = text = style = ''
-                if not dic[key] == '':
+                if not dic[key]:
                     url = 'javascript:alert("无效文件")'
                     text = '无效'
                     style = "class='btn btn-danger'"
