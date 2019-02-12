@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -9,7 +9,7 @@ from kingWeb.models import *
 from kingWeb.util.SqlHelper import SqlHelper
 from kingWeb.apps.adm.permission import check_permission
 from kingWeb.apps.adm.forms import *
-
+from kingWeb.util.WebHelper import WebHelper
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -49,7 +49,7 @@ def edit(request,kwargs):
             'import_type_list':import_type_list,
         })
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -58,18 +58,18 @@ def post_add(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     id = request.POST.get('id','')
     obj = SysTableList.objects.get(id=id)
-    modelform = SysTableListForm(request.POST,instance=obj).save()
+    modelform = SysTableListForm(WebHelper.get_post_dic(request.POST),instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -85,7 +85,7 @@ def delete(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)
@@ -122,7 +122,7 @@ def get_page_data(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_copy(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
@@ -135,7 +135,7 @@ def post_copy(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def post_build_column(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)

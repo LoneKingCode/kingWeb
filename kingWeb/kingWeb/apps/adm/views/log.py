@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -46,7 +46,7 @@ def chart(request,kwargs):
             'title':'统计图表',
         })
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def clear_login(request,kwargs):
     result = ResultModel()
@@ -56,7 +56,7 @@ def clear_login(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def clear_operation(request,kwargs):
     result = ResultModel()
@@ -67,7 +67,7 @@ def clear_operation(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_login_log(request,kwargs):
     assert isinstance(request, HttpRequest)
     start = request.POST.get('start','0')
@@ -104,7 +104,7 @@ def get_login_log(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_operation_log(request,kwargs):
     assert isinstance(request, HttpRequest)
     start = request.POST.get('start','0')
@@ -141,7 +141,7 @@ def get_operation_log(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_chart_by_day(request,kwargs):
     assert isinstance(request, HttpRequest)
     xaxis = []
@@ -160,7 +160,7 @@ def get_chart_by_day(request,kwargs):
     result['visitedPage'] = visitedpage
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 def get_chart_by_week(request,kwargs):
     assert isinstance(request, HttpRequest)
     xaxis = []
@@ -181,7 +181,7 @@ def get_chart_by_week(request,kwargs):
     result['visitedPage'] = visitedpage
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 def get_chart_by_month(request,kwargs):
     assert isinstance(request, HttpRequest)
     xaxis = []
@@ -202,7 +202,7 @@ def get_chart_by_month(request,kwargs):
     result['visitedPage'] = visitedpage
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 def get_chart_by_year(request,kwargs):
     assert isinstance(request, HttpRequest)
     xaxis = []

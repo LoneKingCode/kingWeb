@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -13,6 +13,7 @@ from kingWeb.util.SqlHelper import SqlHelper
 from kingWeb.util.SysHelper import SysHelper
 from kingWeb.apps.adm.permission import check_permission
 from kingWeb.settings import ROOT_PATH
+
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -181,7 +182,7 @@ def edit(request,kwargs):
             'colperrow': colperrow,
         })
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -231,7 +232,7 @@ def post_add(request,kwargs):
     result.flag = affect_rows == 1
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -281,7 +282,7 @@ def post_edit(request,kwargs):
     result.flag = affect_rows == 1
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -310,7 +311,7 @@ def delete(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)
@@ -388,6 +389,7 @@ def get_page_data(request,kwargs):
             dic['ExtendFunction'] = table.extendfunction.replace('{Id}',str(dic['Id'])).replace('{UserId}',str(request.user.id))
 
     datatable = DataTableModel(page.draw,data_count,data_count,pagedata)
+
 
     return JsonResponse(datatable.tojson())
 

@@ -11,7 +11,7 @@ import os
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 
 
 def index(request,kwargs):

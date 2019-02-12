@@ -1,8 +1,9 @@
 """
 Definition of views.
 """
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 import json
+import time
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -16,7 +17,7 @@ from django.core import serializers
 from kingWeb.models import *
 from kingWeb.DynamicRouter import urls
 from kingWeb.apps.adm.permission import check_permission
-from kingWeb.util.WebHelper import *
+from kingWeb.util.WebHelper import WebHelper
 
 def logout(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -140,7 +141,7 @@ def login(request,kwargs):
             'next':request.GET.get('next','')
          })
 
-@csrf_exempt
+@csrf_protect
 def post_login(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -169,7 +170,7 @@ def post_login(request,kwargs):
 
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -188,7 +189,7 @@ def post_add(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_register(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -202,11 +203,11 @@ def post_register(request,kwargs):
     role = SysRole.objects.get(id=5) #获取 "用户" 角色
     user_role = SysUserRole.objects.create(role=role,user=reg_user)
     result.msg = '操作成功'
-    result.flag=True
+    result.flag = True
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -226,6 +227,7 @@ def post_edit(request,kwargs):
         #执行过user.save()时 对应的SysUserProfile对象已经建立
         user_profile = SysUserProfile.objects.get(user=user)
         user_profile.personname = personname
+        user_profile.modifydatetime = time.strftime("%Y-%m-%d %H:%M:%S")
         user_profile.save()
         result.msg = '操作成功'
         result.flag = True
@@ -233,7 +235,7 @@ def post_edit(request,kwargs):
         result.msg = '用户Id不存在'
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_modify_info(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -250,6 +252,7 @@ def post_modify_info(request,kwargs):
         user.save()
         user_profile = SysUserProfile.objects.get(user=user)
         user_profile.personname = personname
+        user_profile.modifydatetime = time.strftime("%Y-%m-%d %H:%M:%S")
         user_profile.save()
         result.msg = '操作成功'
         result.flag = True
@@ -257,7 +260,7 @@ def post_modify_info(request,kwargs):
         result.msg = '旧密码错误'
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -271,7 +274,7 @@ def delete(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)
@@ -303,7 +306,7 @@ def get_page_data(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def delete_role(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
@@ -314,7 +317,7 @@ def delete_role(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def auth_role(request,kwargs):
     result = ResultModel()
     assert isinstance(request, HttpRequest)
@@ -333,7 +336,7 @@ def auth_role(request,kwargs):
         result.msg = '操作失败'
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
@@ -347,7 +350,7 @@ def get_user_role(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_not_user_role(request,kwargs):
     assert isinstance(request, HttpRequest)
     userid = kwargs.get('id','')
@@ -361,7 +364,7 @@ def get_not_user_role(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_not_department_user(request,kwargs):
     assert isinstance(request, HttpRequest)
     start = request.POST.get('start','0')
@@ -396,7 +399,7 @@ def get_not_department_user(request,kwargs):
     return JsonResponse(datatable.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_department_user(request,kwargs):
     assert isinstance(request, HttpRequest)
     start = request.POST.get('start','0')
@@ -431,7 +434,7 @@ def get_department_user(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def remove_department_user(request,kwargs):
     result = ResultModel()
@@ -443,7 +446,7 @@ def remove_department_user(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def set_user_department(request,kwargs):
     result = ResultModel()

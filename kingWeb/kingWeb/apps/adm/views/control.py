@@ -5,7 +5,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from kingWeb.DynamicRouter import urls
@@ -59,7 +59,7 @@ def welcome(request,kwargs):
         {
             'title':'欢迎欢迎',
          })
-@csrf_exempt
+@csrf_protect
 def getserverinfo(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()

@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -8,6 +8,7 @@ from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
 from kingWeb.apps.adm.forms import *
+from kingWeb.util.WebHelper import WebHelper
 @check_permission
 def index(request,kwargs):
     assert isinstance(request, HttpRequest)
@@ -41,7 +42,7 @@ def edit(request,kwargs):
             'description':object.description,
         })
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -50,18 +51,18 @@ def post_add(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     id = request.POST.get('id','')
     obj = SysModule.objects.get(id=id)
-    modelform = SysModuleForm(request.POST,instance=obj).save()
+    modelform = SysModuleForm(WebHelper.get_post_dic(request.POST),instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -76,7 +77,7 @@ def delete(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)

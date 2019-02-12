@@ -1,14 +1,14 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect,csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest,QueryDict
 from django.db.models import Q
-
 import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.permission import check_permission
 from kingWeb.apps.adm.forms import *
+from kingWeb.util.WebHelper import WebHelper
 
 @check_permission
 def index(request,kwargs):
@@ -64,7 +64,7 @@ def edit(request,kwargs):
             'modules':modules
          })
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -79,14 +79,14 @@ def post_add(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     id = request.POST.get('id','')
     parentid = request.POST.get('parentid','')
     obj = SysMenu.objects.get(id=id)
-    postdic = QueryDict.copy(request.POST)
+    postdic = WebHelper.get_post_dic(request.POST)
     if not parentid:
         postdic['parentid'] = '0'
     type = get_menu_type(parentid) #根据父菜单设置此子菜单的类型
@@ -96,7 +96,7 @@ def post_edit(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -111,7 +111,7 @@ def delete(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)
@@ -160,7 +160,7 @@ def get_page_data(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_list(request,kwargs):
     assert isinstance(request, HttpRequest)
     searchkey = request.GET.get('searchKey','')

@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpRequest
 from django.db.models import Q
@@ -7,7 +7,7 @@ import json
 from kingWeb.DynamicRouter import urls
 from kingWeb.models import *
 from kingWeb.apps.adm.forms import *
-
+from kingWeb.util.WebHelper import WebHelper
 from kingWeb.apps.adm.permission import check_permission
 @check_permission
 def index(request,kwargs):
@@ -50,7 +50,7 @@ def edit(request,kwargs):
             'description':object.description,
         })
 
-@csrf_exempt
+@csrf_protect
 def post_add(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
@@ -59,18 +59,18 @@ def post_add(request,kwargs):
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 def post_edit(request,kwargs):
     assert isinstance(request, HttpRequest)
     result = ResultModel()
     id = request.POST.get('id','')
     obj = SysRole.objects.get(id=id)
-    modelform = SysRoleForm(request.POST,instance=obj).save()
+    modelform = SysRoleForm(WebHelper.get_post_dic(request.POST),instance=obj).save()
     result.msg = '操作成功'
     result.flag = True
     return JsonResponse(result.tojson())
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def delete(request,kwargs):
     result = ResultModel()
@@ -86,7 +86,7 @@ def delete(request,kwargs):
     return JsonResponse(result.tojson())
 
 
-@csrf_exempt
+@csrf_protect
 def get_page_data(request,kwargs):
     assert isinstance(request, HttpRequest)
     page = PageModel(request.POST)
@@ -117,7 +117,7 @@ def get_page_data(request,kwargs):
 
     return JsonResponse(datatable.tojson())
 
-@csrf_exempt
+@csrf_protect
 def get_list(request,kwargs):
     assert isinstance(request,HttpRequest)
     alldata = SysRole.objects.values('id','name')
@@ -126,7 +126,7 @@ def get_list(request,kwargs):
         result.append({'pId':0,'name':row['name'],'id':row['id']})
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 def get_menu_list(request,kwargs):
     assert isinstance(request,HttpRequest)
     allmenu = SysMenu.objects.values('id','name','parentid','moduleid','type')
@@ -140,7 +140,7 @@ def get_menu_list(request,kwargs):
             result.append({'pId':'0','name':'--------' + row['name'] + '--------' ,'id':str(row['id']) + '_m','open':True,'type':'module'})
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 def get_role_menus(request,kwargs):
     assert isinstance(request,HttpRequest)
     roleid = request.POST.get('roleId','')
@@ -150,7 +150,7 @@ def get_role_menus(request,kwargs):
         result.append({'id':row['id'],'menuId':row['menu__id']})
     return JsonResponse(result,safe=False)
 
-@csrf_exempt
+@csrf_protect
 @check_permission
 def auth_menus(request,kwargs):
     assert isinstance(request,HttpRequest)

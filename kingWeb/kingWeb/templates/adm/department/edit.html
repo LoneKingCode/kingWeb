@@ -14,7 +14,7 @@
 
 {% block content %}
 <form class="form-horizontal" action="/adm/department/post_edit/" method="post" id="lkForm">
-   {%csrf_token%}
+    {%csrf_token%}
    <input type="hidden" value="{{id}}" name="id"/>
     <div class="form-group">
         <label class="col-md-3 control-label">上级部门</label>

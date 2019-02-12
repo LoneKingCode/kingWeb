@@ -121,8 +121,6 @@
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\models\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\apps\adm\views\" />
     <Folder Include="D:\MyProject\LoneKingCode\python\kingWeb\kingWeb\kingWeb\util\" />
-    <Folder Include="kingWeb\adm\" />
-    <Folder Include="kingWeb\adm\migrations\" />
     <Folder Include="kingWeb\apps\adm\" />
     <Folder Include="kingWeb\apps\adm\migrations\" />
     <Folder Include="kingWeb\apps\adm\models\" />
