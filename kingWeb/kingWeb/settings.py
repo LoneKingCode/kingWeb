@@ -109,9 +109,9 @@ DATABASES = {
      'default': {
     'ENGINE': 'django.db.backends.mysql',
       'NAME': 'kingWeb',   #数据库名
-    'USER': 'root',    #用户名
-    'PASSWORD': 'hacker5402',
-    'HOST': '123.206.57.126',
+    'USER': 'xx',    #用户名
+    'PASSWORD': 'xx', #密码
+    'HOST': 'xx', #服务器地址
     'PORT': '3306',
     'CHARSET':'utf8',##设置字符集，不然会出现中文乱码
     'OPTIONS': {
